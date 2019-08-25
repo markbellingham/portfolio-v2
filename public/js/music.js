@@ -1,5 +1,5 @@
 let table = $('#musicList').DataTable({
-    "ajax": "../src/db-queries.php?albums=true",
+    "ajax": "../src/controllers/db-queries.php?albums=true",
     "columns": [
         {
             "defaultContent": "<i class='icon-plus-circled gi-1-3x'></i>",
@@ -9,7 +9,7 @@ let table = $('#musicList').DataTable({
             "data": "image",
             "aTargets": [1],
             "mRender": function (data) {
-                return `<img src="../Resources/${data}_sm.jpg"/>`;
+                return `<img alt="" src="../Resources/${data}_sm.jpg"/>`;
             }
         },
         {"data": "artist"},
@@ -104,7 +104,7 @@ function format(data, callback) {
     console.log("data: %0", data);
     console.log("callback: %0", callback);
     $.ajax({
-        url: '../src/db-queries.php?get-tracks=' + data['album_id'],
+        url: '../src/controllers/db-queries.php?get-tracks=' + data['album_id'],
         method: 'GET',
         dataType: 'json',
         success: function(response) {

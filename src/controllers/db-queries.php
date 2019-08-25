@@ -1,5 +1,5 @@
 <?php
-require_once('../src/appInit.php');
+require_once(__DIR__.'/../../src/appInit.php');
 
 use Albums\Albums;
 

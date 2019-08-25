@@ -1,7 +1,7 @@
 <?php
 namespace MyPDO;
 use \PDO;
-require_once("../config/config.php");
+require_once(__DIR__."/../../config/config.php");
 
 class MyPDO extends PDO
 {

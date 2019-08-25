@@ -1,6 +1,6 @@
 <?php
 namespace Albums;
-require_once("appInit.php");
+require_once(__DIR__."/../../src/appInit.php");
 use MyPDO\MyPDO;
 
 class Albums

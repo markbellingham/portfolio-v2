@@ -1,3 +1,3 @@
 <?php
-include_once('database.class.php');
-include_once('albums.class.php');
+include_once(__DIR__.'/classes/database.class.php');
+include_once(__DIR__.'/classes/albums.class.php');
