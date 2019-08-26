@@ -1,3 +1,4 @@
+// DataTables setup - list of albums
 let table = $('#musicList').DataTable({
     "ajax": "../src/controllers/db-queries.php?albums=true",
     "columns": [
@@ -9,7 +10,7 @@ let table = $('#musicList').DataTable({
             "data": "image",
             "aTargets": [1],
             "mRender": function (data) {
-                return `<img alt="" src="../Resources/${data}_sm.jpg"/>`;
+                return `<img alt="cover" src="../Resources/${data}_sm.jpg"/>`;
             }
         },
         {"data": "artist"},
@@ -19,36 +20,43 @@ let table = $('#musicList').DataTable({
         {"defaultContent": ""}
     ],
     "createdRow": function(row, data, index) {
-        $('td', row).eq(6).html(`<button class="btn btn-primary btn-round add-album">Add</button>`);
+        $('td', row).eq(6).html(`<button class="btn btn-primary btn-round add-album" data-albumId="${data.album_id}">Add</button>`);
     },
     "columnDefs": [
+        // remove click to reorder on column header
         { "orderable": false, "targets": [0,1,6] },
+        // initial order of rows
         { "orderData": [2, 4, 0], "targets": 0 },
+        // decide priority of which columns are shown when screen size is reduced
         { "responsivePriority": 1, "targets": 0 },
         { "responsivePriority": 2, "targets": 2 },
         { "responsivePriority": 3, "targets": 3 },
     ],
-    "lengthMenu": [10, 25, 50, 100],
+    // Don't show hidden items as child items on small screen sizes (because child rows are used for the tracks)
     "responsive": { details: false },
+    // Items outside of the main table (lengthMenu, info, pagination)
     "dom" : "<'row'<'col-3'l><'col-2'i><'col-7 searchStyle'p>>",
     orderCellsTop: true,
     fixedHeader: true,
+    // function that shows the filtering options at the top of each column
     "initComplete": function() {
-        // Add filtering
         table.columns().every(function () {
             let column = this;
+            let columnIndex = this.index();
 
-            if([2,3].indexOf(column.index()) > -1) {
+            // text search
+            if([2,3].indexOf(columnIndex) > -1) {
                 $('<input type="text" class="form-control input-sm" />')
-                    .appendTo($("thead tr:eq(1) td").eq(this.index()))
+                    .appendTo($("thead tr:eq(1) td").eq(columnIndex))
                     .on("keyup", function () {
                         column.search($(this).val()).draw();
                     });
             }
 
-            if([4,5].indexOf(column.index()) > -1) {
+            // select dropdown
+            if([4,5].indexOf(columnIndex) > -1) {
                 let select = $('<select class="form-control input-sm"><option value=""></option></select>')
-                    .appendTo($("thead tr:eq(1) td").eq(this.index()))
+                    .appendTo($("thead tr:eq(1) td").eq(columnIndex))
                     .on('change', function () {
                         let val = $.fn.dataTable.util.escapeRegex(
                             $(this).val()
@@ -67,6 +75,7 @@ let table = $('#musicList').DataTable({
     }
 });
 
+// rebuild the table when the page is resized
 table.on('responsive-resize.dt', function(e, datatable, columns) {
     columns.forEach(function(is_visible, index) {
         $.each($('tr', datatable.table().header()), function() {
@@ -100,9 +109,8 @@ table.on('click', 'td.details-control', function () {
 });
 
 
+// formats the child row of the music table, showing track information
 function format(data, callback) {
-    console.log("data: %0", data);
-    console.log("callback: %0", callback);
     $.ajax({
         url: '../src/controllers/db-queries.php?get-tracks=' + data['album_id'],
         method: 'GET',

@@ -1,12 +1,8 @@
 <?php
-require_once('../src/appInit.php');
-use Albums\Albums;
 $title = 'Music';
 
 include_once("layout/header.php");
 
-$albums = new Albums();
-$data = $albums->findAll();
 ?>
 <body>
 <div class="row">
