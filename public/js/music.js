@@ -1,3 +1,4 @@
+let tracklist = [];
 /**
  * DataTables setup - list of albums
  * @type {jQuery}
@@ -131,7 +132,6 @@ function format(data, callback) {
         method: 'GET',
         dataType: 'json',
         success: function(response) {
-            console.log("response: %0", response);
             let tracks = '<table id="tracks" class="">';
             $.each(response, function(i, d) {
                 let trackNo = Number(i+1).toString().padStart(2,'0');
@@ -143,10 +143,10 @@ function format(data, callback) {
                         </tr>`;
             });
             let template = `<div class="slider">
-                <div class="col-3">
+                <div class="col-md-3">
                     <img alt="cover" src="../Resources/${data.image}.jpg" width="100%"/>
                 </div>
-                <div class="col-9">${tracks}</div>
+                <div class="col-md-5">${tracks}</div>
                 </div>`;
             callback(template, 'no-padding').show();
             $('#tracks').removeClass('table table-hover dt-responsive table-sm');
@@ -154,3 +154,33 @@ function format(data, callback) {
         }
     });
 }
+
+table.on('click', 'button.add-album', function() {
+    let albumId = $(this).attr('data-albumId');
+    $.ajax({
+        url: `../src/controllers/db-queries.php?get-tracks=${albumId}`,
+        dataType: 'json',
+        success: function(response) {
+            for(let r of response) {
+                tracklist.push(r);
+            }
+            printTrackList(tracklist);
+        }
+    });
+});
+
+function printTrackList(trackList) {
+    let markup = `
+    <table>
+    ${trackList.map(
+        track => `<tr><td>${track.track_no}</td><td>${track.track_name}</td></tr>`
+    ).join('')}
+    </table>
+    `;
+    $('#track-list').html(markup);
+}
+
+$('#clear-tracklist').click( function() {
+    tracklist = [];
+    printTrackList(tracklist);
+});

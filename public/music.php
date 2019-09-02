@@ -7,9 +7,17 @@ include_once("layout/header.php");
 <body>
 <div class="row">
     <div class="col-md-3" id="player">
-        <audio src="" controls>
+        <div id="player">
+            <audio controls>
+                <source src="" type="">
+            </audio>
+        </div>
+        <div id="track-list-container">
+            <button id="clear-tracklist" class="btn btn-light">Clear</button>
+            <div id="track-list">
 
-        </audio>
+            </div>
+        </div>
     </div>
     <div class="col-md-2" id="lyrics">
         <h1>Lyrics</h1>
