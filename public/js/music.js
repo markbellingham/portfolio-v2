@@ -5,46 +5,44 @@ let tracklist = [];
  * @var data.album_id
  */
 let table = $('#musicList').DataTable({
-    "ajax": "../src/controllers/db-queries.php?albums=true",
-    "columns": [
+    ajax: "../src/controllers/db-queries.php?albums=true",
+    columns: [
         {
-            "defaultContent": "<i class='icon-plus-circled gi-1-3x'></i>",
-            "className": "details-control align-middle"
+            defaultContent: "<i class='icon-plus-circled gi-1-3x'></i>",
+            className: "details-control align-middle"
         },
         {
-            "data": "image",
-            "aTargets": [1],
-            "mRender": function (data) {
-                return `<img alt="cover" src="../Resources/${data}_sm.jpg"/>`;
-            }
+            data: "image",
+            render: value => `<img alt="cover" src="../Resources/${value}_sm.jpg"/>`
         },
-        { "data": "artist", "className": "align-middle" },
-        { "data": "title", "className": "align-middle" },
-        { "data": "year", "className": "align-middle" },
-        { "data": "genre", "className": "align-middle" },
-        { "defaultContent": "", "className": "align-middle" }
+        { data: "artist", className: "align-middle" },
+        { data: "title", className: "align-middle" },
+        { data: "year", className: "align-middle" },
+        { data: "genre", className: "align-middle" },
+        {
+            data: "album_id",
+            className: "align-middle",
+            render: value => `<button class="btn btn-primary btn-sm add-album" data-albumId="${value}">Add</button>`
+        }
     ],
-    "createdRow": function(row, data) {
-        $('td', row).eq(6).html(`<button class="btn btn-primary btn-sm add-album" data-albumId="${data.album_id}">Add</button>`);
-    },
-    "columnDefs": [
+    columnDefs: [
         // remove click to reorder on column header
-        { "orderable": false, "targets": [0,1,6] },
+        { orderable: false, targets: [0,1,6] },
         // initial order of rows
-        { "orderData": [2, 4, 0], "targets": 0 },
+        { orderData: [2, 4, 0], targets: 0 },
         // decide priority of which columns are shown when screen size is reduced
-        { "responsivePriority": 1, "targets": 0 },
-        { "responsivePriority": 2, "targets": 2 },
-        { "responsivePriority": 3, "targets": 3 },
+        { responsivePriority: 1, targets: 0 },
+        { responsivePriority: 2, targets: 2 },
+        { responsivePriority: 3, targets: 3 },
     ],
     // Don't show hidden items as child items on small screen sizes (because child rows are used for the tracks)
-    "responsive": { details: false },
+    responsive: { details: false },
     // Items outside of the main table (lengthMenu, info, pagination)
-    "dom" : "<'row'<'col-md-3'l><'col-md-2'i><'col-md-7 searchStyle'p>>",
+    dom : "<'row'<'col-md-3'l><'col-md-2'i><'col-md-7 searchStyle'p>>",
     orderCellsTop: true,
     fixedHeader: true,
     // function that shows the filtering options at the top of each column
-    "initComplete": function() {
+    initComplete: function() {
         table.columns().every(function () {
             let column = this;
             let columnIndex = this.index();
