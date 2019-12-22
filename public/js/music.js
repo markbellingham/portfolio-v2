@@ -4,7 +4,7 @@ let tracklist = [];
  * @type {jQuery}
  * @var data.album_id
  */
-let table = $('#musicList').DataTable({
+const table = $('#musicList').DataTable({
     ajax: "../src/controllers/db-queries.php?albums=true",
     columns: [
         {
@@ -44,8 +44,8 @@ let table = $('#musicList').DataTable({
     // function that shows the filtering options at the top of each column
     initComplete: function() {
         table.columns().every(function () {
-            let column = this;
-            let columnIndex = this.index();
+            const column = this;
+            const columnIndex = this.index();
 
             // text search
             if([2,3].indexOf(columnIndex) > -1) {
@@ -58,10 +58,10 @@ let table = $('#musicList').DataTable({
 
             // select dropdown
             if([4,5].indexOf(columnIndex) > -1) {
-                let select = $('<select class="form-control form-control-sm"><option value=""></option></select>')
+                const select = $('<select class="form-control form-control-sm"><option value=""></option></select>')
                     .appendTo($("thead tr:eq(1) td").eq(columnIndex))
                     .on('change', function () {
-                        let val = $.fn.dataTable.util.escapeRegex(
+                        const val = $.fn.dataTable.util.escapeRegex(
                             $(this).val()
                         );
 
@@ -84,7 +84,7 @@ let table = $('#musicList').DataTable({
 table.on('responsive-resize.dt', function(e, datatable, columns) {
     columns.forEach(function(is_visible, index) {
         $.each($('tr', datatable.table().header()), function() {
-            let col = $($(this).children()[index]);
+            const col = $($(this).children()[index]);
             is_visible === true ? col.show() : col.hide();
             table.responsive.rebuild();
             table.responsive.recalc();
@@ -96,8 +96,8 @@ table.on('responsive-resize.dt', function(e, datatable, columns) {
  * Add event listener for opening and closing details
  */
 table.on('click', 'td.details-control', function () {
-    let tr = $(this).closest('tr');
-    let row = table.row( tr );
+    const tr = $(this).closest('tr');
+    const row = table.row( tr );
 
     if ( row.child.isShown() ) {
         // This row is already open - close it
@@ -126,13 +126,13 @@ table.on('click', 'td.details-control', function () {
  */
 function format(data, callback) {
     $.ajax({
-        url: '../src/controllers/db-queries.php?get-tracks=' + data['album_id'],
+        url: `../src/controllers/db-queries.php?get-tracks=${data.album_id}`,
         method: 'GET',
         dataType: 'json',
         success: function(response) {
             let tracks = '<table id="tracks" class="">';
             $.each(response, function(i, d) {
-                let trackNo = Number(i+1).toString().padStart(2,'0');
+                const trackNo = Number(i+1).toString().padStart(2,'0');
                 tracks += `<tr>
                             <td class="tracks align-middle">${trackNo}</td>
                             <td class="tracks align-middle">${d.track_name}</td>
@@ -140,7 +140,7 @@ function format(data, callback) {
                             <td class="align-middle"><button class="btn btn-outline-secondary btn-sm add-track">Add</button></td>
                         </tr>`;
             });
-            let template = `<div class="slider">
+            const template = `<div class="slider">
                 <div class="col-md-3">
                     <img alt="cover" src="../Resources/${data.image}.jpg" width="100%"/>
                 </div>
@@ -154,17 +154,16 @@ function format(data, callback) {
 }
 
 table.on('click', 'button.add-album', function() {
-    let albumId = $(this).attr('data-albumId');
-    $.ajax({
-        url: `../src/controllers/db-queries.php?get-tracks=${albumId}`,
-        dataType: 'json',
-        success: function(response) {
+    const albumId = this.getAttribute('data-albumId');
+    const result = fetch(`../src/controllers/db-queries.php?get-tracks=${albumId}`);
+    result
+        .then( response => response.json() )
+        .then( response => {
             for(let r of response) {
                 tracklist.push(r);
             }
             printTrackList(tracklist);
-        }
-    });
+        });
 });
 
 function printTrackList(trackList) {
