@@ -5,7 +5,7 @@ let tracklist = [];
  * @var data.album_id
  */
 const table = $('#musicList').DataTable({
-    ajax: "../src/controllers/db-queries.php?albums=true",
+    ajax: "../../src/controllers/db-queries.php?albums=true",
     columns: [
         {
             defaultContent: "<i class='icon-plus-circled gi-1-3x'></i>",
@@ -13,7 +13,7 @@ const table = $('#musicList').DataTable({
         },
         {
             data: "image",
-            render: value => `<img alt="cover" src="../Resources/${value}_sm.jpg"/>`
+            render: value => `<img alt="cover" src="../../Resources/${value}_sm.jpg"/>`
         },
         { data: "artist", className: "align-middle" },
         { data: "title", className: "align-middle" },
@@ -126,7 +126,7 @@ table.on('click', 'td.details-control', function () {
  */
 function format(data, callback) {
     $.ajax({
-        url: `../src/controllers/db-queries.php?get-tracks=${data.album_id}`,
+        url: `../../src/controllers/db-queries.php?get-tracks=${data.album_id}`,
         method: 'GET',
         dataType: 'json',
         success: function(response) {
@@ -142,7 +142,7 @@ function format(data, callback) {
             });
             const template = `<div class="slider">
                 <div class="col-md-3">
-                    <img alt="cover" src="../Resources/${data.image}.jpg" width="100%"/>
+                    <img alt="cover" src="../../Resources/${data.image}.jpg" width="100%"/>
                 </div>
                 <div class="col-md-5">${tracks}</div>
                 </div>`;
@@ -155,7 +155,7 @@ function format(data, callback) {
 
 table.on('click', 'button.add-album', function() {
     const albumId = this.getAttribute('data-albumId');
-    const result = fetch(`../src/controllers/db-queries.php?get-tracks=${albumId}`);
+    const result = fetch(`../../src/controllers/db-queries.php?get-tracks=${albumId}`);
     result
         .then( response => response.json() )
         .then( response => {

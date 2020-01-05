@@ -7,4 +7,4 @@ include_once("layout/header.php");
 
 </body>
 <?php
-include_once ("layout/footer.php");
+include_once("layout/footer.php");

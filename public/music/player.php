@@ -1,7 +1,7 @@
 <?php
 $title = 'Music';
 
-include_once("layout/header.php");
+include_once("../common/layout/header.php");
 
 ?>
 <body>
@@ -35,6 +35,6 @@ include_once("layout/header.php");
     </div>
 </div>
 <?php
-include_once ("layout/footer.php");
+include_once("../common/layout/footer.php");
 ?>
-<script src="js/music.js"></script>
+<script src="js/player.js"></script>

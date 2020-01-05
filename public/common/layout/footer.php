@@ -15,6 +15,6 @@
 <!-- End Google Analytics -->
 
 <!-- colour/theme changer -->
-<script src="js/style_changer.js"></script>
+<script src="/portfolio-v2/public/common/js/style_changer.js"></script>
 </body>
 </html>

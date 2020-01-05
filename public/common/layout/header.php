@@ -13,11 +13,11 @@
     <title><?php echo isset($title) ? $title.' - Mark Bellingham' : 'Mark Bellingham'; ?></title>
 
     <!-- Local Custom Stylesheets -->
-    <link id="colours" type="text/css" href="css/style1.css" rel="stylesheet">
-    <link id="stylesheet" type="text/css" href="css/style.css" rel="stylesheet">
+    <link id="colours" type="text/css" href="/portfolio-v2/public/common/css/style1.css" rel="stylesheet">
+    <link id="stylesheet" type="text/css" href="/portfolio-v2/public/common/css/style.css" rel="stylesheet">
 
     <!-- Vendor Stylesheets -->
-    <link rel="stylesheet" type="text/css" href="./css/fontello/css/fontello.css"/>
+    <link rel="stylesheet" type="text/css" href="/portfolio-v2/public/common/css/fontello/css/fontello.css"/>
     <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/fh-3.1.4/r-2.2.2/datatables.min.css"/>
 
@@ -27,11 +27,11 @@
     <div class="row">
         <header>
             <p id="mainMenu">
-                <a href="index.php" class="mainMenu">Home</a>
-                <a href="music.php" class="mainMenu">Music</a>
-                <a href="pictures.php" class="mainMenu">Photos</a>
+                <a href="../index.php" class="mainMenu">Home</a>
+                <a href="../../music/player.php" class="mainMenu">Music</a>
+                <a href="../../photos/pictures.php" class="mainMenu">Photos</a>
                 <a href="https://markbellingham.me/owncloud" class="mainMenu" target="_blank">NextCloud</a>
-                <a href="contact.php" class="mainMenu">Contact</a>
+                <a href="../../contact/contact.php" class="mainMenu">Contact</a>
             </p>
             <div id="name-big">Mark Bellingham</div>
         </header>
