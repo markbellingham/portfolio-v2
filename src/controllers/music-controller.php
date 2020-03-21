@@ -16,3 +16,10 @@ if(isset($_GET['get-tracks'])) {
     $tracks = $albums->getTracks($albumId);
     echo json_encode($tracks);
 }
+
+if(isset($_GET['get-track'])) {
+    $albums = new Albums();
+    $trackId = $_GET['get-track'];
+    $track = $albums->getOneTrack($trackId);
+    echo json_encode($track);
+}

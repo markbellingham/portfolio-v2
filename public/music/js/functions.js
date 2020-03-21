@@ -15,12 +15,11 @@ export function addAlbumToPlaylist(albumId) {
 
 /**
  * Refresh the playlist in the music player
- * @param trackList
  */
-export function printPlayList(trackList) {
+export function printPlayList() {
     let markup = `
     <table>
-    ${trackList.map(
+    ${playlist.map(
         track => `<tr><td>${track.track_no}</td><td>${track.track_name}</td></tr>`
     ).join('')}
     </table>
@@ -60,7 +59,7 @@ export function printTrackList(tracks, image) {
                         <td class="tracks align-middle">${track.track_name}</td>
                         <td class="tracks align-middle">${track.duration}</td>
                         <td class="align-middle">
-                            <button class="btn btn-outline-secondary btn-sm add-track">Add</button>
+                            <button class="btn btn-outline-secondary btn-sm add-track" data-id="${track.trackId}">Add</button>
                         </td>
                     </tr>`;
                 }
@@ -69,4 +68,9 @@ export function printTrackList(tracks, image) {
         </div>
     </div>`;
     return template;
+}
+
+export async function getOneTrack(trackId) {
+    const result = await fetch(`../../src/controllers/music-controller.php?get-track=${trackId}`);
+    return await result.json();
 }

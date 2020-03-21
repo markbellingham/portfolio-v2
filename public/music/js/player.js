@@ -92,7 +92,7 @@ const table = $('#musicList').DataTable({
 });
 
 /**
- * rebuild the table when the page is resized
+ * rebuild the albums table when the page is resized
  */
 table.on('responsive-resize.dt', function(e, datatable, columns) {
     columns.forEach(function(is_visible, index) {
@@ -106,7 +106,7 @@ table.on('responsive-resize.dt', function(e, datatable, columns) {
 });
 
 /**
- * Add event listener for opening and closing details
+ * Add event listener for opening and closing album details
  */
 table.on('click', 'td.details-control', function () {
     const tr = $(this).closest('tr');
@@ -149,7 +149,16 @@ function format(data, callback) {
 table.on('click', 'button.add-album', function() {
     const albumId = this.getAttribute('data-albumId');
     fn.addAlbumToPlaylist(albumId);
-    fn.printPlayList(playlist);
+    fn.printPlayList();
+});
+
+table.on('click', 'button.add-track', function() {
+    const trackId = this.getAttribute('data-id');
+    fn.getOneTrack(trackId).then( track => {
+        console.log(track);
+        playlist.push(track);
+        fn.printPlayList();
+    });
 });
 
 /**
@@ -157,5 +166,5 @@ table.on('click', 'button.add-album', function() {
  */
 $('#clear-playlist').click( function() {
     playlist.length = 0;
-    fn.printPlayList(playlist);
+    fn.printPlayList();
 });
