@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__.'/../../src/appInit.php');
+require_once $_SERVER['DOCUMENT_ROOT'] . '/portfolio-v2/src/appInit.php';
 
 use Albums\Albums;
 

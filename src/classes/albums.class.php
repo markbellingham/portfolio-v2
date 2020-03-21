@@ -1,6 +1,6 @@
 <?php
 namespace Albums;
-require_once(__DIR__."/../../src/appInit.php");
+require_once "../../src/appInit.php";
 use MyPDO\MyPDO;
 
 class Albums
@@ -17,8 +17,8 @@ class Albums
     {
         $sql = "SELECT al.album_id, al.image, ar.artist, al.title, al.year, g.genre
             FROM albums al
-            JOIN artists ar ON al.artist_id = ar.artist_id
-            JOIN genres g ON g.genre_id = al.genre_id
+            LEFT JOIN artists ar ON al.artist_id = ar.artist_id
+            LEFT JOIN genres g ON g.genre_id = al.genre_id
             ORDER BY ar.artist, al.year, al.album_id";
         $this->data = $this->db->run($sql)->fetchAll();
         return $this->data;
@@ -29,8 +29,8 @@ class Albums
         $params = [$albumId];
         $sql = "SELECT al.album_id, al.image, ar.artist, al.title, al.year, g.genre 
             FROM albums al
-            JOIN artists ar ON al.artist_id = ar.artist_id
-            JOIN genres g ON g.genre_id = al.genre_id
+            LEFT JOIN artists ar ON al.artist_id = ar.artist_id
+            LEFT JOIN genres g ON g.genre_id = al.genre_id
             WHERE al.album_id = ?
             ORDER BY ar.artist, al.year, al.album_id";
         $this->data = $this->db->run($sql, $params)->fetch();

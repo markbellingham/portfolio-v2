@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="Description" content="A portfolio of projects and achievements">
-    <meta name="google-site-verification" content="vDQcywlJ0GI01yVFlc_r-LpdyYllgMe4tw8660tfGqM"/>
+<!--    <meta name="google-site-verification" content="vDQcywlJ0GI01yVFlc_r-LpdyYllgMe4tw8660tfGqM"/>-->
     <meta name="keywords"
           content="computing, computer science, graduate, programming, software development, dynamic website, database, projects, portfolio, HTML, CSS, XML, data engineering, encryption, network design, Python, Java, MySQL, Ajax, cloud, JSON, JSP, REST, servlets, Spring, Android, PHP, assembly, logic, photos, music">
 
@@ -29,9 +29,9 @@
             <p id="mainMenu">
                 <a href="../index.php" class="mainMenu">Home</a>
                 <a href="../../music/player.php" class="mainMenu">Music</a>
-                <a href="../../photos/pictures.php" class="mainMenu">Photos</a>
+                <a href="../../photos/gallery.php" class="mainMenu">Photos</a>
                 <a href="https://markbellingham.me/owncloud" class="mainMenu" target="_blank">NextCloud</a>
-                <a href="../../contact/contact.php" class="mainMenu">Contact</a>
+                <a href="../../contact/me.php" class="mainMenu">Contact</a>
             </p>
             <div id="name-big">Mark Bellingham</div>
         </header>

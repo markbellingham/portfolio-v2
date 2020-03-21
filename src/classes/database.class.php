@@ -1,7 +1,7 @@
 <?php
 namespace MyPDO;
 use \PDO;
-require_once(__DIR__."/../../config/config.php");
+require_once $_SERVER['DOCUMENT_ROOT'] . "/portfolio-v2/config/config.php";
 
 class MyPDO extends PDO
 {

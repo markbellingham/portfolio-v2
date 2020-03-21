@@ -1,6 +1,5 @@
 <?php
 $title = 'Music';
-
 include_once("../common/layout/header.php");
 
 ?>
@@ -37,4 +36,4 @@ include_once("../common/layout/header.php");
 <?php
 include_once("../common/layout/footer.php");
 ?>
-<script src="js/player.js"></script>
+<script type="module" src="js/player.js"></script>

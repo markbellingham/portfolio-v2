@@ -1,11 +1,13 @@
-let tracklist = [];
+import * as fn from './functions.js';
+import { playlist, objParams } from './application-data.js';
+
 /**
  * DataTables setup - list of albums
  * @type {jQuery}
  * @var data.album_id
  */
 const table = $('#musicList').DataTable({
-    ajax: "../../src/controllers/db-queries.php?albums=true",
+    ajax: "../../src/controllers/music-controller.php?albums=true",
     columns: [
         {
             defaultContent: "<i class='icon-plus-circled gi-1-3x'></i>",
@@ -15,10 +17,22 @@ const table = $('#musicList').DataTable({
             data: "image",
             render: value => `<img alt="cover" src="../../Resources/${value}_sm.jpg"/>`
         },
-        { data: "artist", className: "align-middle" },
-        { data: "title", className: "align-middle" },
-        { data: "year", className: "align-middle" },
-        { data: "genre", className: "align-middle" },
+        {
+            data: "artist",
+            className: "align-middle"
+        },
+        {
+            data: "title",
+            className: "align-middle"
+        },
+        {
+            data: "year",
+            className: "align-middle"
+        },
+        {
+            data: "genre",
+            className: "align-middle"
+        },
         {
             data: "album_id",
             className: "align-middle",
@@ -64,7 +78,6 @@ const table = $('#musicList').DataTable({
                         const val = $.fn.dataTable.util.escapeRegex(
                             $(this).val()
                         );
-
                         column
                             .search(val ? '^' + val + '$' : '', true, false)
                             .draw();
@@ -119,65 +132,30 @@ table.on('click', 'td.details-control', function () {
 /**
  * formats the child row of the music table, showing track information
  * @param data
- * @param data.track_name
- * @param data.duration
- * @param data.image
  * @param callback
  */
 function format(data, callback) {
-    $.ajax({
-        url: `../../src/controllers/db-queries.php?get-tracks=${data.album_id}`,
-        method: 'GET',
-        dataType: 'json',
-        success: function(response) {
-            let tracks = '<table id="tracks" class="">';
-            $.each(response, function(i, d) {
-                const trackNo = Number(i+1).toString().padStart(2,'0');
-                tracks += `<tr>
-                            <td class="tracks align-middle">${trackNo}</td>
-                            <td class="tracks align-middle">${d.track_name}</td>
-                            <td class="tracks align-middle">${d.duration}</td>
-                            <td class="align-middle"><button class="btn btn-outline-secondary btn-sm add-track">Add</button></td>
-                        </tr>`;
-            });
-            const template = `<div class="slider">
-                <div class="col-md-3">
-                    <img alt="cover" src="../../Resources/${data.image}.jpg" width="100%"/>
-                </div>
-                <div class="col-md-5">${tracks}</div>
-                </div>`;
-            callback(template, 'no-padding').show();
-            $('#tracks').removeClass('table table-hover dt-responsive table-sm');
-            $('div.slider', callback()).slideDown();
-        }
+    fn.getTracks(data.album_id).then( tracks => {
+        const template = fn.printTrackList(tracks, data.image);
+        callback(template, 'no-padding').show();
+        $('#tracks').removeClass('table table-hover dt-responsive table-sm');
+        $('div.slider', callback()).slideDown();
     });
 }
 
+/**
+ * Add an album to the playlist
+ */
 table.on('click', 'button.add-album', function() {
     const albumId = this.getAttribute('data-albumId');
-    const result = fetch(`../../src/controllers/db-queries.php?get-tracks=${albumId}`);
-    result
-        .then( response => response.json() )
-        .then( response => {
-            for(let r of response) {
-                tracklist.push(r);
-            }
-            printTrackList(tracklist);
-        });
+    fn.addAlbumToPlaylist(albumId);
+    fn.printPlayList(playlist);
 });
 
-function printTrackList(trackList) {
-    let markup = `
-    <table>
-    ${trackList.map(
-        track => `<tr><td>${track.track_no}</td><td>${track.track_name}</td></tr>`
-    ).join('')}
-    </table>
-    `;
-    $('#track-list').html(markup);
-}
-
-$('#clear-tracklist').click( function() {
-    tracklist = [];
-    printTrackList(tracklist);
+/**
+ * Remove all tracks from the playlist
+ */
+$('#clear-playlist').click( function() {
+    playlist.length = 0;
+    fn.printPlayList(playlist);
 });
