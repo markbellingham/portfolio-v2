@@ -76,7 +76,7 @@ html {
 /*-----------------------
  Header and Footer styles
  ------------------------ */
-header,footer,article,nav{
+header,footer,article{
     float: left;
     padding: 10px;
 }
@@ -127,6 +127,25 @@ footer{
         padding-right: 5px;
         font-size: 1em;
     }
+}
+
+#player-container {
+    height: 70px;
+    overflow: hidden;
+}
+
+.nav {
+    background-color: #eaeaea;
+    padding: 5px 0 5px 0;
+    height: 100%;
+}
+.nav-link {
+    padding: 25px;
+    font-size: 2em;
+}
+.nav-link.active {
+    background-color: white;
+    margin-left: 5px;
 }
 
 

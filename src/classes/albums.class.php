@@ -1,6 +1,5 @@
 <?php
 namespace Albums;
-require_once "../../src/appInit.php";
 use MyPDO\MyPDO;
 
 class Albums
@@ -33,6 +32,7 @@ class Albums
      * @param $albumId
      * @return object
      */
+
     public function findOne($albumId)
     {
         $params = [$albumId];
@@ -53,7 +53,10 @@ class Albums
     public function getTracks($albumId)
     {
         $params = [$albumId];
-        $sql = "SELECT trackId, track_no, track_name, duration, filename FROM tracks WHERE album_id = ? ORDER BY track_no";
+        $sql = "SELECT t.trackId, t.track_no, t.track_name, t.duration, t.filename  
+                FROM tracks t
+                WHERE t.album_id = ? 
+                ORDER BY track_no";
         return $this->db->run($sql, $params)->fetchAll();
     }
 
@@ -65,7 +68,9 @@ class Albums
     public function getOneTrack($trackId)
     {
         $params = [$trackId];
-        $sql = "SELECT trackId, track_no, track_name, duration, filename FROM tracks WHERE trackId = ?";
+        $sql = "SELECT trackId, track_no, track_name, duration, filename 
+                FROM tracks 
+                WHERE trackId = ?";
         return $this->db->run($sql, $params)->fetch();
     }
 }

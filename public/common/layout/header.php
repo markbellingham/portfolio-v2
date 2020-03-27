@@ -24,15 +24,15 @@
 </head>
 <body>
 <div id="container">
-    <div class="row">
-        <header>
-            <p id="mainMenu">
-                <a href="../index.php" class="mainMenu">Home</a>
-                <a href="../../music/player.php" class="mainMenu">Music</a>
-                <a href="../../photos/gallery.php" class="mainMenu">Photos</a>
-                <a href="https://markbellingham.me/owncloud" class="mainMenu" target="_blank">NextCloud</a>
-                <a href="../../contact/me.php" class="mainMenu">Contact</a>
-            </p>
-            <div id="name-big">Mark Bellingham</div>
-        </header>
-    </div>
+<!--    <div class="row">-->
+<!--        <header>-->
+<!--            <p id="mainMenu">-->
+<!--                <a href="../index.php" class="mainMenu">Home</a>-->
+<!--                <a href="../../music/player.php" class="mainMenu">Music</a>-->
+<!--                <a href="../../photos/gallery.php" class="mainMenu">Photos</a>-->
+<!--                <a href="https://markbellingham.me/owncloud" class="mainMenu" target="_blank">NextCloud</a>-->
+<!--                <a href="../../contact/me.php" class="mainMenu">Contact</a>-->
+<!--            </p>-->
+<!--            <div id="name-big">Mark Bellingham</div>-->
+<!--        </header>-->
+<!--    </div>-->
