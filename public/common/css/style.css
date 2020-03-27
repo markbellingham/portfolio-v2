@@ -141,7 +141,7 @@ footer{
 }
 .nav-link {
     padding: 25px;
-    font-size: 2em;
+    font-size: 1.8em;
 }
 .nav-link.active {
     background-color: white;

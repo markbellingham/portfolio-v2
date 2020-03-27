@@ -43,7 +43,11 @@ include_once "common/layout/header.php";
                 include_once 'music/library.php';
                 ?>
             </div>
-            <div class="tab-pane" id="playlists">Playlists Tab.</div>
+            <div class="tab-pane" id="playlists">
+                <?php
+                include_once 'playlists/playlists.php';
+                ?>
+            </div>
             <div class="tab-pane" id="gallery">Gallery Tab.</div>
             <div class="tab-pane" id="blog">Blog Tab.</div>
             <div class="tab-pane" id="contact">Contact Tab.</div>
