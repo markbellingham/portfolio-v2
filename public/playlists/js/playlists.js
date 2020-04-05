@@ -7,11 +7,12 @@ getTopAlbums(rootUrl, username, APIKey, dataFormat)
     .then( data => {
         const albums = data.topalbums.album;
         let output = '<table class="table table-condensed table-hover" style="width: 100%;">';
-        output += '<tr><th>Rank</th><th>Artist</th><th>Album</th><th>Play Count</th></tr>';
+        output += '<tr><th></th><th>Album</th><th class="text-right">Play Count</th></tr>';
         for(let [i, album] of albums.entries()) {
-            output += `<tr><td>${(i + 1).toString().padStart(2, '0')}</td>`;
-            output += `<td>${album.artist.name}</td>`;
-            output += `<td>${album.name}</td>`;
+            const hidden = i < 5 ? '' : 'collapse';
+            output += `<tr class="${hidden}"><td>${(i + 1).toString().padStart(2, '0')}</td>`;
+            output += `<td>${album.name}<br>`;
+            output += `${album.artist.name}</td>`;
             output += `<td class="text-right">${album.playcount}</td></tr>`;
         }
         output += '</table>';
@@ -22,9 +23,10 @@ getTopArtists(rootUrl, username, APIKey, dataFormat)
     .then( data => {
         const artists = data.topartists.artist;
         let output = '<table class="table table-condensed table-hover" style="width: 100%;">';
-        output += '<tr><th>Rank</th><th>Artist</th><th>Play Count</th></tr>';
+        output += '<tr><th></th><th>Artist</th><th class="text-right">Play Count</th></tr>';
         for(let [i, artist] of artists.entries()) {
-            output += `<tr><td>${(i + 1).toString().padStart(2, '0')}</td>`;
+            const hidden = i < 5 ? '' : 'collapse';
+            output += `<tr class="${hidden}"><td>${(i + 1).toString().padStart(2, '0')}</td>`;
             output += `<td>${artist.name}</td>`;
             output += `<td class="text-right">${artist.playcount}</td></tr>`;
         }
@@ -34,7 +36,18 @@ getTopArtists(rootUrl, username, APIKey, dataFormat)
 
 getTopTracks(rootUrl, username, APIKey, dataFormat)
     .then( data => {
-        const tracks = '';
+        const tracks = data.toptracks.track;
+        let output = '<table class="table table-condensed table-hover" style="width: 100%;">';
+        output += '<tr><th></th><th>Track</th><th class="text-right">Play Count</th></tr>';
+        for(let [i, track] of tracks.entries()) {
+            const hidden = i < 5 ? '' : 'collapse';
+            output += `<tr class="${hidden}"><td>${(i + 1).toString().padStart(2, '0')}</td>`;
+            output += `<td>${track.name}<br>`;
+            output += `${track.artist.name}</td>`;
+            output += `<td class="text-right">${track.playcount}</td></tr>`;
+        }
+        output += '</table>';
+        $('#top-tracks').html(output);
 });
 
 async function getTopAlbums(rootUrl, username, APIKey, format) {
@@ -50,4 +63,24 @@ async function getTopArtists(rootUrl, username, APIKey, format) {
 async function getTopTracks(rootUrl, username, APIKey, format) {
     const result = await fetch(`${rootUrl}gettoptracks${username}${APIKey}${format}`);
     return await result.json();
+}
+
+$('#top-albums-toggle').click( function() {
+    $('#top-albums').find('.collapse').slideToggle();
+    switchChevrons($(this));
+});
+$('#top-artists-toggle').click( function() {
+    switchChevrons($(this));
+    $('#top-artists').find('.collapse').slideToggle();
+});
+$('#top-tracks-toggle').click( function() {
+    switchChevrons($(this));
+    $('#top-tracks').find('.collapse').slideToggle();
+});
+function switchChevrons(t) {
+    if(t.hasClass('fa-chevron-down')) {
+        t.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+    } else {
+        t.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+    }
 }

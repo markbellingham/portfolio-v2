@@ -10,7 +10,7 @@ export const table = $('#musicList').DataTable({
     ajax: "../src/controllers/music-controller.php?albums=true",
     columns: [
         {
-            defaultContent: "<i class='icon-plus-circled gi-1-3x'></i>",
+            defaultContent: "<i class='fa fa-plus-circle text-success gi-1-3x'></i>",
             className: "details-control align-middle"
         },
         {
@@ -118,11 +118,11 @@ table.on('click', 'td.details-control', function () {
             row.child.hide();
             tr.removeClass('shown');
         } );
-        $(this).html('<i class="icon-plus-circled gi-1-3x"></i>');
+        $(this).html('<i class="fas fa-plus-circle text-success gi-1-3x"></i>');
     }
     else {
         // Open this row
-        $(this).html('<i class="icon-minus-circled gi-1-3x"></i>');
+        $(this).html('<i class="fas fa-minus-circle text-danger gi-1-3x"></i>');
         tr.addClass('shown');
         format(row.data(), row.child);
     }

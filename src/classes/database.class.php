@@ -1,7 +1,8 @@
 <?php
 namespace MyPDO;
 use \PDO;
-require_once $_SERVER['DOCUMENT_ROOT'] . "/portfolio-v2/config/config.php";
+$configs = require_once $_SERVER['DOCUMENT_ROOT'] . "/portfolio-v2/config/config.php";
+$dbConfig = $configs['db_music'];
 
 class MyPDO extends PDO
 {
@@ -10,14 +11,15 @@ class MyPDO extends PDO
 
     public function __construct()
     {
+        global $dbConfig;
         $default_options = array(
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
             PDO::ATTR_EMULATE_PREPARES => false,
             PDO:: ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         );
-        $dsn = 'mysql:host='.DB_HOST.';dbname='.DB_NAME.';charset='.DB_CHAR;
-        parent::__construct($dsn, DB_USER, DB_PASS, $default_options);
-        $this->pdo = new PDO($dsn, DB_USER, DB_PASS, $default_options);
+        $dsn = 'mysql:host='.$dbConfig['db_host'].';dbname='.$dbConfig['db_name'].';charset='.$dbConfig['db_char'];
+        parent::__construct($dsn, $dbConfig['db_user'], $dbConfig['db_pass'], $default_options);
+        $this->pdo = new PDO($dsn, $dbConfig['db_user'], $dbConfig['db_pass'], $default_options);
     }
 
     // A classical static method to make it universally available

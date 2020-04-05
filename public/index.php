@@ -26,7 +26,7 @@ include_once "common/layout/header.php";
                 <a href="#gallery" class="nav-link" data-toggle="tab">Gallery</a>
             </li>
             <li class="nav-item">
-                <a href="#blog" class="nav-link" data-toggle="tab">Blog</a>
+                <a href="#tutorials" class="nav-link" data-toggle="tab">Tutorials</a>
             </li>
             <li class="nav-item">
                 <a href="#contact" class="nav-link" data-toggle="tab">Contact</a>
@@ -34,7 +34,7 @@ include_once "common/layout/header.php";
         </ul>
     </div>
 
-    <div class="col-md-10">
+    <div class="col-md-10" style="height: 85vh; overflow: auto;">
         <!-- Tab panes -->
         <div class="tab-content">
             <div class="tab-pane active" id="home">Home Tab.</div>
@@ -48,9 +48,17 @@ include_once "common/layout/header.php";
                 include_once 'playlists/playlists.php';
                 ?>
             </div>
-            <div class="tab-pane" id="gallery">Gallery Tab.</div>
-            <div class="tab-pane" id="blog">Blog Tab.</div>
-            <div class="tab-pane" id="contact">Contact Tab.</div>
+            <div class="tab-pane" id="gallery">
+                <?php
+                include_once 'photos/gallery.php';
+                ?>
+            </div>
+            <div class="tab-pane" id="tutorials">Tutorials Tab.</div>
+            <div class="tab-pane" id="contact">
+                <?php
+                include_once 'contact/me.php';
+                ?>
+            </div>
         </div>
     </div>
 </div>
