@@ -39,7 +39,7 @@ export function printPlayList() {
  * @returns {Promise<any>}
  */
 export async function getTracks(albumId) {
-    const result = await fetch(`../src/controllers/music-controller.php?get-tracks=${albumId}`);
+    const result = await fetch(`/api/v1/get/tracks/${albumId}`);
     return await result.json();
 }
 
@@ -77,6 +77,6 @@ export function printTrackList(tracks, image) {
 }
 
 export async function getOneTrack(trackId) {
-    const result = await fetch(`../src/controllers/music-controller.php?get-track=${trackId}`);
+    const result = await fetch(`/api/v1/get/track/${trackId}`);
     return await result.json();
 }

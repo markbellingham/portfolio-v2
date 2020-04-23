@@ -1,10 +1,10 @@
 <?php
-require_once '../src/appInit.php';
+require_once 'appInit.php';
 
 include_once "common/layout/header.php";
 ?>
 <body>
-<div class="col-md-10 col-md-offset-1">
+<div class="col-md-12">
     <?php
     include_once 'music/player.php';
     ?>
@@ -63,5 +63,21 @@ include_once "common/layout/header.php";
     </div>
 </div>
 </body>
+
+<script>
+    // Auto select the tab if the name is in the url
+    const url = document.location.toString();
+    if(url.match('#')) {
+        $(`.nav-item a[href="#${url.split('#')[1]}"]`).tab('show');
+    }
+
+    // Update the url when a tab is selected
+    $('.nav-link').on('click', function() {
+        const tab = this.href;
+        history.pushState({
+            id: tab
+        }, 'Title', tab);
+    });
+</script>
 <?php
 include_once "common/layout/footer.php";

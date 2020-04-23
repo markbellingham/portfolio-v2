@@ -1,17 +1,16 @@
 <?php
 namespace MyPDO;
 use \PDO;
-$configs = require_once $_SERVER['DOCUMENT_ROOT'] . "/portfolio-v2/config/config.php";
-$dbConfig = $configs['db_music'];
 
 class MyPDO extends PDO
 {
     protected static $instance;
     protected $pdo;
 
-    public function __construct()
+    public function __construct($db_name)
     {
-        global $dbConfig;
+        $configs = include  "../../config/config.php";
+        $dbConfig = $configs[$db_name];
         $default_options = array(
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
             PDO::ATTR_EMULATE_PREPARES => false,
@@ -23,12 +22,12 @@ class MyPDO extends PDO
     }
 
     // A classical static method to make it universally available
-    public static function instance()
+    public static function instance($db_name)
     {
-        if(self::$instance === null) {
-            self::$instance = new self;
+        if(self::$instance[$db_name] === null) {
+            self::$instance[$db_name] = new MyPDO($db_name);
         }
-        return self::$instance;
+        return self::$instance[$db_name];
     }
 
     // A proxy to native PDO methods

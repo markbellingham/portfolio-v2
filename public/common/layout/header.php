@@ -5,10 +5,9 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta name="Description" content="A portfolio of projects and achievements">
-<!--    <meta name="google-site-verification" content="vDQcywlJ0GI01yVFlc_r-LpdyYllgMe4tw8660tfGqM"/> -->
+    <meta name="Description" content="A personal website">
     <meta name="keywords"
-          content="computing, computer science, graduate, programming, software development, dynamic website, database, projects, portfolio, HTML, CSS, XML, data engineering, encryption, network design, Python, Java, MySQL, Ajax, cloud, JSON, JSP, REST, servlets, Spring, Android, PHP, assembly, logic, photos, music">
+          content="computing, computer science, graduate, programming, software development, dynamic website, webapp, database, projects, personal, portfolio, HTML, CSS, XML, MySQL, Ajax, JSON, REST, PHP, photos, music">
 
     <title><?php echo isset($title) ? $title.' - Mark Bellingham' : 'Mark Bellingham'; ?></title>
 
@@ -24,8 +23,8 @@
     <script src="https://kit.fontawesome.com/0825dd3daf.js" crossorigin="anonymous"></script>
 
     <!-- Local Custom Stylesheets -->
-    <link id="colours" type="text/css" href="/portfolio-v2/public/common/css/style1.css" rel="stylesheet">
-    <link id="stylesheet" type="text/css" href="/portfolio-v2/public/common/css/style.css" rel="stylesheet">
+    <link id="colours" type="text/css" href="common/css/style1.css" rel="stylesheet">
+    <link id="stylesheet" type="text/css" href="common/css/style.css" rel="stylesheet">
 
 </head>
 <body>

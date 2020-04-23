@@ -1,6 +1,6 @@
 <?php
 namespace Pictures;
-require_once(__DIR__."../appInit.php");
+
 use MyPDO\MyPDO;
 
 class Pictures
@@ -10,7 +10,7 @@ class Pictures
 
     public function __construct()
     {
-        $this->db = MyPDO::instance();
+        $this->db = MyPDO::instance('Pictures');
     }
 
 

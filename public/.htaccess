@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteRule api/([^\.]+).(xml|json|csv|datatables) api/front-controller.php?url=$1&type=$2 [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2|font.css|css|js)$">
+    Header set Access-Control-Allow-Origin "*"
+  </FilesMatch>
+</IfModule>

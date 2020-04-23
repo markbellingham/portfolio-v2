@@ -1,5 +1,5 @@
 <?php
-namespace Albums;
+require_once('database.class.php');
 use MyPDO\MyPDO;
 
 class Albums
@@ -9,7 +9,7 @@ class Albums
 
     public function __construct()
     {
-        $this->db = MyPDO::instance();
+        $this->db = MyPDO::instance('Music');
     }
 
     /**
@@ -23,8 +23,7 @@ class Albums
             LEFT JOIN artists ar ON al.artist_id = ar.artist_id
             LEFT JOIN genres g ON g.genre_id = al.genre_id
             ORDER BY ar.artist, al.year, al.album_id";
-        $this->data = $this->db->run($sql)->fetchAll();
-        return $this->data;
+        return $this->db->run($sql)->fetchAll();
     }
 
     /**

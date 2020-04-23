@@ -7,7 +7,7 @@ import * as fn from './functions.js';
  * @var data.album_id
  */
 export const table = $('#musicList').DataTable({
-    ajax: "../src/controllers/music-controller.php?albums=true",
+    ajax: "/api/v1/get/albums.datatables",
     columns: [
         {
             defaultContent: "<i class='fa fa-plus-circle text-success gi-1-3x'></i>",

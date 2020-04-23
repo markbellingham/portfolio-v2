@@ -1,5 +1,11 @@
 {
-    "require": {
-        "phpmailer/phpmailer": "^6.1"
-    }
+  "require": {
+    "phpmailer/phpmailer": "^6.1",
+    "ext-pdo": "*",
+    "ext-json": "*",
+    "datatables/datatables": "^1.10",
+    "twitter/bootstrap": "^4.4",
+    "components/jquery": "^3.4",
+    "ext-http": "*"
+  }
 }
