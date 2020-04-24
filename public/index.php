@@ -64,7 +64,10 @@ include_once "common/layout/header.php";
 </div>
 </body>
 
-<script>
+<script type="module">
+    import * as fn from './music/js/functions.js';
+    fn.printPlayList();
+
     // Auto select the tab if the name is in the url
     const url = document.location.toString();
     if(url.match('#')) {

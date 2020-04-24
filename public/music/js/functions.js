@@ -1,5 +1,4 @@
-import { playlist } from "./application-data.js";
-import * as fn from './functions.js';
+import { playlist, nowPlaying } from "./application-data.js";
 
 /**
  * Get tracks for an album and add them to the playlist
@@ -9,9 +8,18 @@ export function addAlbumToPlaylist(albumId) {
     getTracks(albumId)
         .then( response => {
             for(let r of response) {
-                playlist.push(r);
+                if( playlist.length === 0 ) {
+                    playlist.push(r);
+                    const player = document.getElementById('player');
+                    player.src = '/Resources/Music/' + r.filename;
+                    player.load();
+                    document.getElementById('now-playing').innerHTML = `<img src="Resources/${r.image}_sm.jpg" alt="album cover" class="pr-1"/> ${r.artist} - ${r.track_name}`;
+                    nowPlaying.trackId = r.trackId;
+                } else {
+                    playlist.push(r);
+                }
             }
-            fn.printPlayList();
+            printPlayList();
         });
 }
 
@@ -21,14 +29,21 @@ export function addAlbumToPlaylist(albumId) {
 export function printPlayList() {
     console.log(playlist);
     let markup = `<table style="width: 100%;">`;
-    for(let [i, track] of playlist.entries()) {
+    if(playlist.length > 0) {
+        for(let [i, track] of playlist.entries()) {
+            const colour = nowPlaying.trackId === track.trackId ? 'text-danger' : '';
+            markup += `
+            <tr class="${colour}">
+                <td>${(i + 1).toString().padStart(2,'0')}</td>
+                <td>${track.track_name}</td>
+                <td>${track.duration}</td>
+                <td><button class="btn btn-xs btn-danger remove" data-id="${track.trackId}" title="Remove">x</button></td>
+            </tr>`;
+        }
+    } else {
         markup += `
-        <tr>
-            <td>${(i + 1).toString().padStart(2,'0')}</td>
-            <td>${track.track_name}</td>
-            <td>${track.duration}</td>
-            <td><button class="btn btn-xs btn-danger remove" data-id="${track.trackId}" title="Remove">x</button></td>
-        </tr>`;
+        <tr><td class="text-center"><h5>Playlist Empty</h5></td></tr>
+        `;
     }
     markup += `</table>`;
     $('#track-list').html(markup);

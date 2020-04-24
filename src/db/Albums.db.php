@@ -52,8 +52,10 @@ class Albums
     public function getTracks($albumId)
     {
         $params = [$albumId];
-        $sql = "SELECT t.trackId, t.track_no, t.track_name, t.duration 
+        $sql = "SELECT t.trackId, t.track_no, t.track_name, t.duration, t.filename, al.title, al.image, ar.artist 
                 FROM tracks t
+                JOIN albums al ON t.album_id = al.album_id
+                JOIN artists ar ON al.artist_id = ar.artist_id
                 WHERE t.album_id = ? 
                 ORDER BY track_no";
         return $this->db->run($sql, $params)->fetchAll();
