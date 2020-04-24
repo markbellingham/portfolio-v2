@@ -9,14 +9,36 @@
     display: table;
 }
 
+#main-page {
+    position: absolute;
+    margin-top: 100px;
+}
+
+.btn-group-xs > .btn, .btn-xs {
+    padding: .25rem .4rem;
+    font-size: .875rem;
+    line-height: .5;
+    border-radius: .2rem;
+}
+
 html {
     font-family: "Lucida Sans", sans-serif;
     overflow-y: scroll;
 }
 
 #player-container {
-    height: 70px;
+    height: 85px;
     overflow: hidden;
+}
+
+#tracklist-container {
+    height: 0;
+    display: none;
+    z-index: 3;
+    background-color: #fefefe;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2), 0 10px 20px 0 rgba(0, 0, 0, 0.19);
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 

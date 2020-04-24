@@ -9,7 +9,7 @@ include_once "common/layout/header.php";
     include_once 'music/player.php';
     ?>
 </div>
-<div  class="col-md-12">
+<div id="main-page" class="col-md-12">
     <div class="col-md-2">
         <!-- Nav tabs -->
         <ul class="nav flex-column">

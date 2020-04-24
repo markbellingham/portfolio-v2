@@ -7,7 +7,7 @@ getIcons().then( icons => {
 
 // Get icons for the icon chooser
 async function getIcons() {
-    const result = await fetch(`/api/v1/get/contact/icons.json`);
+    const result = await fetch(`/api/v1/get/contact/icons`);
     return await result.json();
 }
 

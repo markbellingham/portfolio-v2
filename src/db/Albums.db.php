@@ -52,7 +52,7 @@ class Albums
     public function getTracks($albumId)
     {
         $params = [$albumId];
-        $sql = "SELECT t.trackId, t.track_no, t.track_name, t.duration, t.filename  
+        $sql = "SELECT t.trackId, t.track_no, t.track_name, t.duration 
                 FROM tracks t
                 WHERE t.album_id = ? 
                 ORDER BY track_no";

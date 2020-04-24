@@ -1,6 +1,7 @@
 <IfModule mod_rewrite.c>
     RewriteEngine on
     RewriteRule api/([^\.]+).(xml|json|csv|datatables) api/front-controller.php?url=$1&type=$2 [L]
+    RewriteRule api/([^\.]+)$ api/front-controller.php?url=$1 [L]
 </IfModule>
 
 <IfModule mod_headers.c>

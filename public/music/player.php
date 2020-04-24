@@ -1,27 +1,39 @@
 <?php
 $title = 'Music';
 ?>
-<div id="player-container">
+<div>
     <div class="row">
-        <div  class="col-md-6 col-md offset-3" style="border: 1px solid red;">
-            <div id="player">
+        <div id="player-container" class="col-md-8 offset-2">
+            <div id="player" class="col-md-7 offset-1">
                 <audio controls>
                     <source src="" type="">
                 </audio>
             </div>
-            <div class="col-md-2" style="border: 1px solid green;">
-                <button id="clear-playlist" class="btn btn-light">Clear Playlist</button>
+            <div class="col-md-4 text-right">
+                <i id="toggle-tracklist" class="fas fa-chevron-circle-down text-primary" style="font-size: 2em; z-index: 1000;"></i>
             </div>
-            <div class="col-md-1 down-arrow"></div>
         </div>
-        <div class="col-md-3"></div>
-    </div>
-    <div class="row">
-        <div id="track-list" class="col-md-4">
+        <div class="col-md-2">
 
         </div>
-        <div class="col-md-2" id="lyrics">
-            <h2>Lyrics</h2>
+    </div>
+    <div class="row">
+        <div id="tracklist-container" class="col-md-8 offset-2">
+            <div class="col-md-6">
+                <h5>
+                    <span class="text-primary">Tracklist</span>
+                    <button id="clear-playlist" class="btn btn-light float-right">Clear Playlist</button>
+                </h5>
+                <div id="track-list" style="width: 100%;">
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h5 class="text-primary">Lyrics</h5>
+                <div id="lyrics">
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

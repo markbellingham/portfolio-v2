@@ -20,13 +20,14 @@ export function addAlbumToPlaylist(albumId) {
  */
 export function printPlayList() {
     console.log(playlist);
-    let markup = `<table>`;
+    let markup = `<table style="width: 100%;">`;
     for(let [i, track] of playlist.entries()) {
         markup += `
         <tr>
             <td>${(i + 1).toString().padStart(2,'0')}</td>
             <td>${track.track_name}</td>
             <td>${track.duration}</td>
+            <td><button class="btn btn-xs btn-danger remove" data-id="${track.trackId}" title="Remove">x</button></td>
         </tr>`;
     }
     markup += `</table>`;
@@ -61,9 +62,9 @@ export function printTrackList(tracks, image) {
                     const trackNo = (i + 1).toString().padStart(2,'0');
                     template += `
                     <tr>
-                        <td class="tracks align-middle">${trackNo}</td>
+                        <td class="tracks align-text-top">${trackNo}</td>
                         <td class="tracks align-middle">${track.track_name}</td>
-                        <td class="tracks align-middle">${track.duration}</td>
+                        <td class="tracks align-text-top">${track.duration}</td>
                         <td class="align-middle">
                             <button class="btn btn-outline-secondary btn-sm add-track" data-id="${track.trackId}">Add</button>
                         </td>

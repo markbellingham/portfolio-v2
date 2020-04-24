@@ -36,7 +36,7 @@ switch($target) {
         $response = $contactController->fulfilRequest();
         break;
     default:
-        http_redirect('index.php');
+        header('/');
 }
 
 switch($returnType) {
