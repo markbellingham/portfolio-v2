@@ -45,6 +45,9 @@ $('#clear-playlist').click( function() {
     fn.printPlayList();
 });
 
+/**
+ * Change the playing track by double clicking it in the playlist
+ */
 $('#track-list').on('dblclick', 'tr', function() {
     const trackId = parseInt(this.id.substring(2));
     const track = playlist.find( t => t.trackId === trackId );

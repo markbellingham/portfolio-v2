@@ -186,7 +186,9 @@ function addAlbumToPlaylist(albumId) {
                 if( playlist.length === 0 ) {
                     fn.setPlayingTrack(r);
                 }
-                playlist.push(r);
+                if(playlist.find( t => t.trackId === r.trackId) === undefined) {
+                    playlist.push(r);
+                }
             }
             fn.printPlayList();
         });

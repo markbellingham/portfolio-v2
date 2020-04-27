@@ -25,7 +25,6 @@ export function setPlayingTrack(track) {
  * Refresh the playlist in the music player
  */
 export function printPlayList() {
-    console.log(playlist);
     let markup = `<table style="width: 100%;">`;
     if(playlist.length > 0) {
         for(let [i, track] of playlist.entries()) {
