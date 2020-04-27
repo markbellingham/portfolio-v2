@@ -18,7 +18,7 @@ export const table = $('#musicList').DataTable({
             render: value => `<img alt="cover" src="../Resources/${value}_sm.jpg"/>`
         },
         {
-            data: "artist",
+            data: "album_artist",
             className: "align-middle"
         },
         {
@@ -135,7 +135,7 @@ table.on('click', 'td.details-control', function () {
  * @param callback
  */
 function format(data, callback) {
-    fn.getTracks(data.album_id).then( tracks => {
+    getTracks(data.album_id).then( tracks => {
         const template = fn.printTrackList(tracks, data.image);
         callback(template, 'no-padding').show();
         $('#tracks').removeClass('table table-hover dt-responsive table-sm');
@@ -148,13 +148,56 @@ function format(data, callback) {
  */
 table.on('click', 'button.add-album', function() {
     const albumId = this.getAttribute('data-albumId');
-    fn.addAlbumToPlaylist(albumId);
+    addAlbumToPlaylist(albumId);
 });
 
+/**
+ * Add a single track to the playlist
+ */
 table.on('click', 'button.add-track', function() {
     const trackId = this.getAttribute('data-id');
-    fn.getOneTrack(trackId).then( track => {
+    getOneTrack(trackId).then( track => {
+        if(playlist.length === 0) {
+            fn.setPlayingTrack(track);
+        }
         playlist.push(track);
         fn.printPlayList();
     });
 });
+
+/**
+ * Get information about a single track from the database
+ * @param trackId
+ * @returns {Promise<any>}
+ */
+async function getOneTrack(trackId) {
+    const result = await fetch(`/api/v1/get/track/${trackId}`);
+    return await result.json();
+}
+
+/**
+ * Get tracks for an album and add them to the playlist
+ * @param albumId
+ */
+function addAlbumToPlaylist(albumId) {
+    getTracks(albumId)
+        .then( response => {
+            for(let r of response) {
+                if( playlist.length === 0 ) {
+                    fn.setPlayingTrack(r);
+                }
+                playlist.push(r);
+            }
+            fn.printPlayList();
+        });
+}
+
+/**
+ * Get all tracks for one album from the database
+ * @param albumId
+ * @returns {Promise<any>}
+ */
+async function getTracks(albumId) {
+    const result = await fetch(`/api/v1/get/tracks/${albumId}`);
+    return await result.json();
+}

@@ -18,7 +18,7 @@ class Albums
      */
     public function findAll()
     {
-        $sql = "SELECT al.album_id, al.image, ar.artist, al.title, al.year, g.genre
+        $sql = "SELECT al.album_id, al.image, al.album_artist, ar.artist, al.title, al.year, g.genre
             FROM albums al
             LEFT JOIN artists ar ON al.artist_id = ar.artist_id
             LEFT JOIN genres g ON g.genre_id = al.genre_id
@@ -69,8 +69,10 @@ class Albums
     public function getOneTrack($trackId)
     {
         $params = [$trackId];
-        $sql = "SELECT trackId, track_no, track_name, duration, filename 
-                FROM tracks 
+        $sql = "SELECT t.trackId, t.track_no, t.track_name, t.duration, t.filename, al.title, al.image, ar.artist 
+                FROM tracks t
+                JOIN albums al ON t.album_id = al.album_id
+                JOIN artists ar ON al.artist_id = ar.artist_id
                 WHERE trackId = ?";
         return $this->db->run($sql, $params)->fetch();
     }

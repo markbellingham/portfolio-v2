@@ -1,5 +1,6 @@
-import { playlist, objParams } from './application-data.js';
+import {playlist, objParams, nowPlaying} from './application-data.js';
 import * as fn from './functions.js';
+import {setPlayingTrack} from "./functions.js";
 
 const tracklistContainer = $('#tracklist-container');
 
@@ -44,8 +45,32 @@ $('#clear-playlist').click( function() {
     fn.printPlayList();
 });
 
-$('#track-list').on('click','.remove', function() {
+$('#track-list').on('dblclick', 'tr', function() {
+    const trackId = parseInt(this.id.substring(2));
+    const track = playlist.find( t => t.trackId === trackId );
+    fn.setPlayingTrack(track);
+    fn.printPlayList();
+});
+
+/**
+ * Remove a single track from the playlist
+ */
+$('#track-list').on('click','.remove', function(e) {
+    e.stopPropagation();
     const trackId = parseInt(this.getAttribute('data-id'));
     playlist.splice(playlist.findIndex( t => t.trackId === trackId), 1);
+    fn.printPlayList();
+});
+
+/**
+ * When track stops start playing the next one in the playlist, if it exists
+ */
+document.getElementById('player').addEventListener('ended', function() {
+    const playingTrackIndex = playlist.findIndex( t => t.trackId === nowPlaying.trackId );
+    if(playlist.length > 0) {
+        if(playingTrackIndex > -1 && playlist.length - 1 >= playingTrackIndex + 1) {
+            fn.setPlayingTrack(playlist[playingTrackIndex + 1]);
+        }
+    }
     fn.printPlayList();
 });

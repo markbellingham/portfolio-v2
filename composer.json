@@ -6,6 +6,7 @@
     "datatables/datatables": "^1.10",
     "twitter/bootstrap": "^4.4",
     "components/jquery": "^3.4",
-    "ext-http": "*"
+    "ext-http": "*",
+    "ext-simplexml": "*"
   }
 }

@@ -21,4 +21,20 @@ class Functions {
         $mtime = filemtime($_SERVER['DOCUMENT_ROOT'] . $file);
         return preg_replace('{\\.([^./]+)$}', ".$mtime.\$1", $file);
     }
+
+    public function xml_encode(SimpleXMLElement $object, array $data)
+    {
+        foreach ($data as $key => $value) {
+            if (is_array($value) || is_object($value)) {
+                $new_object = $object->addChild($key);
+                $this->xml_encode($new_object, (array) $value);
+            } else {
+                // if the key is an integer, it needs text with it to actually work.
+                if ($key == (int) $key) {
+                    $key = "key_$key";
+                }
+                $object->addChild($key, htmlspecialchars($value));
+            }
+        }
+    }
 }

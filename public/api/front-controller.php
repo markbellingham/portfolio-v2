@@ -44,7 +44,10 @@ switch($returnType) {
         echo json_encode($response);
         break;
     case 'xml':
-//        echo xml_encode($response);
+        $fn = new Functions();
+        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" ?><rootTag/>');
+        $fn->xml_encode($xml, (array) $response);
+        echo $xml->asXML();
         break;
     case 'csv':
 //        echo csv_encode($response);

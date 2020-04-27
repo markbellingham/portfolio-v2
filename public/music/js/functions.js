@@ -1,26 +1,24 @@
 import { playlist, nowPlaying } from "./application-data.js";
 
 /**
- * Get tracks for an album and add them to the playlist
- * @param albumId
+ * Set playing track in the player, now playing area,
+ * @param track
  */
-export function addAlbumToPlaylist(albumId) {
-    getTracks(albumId)
-        .then( response => {
-            for(let r of response) {
-                if( playlist.length === 0 ) {
-                    playlist.push(r);
-                    const player = document.getElementById('player');
-                    player.src = '/Resources/Music/' + r.filename;
-                    player.load();
-                    document.getElementById('now-playing').innerHTML = `<img src="Resources/${r.image}_sm.jpg" alt="album cover" class="pr-1"/> ${r.artist} - ${r.track_name}`;
-                    nowPlaying.trackId = r.trackId;
-                } else {
-                    playlist.push(r);
-                }
-            }
-            printPlayList();
-        });
+export function setPlayingTrack(track) {
+    const player = document.getElementById('player');
+    player.src = '/Resources/Music/' + track.filename;
+    player.load();
+    player.play();
+    const nowPlayingInfo = `
+    <div style="float: left;">
+        <img src="Resources/${track.image}_sm.jpg" alt="album cover" class="pr-1"/>
+    </div>
+    <div style="float: left;">
+        ${track.artist} <br> ${track.track_name} (${track.title})
+    </div>
+    `;
+    document.getElementById('now-playing').innerHTML = nowPlayingInfo;
+    nowPlaying.trackId = track.trackId;
 }
 
 /**
@@ -33,7 +31,7 @@ export function printPlayList() {
         for(let [i, track] of playlist.entries()) {
             const colour = nowPlaying.trackId === track.trackId ? 'text-danger' : '';
             markup += `
-            <tr class="${colour}">
+            <tr class="${colour}" id="t-${track.trackId}">
                 <td>${(i + 1).toString().padStart(2,'0')}</td>
                 <td>${track.track_name}</td>
                 <td>${track.duration}</td>
@@ -42,21 +40,11 @@ export function printPlayList() {
         }
     } else {
         markup += `
-        <tr><td class="text-center"><h5>Playlist Empty</h5></td></tr>
+        <tr><td class="text-center"><h5>Playlist Is Empty</h5></td></tr>
         `;
     }
     markup += `</table>`;
     $('#track-list').html(markup);
-}
-
-/**
- * Get tracks for one album
- * @param albumId
- * @returns {Promise<any>}
- */
-export async function getTracks(albumId) {
-    const result = await fetch(`/api/v1/get/tracks/${albumId}`);
-    return await result.json();
 }
 
 /**
@@ -90,9 +78,4 @@ export function printTrackList(tracks, image) {
         </div>
     </div>`;
     return template;
-}
-
-export async function getOneTrack(trackId) {
-    const result = await fetch(`/api/v1/get/track/${trackId}`);
-    return await result.json();
 }

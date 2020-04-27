@@ -9,10 +9,10 @@ $title = 'Music';
                     <source src="" type="">
                 </audio>
             </div>
-            <div class="col-md-4 pl-4" id="now-playing">
+            <div class="col-md-7 pl-5" id="now-playing">
 
             </div>
-            <div class="col-md-4 text-right">
+            <div class="col-md-1 text-right">
                 <i id="toggle-tracklist" class="fas fa-chevron-circle-down text-primary" style="font-size: 2em; z-index: 1000;"></i>
             </div>
         </div>
@@ -24,7 +24,7 @@ $title = 'Music';
         <div id="tracklist-container" class="col-md-8 offset-2">
             <div class="col-md-6">
                 <h5>
-                    <span class="text-primary">Tracklist</span>
+                    <span class="text-primary">Playlist</span>
                     <button id="clear-playlist" class="btn btn-light float-right">Clear Playlist</button>
                 </h5>
                 <div id="track-list" style="width: 100%;">
