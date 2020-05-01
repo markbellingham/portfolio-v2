@@ -1,6 +1,6 @@
 import {playlist, objParams, nowPlaying} from './application-data.js';
 import * as fn from './functions.js';
-import {setPlayingTrack} from "./functions.js";
+import { lyrics } from "./lyrics.js";
 
 const tracklistContainer = $('#tracklist-container');
 
@@ -51,8 +51,10 @@ $('#clear-playlist').click( function() {
 $('#track-list').on('dblclick', 'tr', function() {
     const trackId = parseInt(this.id.substring(2));
     const track = playlist.find( t => t.trackId === trackId );
-    fn.setPlayingTrack(track);
-    fn.printPlayList();
+    if(track) {
+        fn.setPlayingTrack(track);
+        fn.printPlayList();
+    }
 });
 
 /**
@@ -77,3 +79,5 @@ document.getElementById('player').addEventListener('ended', function() {
     }
     fn.printPlayList();
 });
+
+lyrics.get('john_lennon','imagine');
