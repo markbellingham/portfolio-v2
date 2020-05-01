@@ -2,29 +2,34 @@
 
 class MusicController {
 
-    private $requestType;
+    private $requestMethod;
     private $params;
     private $response = '';
 
-    public function __construct($request)
+    /**
+     * MusicController constructor.
+     * @param array $request
+     * @param string|null $requestMethod
+     */
+    public function __construct(array $request, string $requestMethod = null)
     {
-        $this->requestType = array_shift($request) ?? 'get';
+        $this->requestMethod = $requestMethod ?? 'GET';
         $this->params = $request;
     }
 
     public function fulfilRequest()
     {
-        switch($this->requestType) {
-            case 'get':
+        switch($this->requestMethod) {
+            case 'GET':
                 $this->get();
                 break;
-            case 'post':
+            case 'POST':
                 $this->post();
                 break;
-            case 'put':
+            case 'PUT':
                 $this->put();
                 break;
-            case 'delete':
+            case 'DELETE':
                 $this->delete();
                 break;
         }

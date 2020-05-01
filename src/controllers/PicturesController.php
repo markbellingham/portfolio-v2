@@ -2,38 +2,48 @@
 
 class PicturesController
 {
-    private $requestType = 'GET';
-    private $params = [];
+    private $requestMethod;
+    private $params;
+    private $response = '';
 
-    public function __construct($request)
+    public function __construct($request, $requestMethod)
     {
-        $this->requestType = array_shift($request) ?? 'get';
+        $this->requestMethod = $requestMethod ?? 'GET';
         $this->params = $request;
     }
 
     public function fulfilRequest()
     {
-        $response = '';
-        switch($this->requestType) {
-            case 'get':
-                $response = $this->get();
+        switch($this->requestMethod) {
+            case 'GET':
+                $this->get();
                 break;
-            case 'post':
-                $response = $this->post();
+            case 'POST':
+                $this->post();
                 break;
-            case 'put':
-                $response = $this->put();
+            case 'PUT':
+                $this->put();
                 break;
-            case 'delete':
-                $response = $this->delete();
+            case 'DELETE':
+                $this->delete();
                 break;
         }
-        return $response;
+        return $this->response;
     }
 
     private function get()
     {
-        return '';
+        $pictures = new Pictures();
+        switch($this->params[0]) {
+            case 'pictures':
+                $this->response = $pictures->findAll();
+                break;
+            case 'picture':
+                $this->response = $pictures->findOne($this->response[1]);
+                break;
+            case 'search':
+
+        }
     }
 
     private function post()

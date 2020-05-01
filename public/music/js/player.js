@@ -1,6 +1,6 @@
 import {playlist, objParams, nowPlaying} from './application-data.js';
 import * as fn from './functions.js';
-import { lyrics } from "./lyrics.js";
+// import { lyrics } from "./lyrics.js";
 
 const tracklistContainer = $('#tracklist-container');
 
@@ -80,4 +80,4 @@ document.getElementById('player').addEventListener('ended', function() {
     fn.printPlayList();
 });
 
-lyrics.get('john_lennon','imagine');
+// lyrics.get('john_lennon','imagine');

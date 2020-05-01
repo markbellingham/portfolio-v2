@@ -7,7 +7,7 @@ getIcons().then( icons => {
 
 // Get icons for the icon chooser
 async function getIcons() {
-    const result = await fetch(`/api/v1/get/contact/icons`);
+    const result = await fetch(`/api/v1/contact/icons`);
     return await result.json();
 }
 
@@ -27,7 +27,7 @@ $('#send-email-btn').click( function() {
         const formData = $(form).serializeArray();
         formData.push({name: 'send-email', value: true});
         $.ajax({
-            url: `/api/v1/post/contact.php`,
+            url: `/api/v1/contact.php`,
             method: 'POST',
             data: formData,
             dataType: 'json',

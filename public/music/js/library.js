@@ -7,7 +7,7 @@ import * as fn from './functions.js';
  * @var data.album_id
  */
 export const table = $('#musicList').DataTable({
-    ajax: "/api/v1/get/albums.datatables",
+    ajax: "/api/v1/albums.datatables",
     columns: [
         {
             defaultContent: "<i class='fa fa-plus-circle text-success gi-1-3x'></i>",
@@ -171,7 +171,7 @@ table.on('click', 'button.add-track', function() {
  * @returns {Promise<any>}
  */
 async function getOneTrack(trackId) {
-    const result = await fetch(`/api/v1/get/track/${trackId}`);
+    const result = await fetch(`/api/v1/track/${trackId}`);
     return await result.json();
 }
 
@@ -200,6 +200,6 @@ function addAlbumToPlaylist(albumId) {
  * @returns {Promise<any>}
  */
 async function getTracks(albumId) {
-    const result = await fetch(`/api/v1/get/tracks/${albumId}`);
+    const result = await fetch(`/api/v1/tracks/${albumId}`);
     return await result.json();
 }

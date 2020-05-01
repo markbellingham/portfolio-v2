@@ -3,20 +3,20 @@ require_once '../appInit.php';
 
 /**
  * $request = array(
- *          [0] => string api version ('v1','v2')
- *          [1] => string request type ('get','post','put','delete')
+ *          [0] => /api/
+ *          [1] => string api version ('v1','v2')
  *          [2] => string end point controller ('albums','tracks','playlists','pictures','contact')
  *          [3] => int id
- *          [4] => array values
  *      )
  */
 
 $requestUrl = $_GET['url'] ?? [];
 $request = explode('/', $requestUrl);
 $apiVersion = array_shift($request);
-$target = $request[1] ?? '';
+$target = $request[0] ?? '';
 $returnType = $_GET['type'] ?? '';
 $response = '';
+$requestMethod = $_SERVER['REQUEST_METHOD'];
 
 switch($target) {
     case 'albums':
@@ -24,15 +24,15 @@ switch($target) {
     case 'tracks':
     case 'track':
     case 'playlist':
-        $musicController = new MusicController($request);
+        $musicController = new MusicController($request, $requestMethod);
         $response = $musicController->fulfilRequest();
         break;
     case 'pictures':
-        $picturesController = new PicturesController($request);
+        $picturesController = new PicturesController($request, $requestMethod);
         $response = $picturesController->fulfilRequest();
         break;
     case 'contact':
-        $contactController = new ContactController($request);
+        $contactController = new ContactController($request, $requestMethod);
         $response = $contactController->fulfilRequest();
         break;
     default:
