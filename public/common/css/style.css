@@ -90,3 +90,14 @@ table.dataTable tbody td.no-padding {
     padding-right: 0.5em;
     font-size: 14px;
 }
+
+
+
+/*------------------------------------
+Pictures Styles
+ ------------------------------------*/
+
+#photos {
+    column-count: 4;
+    column-gap: 10px;
+}

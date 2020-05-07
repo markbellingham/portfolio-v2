@@ -6,7 +6,12 @@ class PicturesController
     private $params;
     private $response = '';
 
-    public function __construct($request, $requestMethod)
+    /**
+     * PicturesController constructor.
+     * @param array $request
+     * @param string $requestMethod
+     */
+    public function __construct(array $request, string $requestMethod)
     {
         $this->requestMethod = $requestMethod ?? 'GET';
         $this->params = $request;

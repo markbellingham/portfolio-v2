@@ -50,7 +50,7 @@ include_once "common/layout/header.php";
             </div>
             <div class="tab-pane" id="gallery">
                 <?php
-                include_once 'photos/gallery.php';
+                include_once 'photo/gallery.php';
                 ?>
             </div>
             <div class="tab-pane" id="tutorials">Tutorials Tab.</div>

@@ -9,9 +9,9 @@ class MusicController {
     /**
      * MusicController constructor.
      * @param array $request
-     * @param string|null $requestMethod
+     * @param string $requestMethod
      */
-    public function __construct(array $request, string $requestMethod = null)
+    public function __construct(array $request, string $requestMethod)
     {
         $this->requestMethod = $requestMethod ?? 'GET';
         $this->params = $request;
