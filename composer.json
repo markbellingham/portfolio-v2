@@ -7,6 +7,7 @@
     "twitter/bootstrap": "^4.4",
     "components/jquery": "^3.4",
     "ext-http": "*",
-    "ext-simplexml": "*"
+    "ext-simplexml": "*",
+    "ext-curl": "*"
   }
 }
