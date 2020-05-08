@@ -13,12 +13,12 @@ class Pictures
     }
 
     /**
-     * Get all photo
+     * Get all photos (width and height is for thumbnails)
      * @return array
      */
     public function findAll()
     {
-        $sql = "SELECT p.id, p.title, p.description, p.town, c.name, p.filename
+        $sql = "SELECT p.id, p.title, p.description, p.town, c.name, p.filename, p.width, p.height
                 FROM photos p
                 JOIN countries c ON c.Id = p.country
                 ORDER BY RAND()";

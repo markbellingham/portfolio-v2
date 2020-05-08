@@ -14,7 +14,7 @@ function formatOutput(data) {
     for(let d of data) {
         markup += `
         <div class="grid-item mt-2" style="width: 100%;">
-            <img loading="lazy" width="100%" src="/Resources/Pictures/Favourites/thumbs_md/${d.filename}" alt="${d.title}"/>
+            <img loading="lazy" width="100%" intrinsicsize="${d.width} x ${d.height}" src="/Resources/Pictures/Favourites/thumbs_md/${d.filename}" alt="${d.title}"/>
         </div>
         `;
     }
