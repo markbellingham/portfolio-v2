@@ -77,12 +77,10 @@ function dataIsStale(date) {
     const d = q.getDate();
     const m = q.getMonth();
     const y = q.getFullYear();
-    const today = new Date(y, m, d);
 
+    const today = new Date(y, m, d);
     const savedDate = new Date(date);
 
-    console.log("today", today);
-    console.log("savedDate", savedDate);
     return today > savedDate;
 }
 

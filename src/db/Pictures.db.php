@@ -18,7 +18,7 @@ class Pictures
      */
     public function findAll()
     {
-        $sql = "SELECT p.id, p.title, p.description, p.town, c.name, p.filename, p.width, p.height
+        $sql = "SELECT p.id, p.title, p.description, p.town, c.name AS country, p.filename, p.width, p.height
                 FROM photos p
                 JOIN countries c ON c.Id = p.country
                 ORDER BY RAND()";
