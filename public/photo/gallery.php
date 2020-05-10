@@ -9,7 +9,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-body mb-0 p-0">
-                <img id="modal-image" src="" alt="" style="width:100%">
+                <img id="modal-image" src="" alt="">
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-primary btn-rounded btn-md ml-4 text-center" data-dismiss="modal" type="button">Close</button>
