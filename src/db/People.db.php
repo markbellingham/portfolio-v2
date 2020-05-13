@@ -24,4 +24,11 @@ class People
         $sql = "SELECT id, name, cookie_ref FROM users WHERE cookie_ref = ?";
         return $this->db->run($sql, $params)->fetch();
     }
+
+    public function findUserById($id)
+    {
+        $params = [$id];
+        $sql = "SELECT id, name, cookie_ref FROM users WHERE id = ?";
+        return $this->db->run($sql, $params)->fetch();
+    }
 }

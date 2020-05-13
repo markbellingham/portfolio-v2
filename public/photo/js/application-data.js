@@ -1,2 +1,2 @@
 export const photos = []
-const objParams = { town: '' }
+const objParams = { town: '', fave_count: '', comment_count: '', comments: '', created:'', comment: '' }

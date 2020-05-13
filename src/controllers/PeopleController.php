@@ -34,12 +34,12 @@ class PeopleController
     private function get()
     {
         $people = new People();
-        switch($this->params[0]) {
+        switch($this->params['end_point']) {
             case 'users':
                 $this->response = $people->findAllUsers();
                 break;
             case 'user':
-                $this->response = $people->findUserByCookie($this->params[1]);
+                $this->response = $people->findUserByCookie($this->params['id']);
                 break;
         }
     }

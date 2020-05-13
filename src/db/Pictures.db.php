@@ -5,7 +5,6 @@ use MyPDO\MyPDO;
 class Pictures
 {
     private $db;
-    private $data;
 
     public function __construct()
     {
@@ -19,16 +18,16 @@ class Pictures
     public function findAll()
     {
         $sql = "SELECT p.id, p.title, p.description, p.town, c.name AS country, p.filename, p.width, p.height,
-                    cmt.comment, IFNULL(cmt.cmt_count, 0) AS cmt_count, IFNULL(fv.fave_count, 0) AS fave_count
+                    IFNULL(cmt.cmt_count, 0) AS comment_count, IFNULL(fv.fave_count, 0) AS fave_count
                 FROM photos p
                 JOIN countries c ON c.Id = p.country
                 LEFT JOIN (
-                    SELECT id, user_id, photo_id, comment, COUNT(comment) AS cmt_count
-                    FROM user_comments 
+                    SELECT photo_id, COUNT(comment) AS cmt_count
+                    FROM photo_comments 
                 ) AS cmt ON cmt.photo_id = p.id
                 LEFT JOIN (
-                    SELECT user_id, photo_id, COUNT(user_id) AS fave_count
-                    FROM user_faves
+                    SELECT photo_id, COUNT(user_id) AS fave_count
+                    FROM photo_faves
                 ) AS fv ON fv.photo_id = p.id
                 ORDER BY RAND()";
         return $this->db->run($sql)->fetchAll();
@@ -42,13 +41,39 @@ class Pictures
     public function findOne(int $photoId)
     {
         $params = [$photoId];
-        $sql = "SELECT p.id, p.title, p.description, p.town, c.name, p.filename
+        $sql = "SELECT p.id, p.title, p.description, p.town, c.name, p.filename,
+                    IFNULL(cmt.cmt_count, 0) AS comment_count, IFNULL(fv.fave_count, 0) AS fave_count
                 FROM photos p
                 JOIN countries c ON c.Id = p.country
+                LEFT JOIN (
+                    SELECT photo_id, COUNT(comment) AS cmt_count                    
+                    FROM photo_comments
+                    GROUP BY photo_id
+                ) AS cmt ON cmt.photo_id = p.id
+                LEFT JOIN (
+                    SELECT photo_id, COUNT(user_id) AS fave_count
+                    FROM photo_faves
+                    GROUP BY photo_id
+                ) AS fv ON fv.photo_id = p.id
                 WHERE p.id = ?";
         return $this->db->run($sql, $params)->fetch();
     }
 
+    /**
+     * Get a list of comments for one photo
+     * @param $photoId
+     * @return array
+     */
+    public function getPhotoComments($photoId)
+    {
+        $params = [$photoId];
+        $sql = "SELECT pc.id, pc.user_id, u.name, pc.photo_id, pc.comment, DATE_FORMAT(pc.created, 'd-m-Y @ HH:mm') AS created
+                FROM photo_comments pc
+                JOIN people.users u ON pc.user_id = u.id
+                WHERE pc.photo_id = ?
+                ORDER BY pc.created";
+        return $this->db->run($sql, $params)->fetchAll();
+    }
 
 
 }

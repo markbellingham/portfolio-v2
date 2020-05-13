@@ -39,18 +39,18 @@ class MusicController {
     private function get()
     {
         $albums = new Albums();
-        switch($this->params[0]) {
+        switch($this->params['end_point']) {
             case 'albums':
                 $this->response = $albums->findAll();
                 break;
             case 'album':
-                $this->response = $albums->findOne($this->params[1]);
+                $this->response = $albums->findOne($this->params['id']);
                 break;
             case 'tracks':
-                $this->response = $albums->getTracks($this->params[1]);
+                $this->response = $albums->getTracks($this->params['id']);
                 break;
             case 'track':
-                $this->response = $albums->getOneTrack($this->params[1]);
+                $this->response = $albums->getOneTrack($this->params['id']);
         }
     }
 

@@ -555,14 +555,16 @@ CREATE TABLE IF NOT EXISTS users (
 
 INSERT INTO users (name) VALUES ('Anonymous'), ('Mark');
 
-CREATE TABLE IF NOT EXISTS user_faves (
+CREATE TABLE IF NOT EXISTS photo_faves (
     user_id INT NOT NULL,
-    photo_id INT NOT NULL
+    photo_id INT NOT NULL,
+    PRIMARY KEY (user_id, photo_id)
 );
 
-CREATE TABLE IF NOT EXISTS user_comments (
+CREATE TABLE IF NOT EXISTS photo_comments (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     user_id INT NOT NULL,
     photo_id INT NOT NULL,
-    COMMENT TEXT NOT NULL
+    COMMENT TEXT NOT NULL,
+    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

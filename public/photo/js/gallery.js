@@ -4,7 +4,7 @@ import * as c from '../../common/functions/cookies.js';
 const cookie = c.getCookie();
 
 getPhotos().then( data => {
-        const photoMarkup = formatOutput(data);
+        const photoMarkup = formatPhotoGrid(data);
         $('#photos').html(photoMarkup);
     });
 
@@ -13,7 +13,17 @@ getPhotos().then( data => {
  * @returns {Promise<any>}
  */
 async function getPhotos() {
-    const result = await fetch(`/api/v1/pictures.json`);
+    const result = await fetch(`/api/v1/photos.json`);
+    return await result.json();
+}
+
+/**
+ * Get full information about one photo
+ * @param {int} photoId
+ * @returns {Promise<any>}
+ */
+async function getPhotoDetails(photoId) {
+    const result = await fetch(`/api/v1/photo/${photoId}`);
     return await result.json();
 }
 
@@ -22,7 +32,7 @@ async function getPhotos() {
  * @param {array} data
  * @returns {string}
  */
-function formatOutput(data) {
+function formatPhotoGrid(data) {
     let markup = '';
     photos.length = 0;
     for(let [i, p] of data.entries()) {
@@ -38,8 +48,8 @@ function formatOutput(data) {
                     if(p.fave_count > 0) {
                         markup += `<i class="fas fa-heart"></i> ${p.fave_count}`;
                     }
-                    if(p.cmt_count > 0) {
-                        markup += `<i class="fas fa-comment-alt"></i> ${p.cmt_count}`;
+                    if(p.comment_count > 0) {
+                        markup += `<i class="fas fa-comment-alt"></i> ${p.comment_count}`;
                     }
                 markup += `</p>
             </div>
@@ -50,15 +60,42 @@ function formatOutput(data) {
 }
 
 /**
+ * Format the comments for the photo modal
+ * @param {array} comments
+ */
+function formatComments(comments) {
+    let markup = ``;
+    if(comments.length > 0) {
+        for(let c of comments) {
+            markup += `
+            <div class="col-md-12">
+                <small class="text-left"><span class="text-primary">${c.name}</span> - ${c.created}</small>
+                <p class="text-left">${c.comment}</p>
+            </div>
+        `;
+        }
+    } else {
+        markup = '<p class="text-center">No Comments</p>';
+    }
+    return markup;
+}
+
+/**
  * Event handler to show large modal when clicking on a photo thumbnail
  */
 $('#photos').on('click', 'img', function() {
     const photoId = Number(this.getAttribute('data-id'));
+    getPhotoDetails(photoId).then( photoData => {
+        const commentMarkup = formatComments(photoData.comments);
+        $('#comments').html(commentMarkup);
+    });
     const photo = photos.find(p => p.id === photoId );
     $('#modal-image').attr({'src': '/Resources/Pictures/Favourites/' + photo.filename, 'alt': photo.title});
     $('#modal-photo-title').text(photo.title);
     $('#modal-photo-location').text(photo.town + ', ' + photo.country);
     $('#make-favourite').attr('data-photoId', photoId.toString());
+    $('#full-size-photo').attr('data-photoid', photoId.toString());
+    $('#fave-count').text(photo.fave_count);
     $('#modalIMG').modal();
 });
 
@@ -70,4 +107,13 @@ $('#make-favourite').on('click', function() {
     const photoId = Number(this.getAttribute('data-photoid'));
     const photo = photos.find(p => p.id === photoId );
     console.log(photo);
+});
+
+/**
+ * Event handler for full size photo button on image modal
+ */
+$('#full-size-photo').on('click', function() {
+    const photoId = Number(this.getAttribute('data-photoid'));
+    const photo = photos.find(p => p.id === photoId );
+    window.open('/Resources/Pictures/Favourites/' + photo.filename);
 });

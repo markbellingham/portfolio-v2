@@ -2,23 +2,30 @@
 require_once '../appInit.php';
 
 /**
+ * API URL format: /api/v{number}/{end-point}/{id}.{format}
+ * API example: /api/v1/photo/371.json
  * $request = array(
  *          [0] => /api/
  *          [1] => string api version ('v1','v2')
  *          [2] => string end point controller ('albums','tracks','playlists','pictures','contact')
  *          [3] => int id
  *      )
+ *
+ * Supported formats: 'json','xml','csv'
+ *
+ * REQUEST_METHOD : 'GET' (select), 'POST' (insert), 'PUT' (update), 'DELETE' (delete)
  */
 
 $requestUrl = $_GET['url'] ?? [];
-$request = explode('/', $requestUrl);
-$apiVersion = array_shift($request);
-$target = $request[0] ?? '';
+$requestElements = explode('/', $requestUrl);
+$request['api_version'] = $requestElements[0] ?? '';
+$request['end_point'] = $requestElements[1] ?? '';
+$request['id'] = $requestElements[2] ?? '';
 $returnType = $_GET['type'] ?? '';
 $response = '';
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 
-switch($target) {
+switch($request['end_point']) {
     case 'albums':
     case 'album':
     case 'tracks':
@@ -27,7 +34,8 @@ switch($target) {
         $musicController = new MusicController($request, $requestMethod);
         $response = $musicController->fulfilRequest();
         break;
-    case 'pictures':
+    case 'photos':
+    case 'photo':
         $picturesController = new PicturesController($request, $requestMethod);
         $response = $picturesController->fulfilRequest();
         break;

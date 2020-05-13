@@ -39,15 +39,16 @@ class PicturesController
     private function get()
     {
         $pictures = new Pictures();
-        switch($this->params[0]) {
-            case 'pictures':
+        switch($this->params['end_point']) {
+            case 'photos':
                 $this->response = $pictures->findAll();
                 break;
-            case 'picture':
-                $this->response = $pictures->findOne($this->response[1]);
+            case 'photo':
+                $this->response = $pictures->findOne($this->params['id']);
+                $this->response->comments = $pictures->getPhotoComments($this->params['id']);
                 break;
             case 'search':
-
+                break;
         }
     }
 

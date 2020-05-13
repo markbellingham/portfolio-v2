@@ -14,20 +14,28 @@
                         <img id="modal-image" src="" alt="">
                     </div>
                     <div class="col-md-3">
-                        <div class="text-left">
+                        <div class="text-right">
+                            <button class="btn btn-outline-dark btn-rounded btn-md" type="button" id="full-size-photo" data-photoid="">Full Size</button>
+                            <button class="btn btn-outline-primary btn-rounded btn-md" data-dismiss="modal" type="button">Close</button>
+                        </div>
+                        <div class="text-left mt-2">
                             <h3>
                                 <span class="text-primary" id="modal-photo-title"></span>
-                                <button class="btn btn-outline-primary btn-rounded btn-md float-right" data-dismiss="modal" type="button">Close</button>
+                                <span  class="float-right">
+                                    <i id="make-favourite" data-photoid="" class="fas fa-heart"></i>
+                                    <span id="fave-count"></span>
+                                </span>
                             </h3>
                             <p id="modal-photo-location"></p>
                         </div>
-                        <div id="comments" class="text-left mt-2">
+                        <div class="text-left mt-2">
                             <h5>
                                 <span class="text-primary">Comments:</span>
-                                <span  class="float-right">
-                                    <i id="make-favourite" data-photoid="" class="fas fa-heart"></i>
-                                </span>
                             </h5>
+                        </div>
+                        <div id="comments" class="text-left mt-2"></div>
+                        <div class="text-left mt-2">
+                            <h5 class="text-primary">Add Comment</h5>
                         </div>
                         <div class="text-left mt-2">
                             <label for="comment-name">Name:</label>
