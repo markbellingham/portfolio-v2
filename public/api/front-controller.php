@@ -35,6 +35,11 @@ switch($target) {
         $contactController = new ContactController($request, $requestMethod);
         $response = $contactController->fulfilRequest();
         break;
+    case 'users':
+    case 'user':
+        $peopleController = new PeopleController($request, $requestMethod);
+        $response = $peopleController->fulfilRequest();
+        break;
     case 'lastfm':
         $lastFmController = new LastFmController();
         $lastFmController->refreshData();

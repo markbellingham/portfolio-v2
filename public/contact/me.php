@@ -6,8 +6,8 @@
         <div class="col-md-8">
             <h4 class="text-primary">Contact Me</h4>
 
-            <label for="name" class="mt-3">Name:<span class="text-danger">*</span></label>
-            <input type="text" name="name" id="name" class="form-control" required/>
+            <label for="contact-name" class="mt-3">Name:<span class="text-danger">*</span></label>
+            <input type="text" name="name" id="contact-name" class="form-control" required/>
 
             <label for="email-address" class="mt-3">Email Address:</label>
             <input type="email" name="email" id="email-address" class="form-control"/>

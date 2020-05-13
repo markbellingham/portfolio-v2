@@ -8,11 +8,38 @@
 <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalIMG" role="dialog" tabindex="-1">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
-            <div class="modal-body mb-0 p-0">
-                <img id="modal-image" src="" alt="">
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline-primary btn-rounded btn-md ml-4 text-center" data-dismiss="modal" type="button">Close</button>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-9">
+                        <img id="modal-image" src="" alt="">
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-left">
+                            <h3>
+                                <span class="text-primary" id="modal-photo-title"></span>
+                                <button class="btn btn-outline-primary btn-rounded btn-md float-right" data-dismiss="modal" type="button">Close</button>
+                            </h3>
+                            <p id="modal-photo-location"></p>
+                        </div>
+                        <div id="comments" class="text-left mt-2">
+                            <h5>
+                                <span class="text-primary">Comments:</span>
+                                <span  class="float-right">
+                                    <i id="make-favourite" data-photoid="" class="fas fa-heart"></i>
+                                </span>
+                            </h5>
+                        </div>
+                        <div class="text-left mt-2">
+                            <label for="comment-name">Name:</label>
+                            <input type="text" id="comment-name" name="name" class="form-control"/>
+                            <label for="new-comment" class="text-left">Comment:</label>
+                            <textarea id="new-comment" name="comment" class="form-control"></textarea>
+                        </div>
+                        <div class="text-right mt-2">
+                            <button type="button" id="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -18,9 +18,18 @@ class Pictures
      */
     public function findAll()
     {
-        $sql = "SELECT p.id, p.title, p.description, p.town, c.name AS country, p.filename, p.width, p.height
+        $sql = "SELECT p.id, p.title, p.description, p.town, c.name AS country, p.filename, p.width, p.height,
+                    cmt.comment, IFNULL(cmt.cmt_count, 0) AS cmt_count, IFNULL(fv.fave_count, 0) AS fave_count
                 FROM photos p
                 JOIN countries c ON c.Id = p.country
+                LEFT JOIN (
+                    SELECT id, user_id, photo_id, comment, COUNT(comment) AS cmt_count
+                    FROM user_comments 
+                ) AS cmt ON cmt.photo_id = p.id
+                LEFT JOIN (
+                    SELECT user_id, photo_id, COUNT(user_id) AS fave_count
+                    FROM user_faves
+                ) AS fv ON fv.photo_id = p.id
                 ORDER BY RAND()";
         return $this->db->run($sql)->fetchAll();
     }

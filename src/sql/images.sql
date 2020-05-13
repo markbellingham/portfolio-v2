@@ -1,3 +1,14 @@
+CREATE TABLE IF NOT EXISTS photos (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    description VARCHAR(255),
+    town VARCHAR(255) NOT NULL,
+    country INT NOT NULL,
+    filename VARCHAR(255) NOT NULL,
+    width INT NOT NULL,
+    height INT NOT NULL
+);
+
 INSERT INTO photos (title, town, country, filename)
 VALUES
     ('Puguang Temple','Zhangjiajie, Hunan',46,'02052012750.JPG'),
@@ -535,3 +546,23 @@ VALUES
         ('Traditional Theatre','Cusco',173,'pf6540992.jpg'),
         ('Traditional Market','Cusco',173,'pf7290772.jpg'),
         ('Llamas','Machu Picchu',173,'pf9521408.jpg');
+
+CREATE TABLE IF NOT EXISTS users (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    cookie_ref VARCHAR(255)
+);
+
+INSERT INTO users (name) VALUES ('Anonymous'), ('Mark');
+
+CREATE TABLE IF NOT EXISTS user_faves (
+    user_id INT NOT NULL,
+    photo_id INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS user_comments (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    photo_id INT NOT NULL,
+    COMMENT TEXT NOT NULL
+);
