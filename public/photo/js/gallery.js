@@ -1,4 +1,4 @@
-import { photos } from './application-data.js';
+import { photos, userFaves, userId } from './application-data.js';
 import * as c from '../../common/functions/cookies.js';
 
 const cookie = c.getCookie();
@@ -28,6 +28,16 @@ async function getPhotoDetails(photoId) {
 }
 
 /**
+ *
+ * @param {int} userId
+ * @returns {Promise<any>}
+ */
+async function getUserDetails(userId) {
+    const result = await fetch(`/api/v1/user/${userId}`);
+    return result.json();
+}
+
+/**
  * Format the photo grid on Gallery tab
  * @param {array} data
  * @returns {string}
@@ -40,7 +50,7 @@ function formatPhotoGrid(data) {
         const itemClass = i === 0 ? 'grid-item' : 'grid-item mt-2';
         markup += `
         <div class="${itemClass}">
-            <img loading="lazy" width="${p.width}" height="${p.height}" src="/Resources/Pictures/Favourites/thumbs_md/${p.filename}" alt="${p.title}" data-id="${p.id}"/>
+            <img loading="lazy" width="${p.width}" height="${p.height}" src="/Resources/Pictures/${p.directory}/thumbs_md/${p.filename}" alt="${p.title}" data-id="${p.id}"/>
             <div class="img-overlay">
                 <h5 class="ml-2">${p.title}</h5>
                 <p class="ml-2" style="float: left;">${p.town}, ${p.country}</p>
@@ -90,10 +100,14 @@ $('#photos').on('click', 'img', function() {
         $('#comments').html(commentMarkup);
     });
     const photo = photos.find(p => p.id === photoId );
-    $('#modal-image').attr({'src': '/Resources/Pictures/Favourites/' + photo.filename, 'alt': photo.title});
+    $('#modal-image').attr({'src': `/Resources/Pictures/${photo.directory}/${photo.filename}`, 'alt': photo.title});
     $('#modal-photo-title').text(photo.title);
     $('#modal-photo-location').text(photo.town + ', ' + photo.country);
-    $('#make-favourite').attr('data-photoId', photoId.toString());
+    if(userFaves.indexOf(photoId) > -1) {
+        $('#make-favourite').addClass('text-danger').attr('data-photoId', photoId.toString());
+    } else {
+        $('#make-favourite').removeClass('text-danger').attr('data-photoId', photoId.toString());
+    }
     $('#full-size-photo').attr('data-photoid', photoId.toString());
     $('#fave-count').text(photo.fave_count);
     $('#modalIMG').modal();
@@ -106,7 +120,12 @@ $('#make-favourite').on('click', function() {
     $(this).addClass('text-danger');
     const photoId = Number(this.getAttribute('data-photoid'));
     const photo = photos.find(p => p.id === photoId );
-    console.log(photo);
+    if(userFaves.indexOf(photoId) < 0) {
+        userFaves.push(photoId);
+        photo.fave_count++;
+        $('#fave-count').text(photo.fave_count);
+    }
+    console.log(userFaves);
 });
 
 /**

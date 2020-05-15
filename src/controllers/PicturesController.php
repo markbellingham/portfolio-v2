@@ -39,7 +39,7 @@ class PicturesController
     private function get()
     {
         $pictures = new Pictures();
-        switch($this->params['end_point']) {
+        switch($this->params['endpoint']) {
             case 'photos':
                 $this->response = $pictures->findAll();
                 break;

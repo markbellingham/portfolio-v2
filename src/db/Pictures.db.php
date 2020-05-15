@@ -13,11 +13,13 @@ class Pictures
 
     /**
      * Get all photos (width and height is for thumbnails)
+     * @param string $directory
      * @return array
      */
-    public function findAll()
+    public function findAll(string $directory = 'Favourites')
     {
-        $sql = "SELECT p.id, p.title, p.description, p.town, c.name AS country, p.filename, p.width, p.height,
+        $params = [$directory];
+        $sql = "SELECT p.id, p.title, p.description, p.town, c.name AS country, p.filename, p.directory, p.width, p.height,
                     IFNULL(cmt.cmt_count, 0) AS comment_count, IFNULL(fv.fave_count, 0) AS fave_count
                 FROM photos p
                 JOIN countries c ON c.Id = p.country
@@ -28,9 +30,10 @@ class Pictures
                 LEFT JOIN (
                     SELECT photo_id, COUNT(user_id) AS fave_count
                     FROM photo_faves
-                ) AS fv ON fv.photo_id = p.id
+                ) AS fv ON fv.photo_id = p.id   
+                WHERE p.directory = ?
                 ORDER BY RAND()";
-        return $this->db->run($sql)->fetchAll();
+        return $this->db->run($sql, $params)->fetchAll();
     }
 
     /**
@@ -41,7 +44,7 @@ class Pictures
     public function findOne(int $photoId)
     {
         $params = [$photoId];
-        $sql = "SELECT p.id, p.title, p.description, p.town, c.name, p.filename,
+        $sql = "SELECT p.id, p.title, p.description, p.town, c.name, p.filename, p.directory,
                     IFNULL(cmt.cmt_count, 0) AS comment_count, IFNULL(fv.fave_count, 0) AS fave_count
                 FROM photos p
                 JOIN countries c ON c.Id = p.country

@@ -34,7 +34,7 @@ class PeopleController
     private function get()
     {
         $people = new People();
-        switch($this->params['end_point']) {
+        switch($this->params['endpoint']) {
             case 'users':
                 $this->response = $people->findAllUsers();
                 break;

@@ -39,7 +39,7 @@ class MusicController {
     private function get()
     {
         $albums = new Albums();
-        switch($this->params['end_point']) {
+        switch($this->params['endpoint']) {
             case 'albums':
                 $this->response = $albums->findAll();
                 break;
