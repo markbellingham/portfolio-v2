@@ -10,10 +10,10 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-9">
+                    <div id="modal-image-container" class="col-md-7">
                         <img id="modal-image" src="" alt="">
                     </div>
-                    <div class="col-md-3">
+                    <div id="modal-text-container" class="col-md-5">
                         <div class="text-right">
                             <button class="btn btn-outline-dark btn-rounded btn-md" type="button" id="full-size-photo" data-photoid="">Full Size</button>
                             <button class="btn btn-outline-primary btn-rounded btn-md" data-dismiss="modal" type="button">Close</button>
@@ -27,11 +27,6 @@
                                 </span>
                             </h3>
                             <p id="modal-photo-location"></p>
-                        </div>
-                        <div class="text-left mt-2">
-                            <h5>
-                                <span class="text-primary">Comments:</span>
-                            </h5>
                         </div>
                         <div id="comments" class="text-left mt-2"></div>
                         <div class="text-left mt-2">

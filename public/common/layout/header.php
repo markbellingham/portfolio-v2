@@ -22,7 +22,6 @@
     <script src="https://kit.fontawesome.com/0825dd3daf.js" crossorigin="anonymous"></script>
 
     <!-- Local Custom Stylesheets -->
-    <link id="colours" type="text/css" href="common/css/style1.css" rel="stylesheet">
     <link id="stylesheet" type="text/css" href="common/css/style.css" rel="stylesheet">
 
 </head>

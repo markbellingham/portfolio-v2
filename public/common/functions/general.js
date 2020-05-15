@@ -24,10 +24,13 @@ async function getIcons(num) {
 
 function buildIconChooser(icons) {
     const chosenIcon = icons[Math.floor(Math.random() * icons.length)];
-    const chosenIconHtml = `<label for="icons" class="mr-5">Select the ${chosenIcon.name} icon:</label>`;
+    const chosenIconHtml = `<label for="icons" class="mr-1">Select the ${chosenIcon.name} icon:</label>`;
     let iconsHtml = '';
     for(let i of icons) {
-        iconsHtml += `<label for="r-${i.icon_id}" class="btn btn-warning ml-1"><input type="radio" class="mr-3" name="icon" id="r-${i.icon_id}" value="${i.icon_id}"/>${i.icon}</label>`
+        iconsHtml += `<label for="r-${i.icon_id}" class="btn btn-warning ml-1" title="${i.name}">
+            <input type="radio" class="" name="icon" id="r-${i.icon_id}" value="${i.icon_id}"/>
+            ${i.icon}
+            </label>`
     }
     return { chosenIcon: chosenIcon, chosenIconHtml: chosenIconHtml, iconsHtml: iconsHtml };
 }

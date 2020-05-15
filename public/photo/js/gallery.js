@@ -4,11 +4,6 @@ import { buildCaptchaIcons } from '../../common/functions/general.js';
 
 let chosenIcon = {};
 
-buildCaptchaIcons(4, icons => {
-    $('#gallery-icons').html(icons.chosenIconHtml + icons.iconsHtml);
-    chosenIcon = icons.chosenIcon;
-});
-
 const cookie = c.getCookie();
 
 getPhotos().then( response => {
@@ -86,14 +81,17 @@ function formatComments(comments) {
     if(comments.length > 0) {
         for(let c of comments) {
             markup += `
+            <div class="text-left mt-2">
+                <h5>
+                    <span class="text-primary">Comments:</span>
+                </h5>
+            </div>
             <div class="col-md-12">
                 <small class="text-left"><span class="text-primary">${c.name}</span> - ${c.created}</small>
                 <p class="text-left">${c.comment}</p>
             </div>
         `;
         }
-    } else {
-        markup = '<p class="text-center">No Comments</p>';
     }
     return markup;
 }
@@ -107,7 +105,18 @@ $('#photos').on('click', 'img', function() {
         const commentMarkup = formatComments(response.data.comments);
         $('#comments').html(commentMarkup);
     });
+    buildCaptchaIcons(4, icons => {
+        $('#gallery-icons').html(icons.chosenIconHtml + icons.iconsHtml);
+        chosenIcon = icons.chosenIcon;
+    });
     const photo = photos.find(p => p.id === photoId );
+    if(photo.width/photo.height < 0.90) {
+        $('#modal-image-container').removeClass('col-md-9').addClass('col-md-7');
+        $('#modal-text-container').removeClass('col-md-3').addClass('col-md-5');
+    } else {
+        $('#modal-image-container').removeClass('col-md-7').addClass('col-md-9');
+        $('#modal-text-container').removeClass('col-md-5').addClass('col-md-3');
+    }
     $('#modal-image').attr({'src': `/Resources/Pictures/${photo.directory}/${photo.filename}`, 'alt': photo.title});
     $('#modal-photo-title').text(photo.title);
     $('#modal-photo-location').text(photo.town + ', ' + photo.country);
