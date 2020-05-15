@@ -6,6 +6,8 @@
         <div class="col-md-8">
             <h4 class="text-primary">Contact Me</h4>
 
+            <input type="hidden" name="secret" class="server-secret" value="<?= $secret ?>"/>
+
             <label for="contact-name" class="mt-3">Name:<span class="text-danger">*</span></label>
             <input type="text" name="name" id="contact-name" class="form-control" required/>
 
@@ -15,10 +17,13 @@
             <label for="subject" class="mt-3">Subject:<span class="text-danger">*</span></label>
             <input type="text" name="subject" id="subject" class="form-control" required/>
 
+            <label for="contact-description" class="d-none">Description</label>
+            <input type="text" name="description" class="d-none" id="contact-description" value=""/>
+
             <label for="message" class="mt-3">Message:<span class="text-danger">*</span></label>
             <textarea rows="10" name="message" id="message" class="form-control" required></textarea>
 
-            <div id="icons" class="text-center mt-3 btn-group-toggle" data-toggle="buttons"></div>
+            <div id="contact-icons" class="text-center mt-3 btn-group-toggle" data-toggle="buttons"></div>
 
             <div class="text-right mt-3">
                 <button id="send-email-btn" class="btn btn-primary">Send Message</button>
@@ -52,8 +57,13 @@
             <a href="https://www.youtube.com/user/mbellingham/videos">YouTube</a>
         </p>
 
-        <p class="mt-5">If you want to send me a secure message,<br><a href="contact/publickey.asc" target="_blank">Click Here</a> to get my PGP public key,<br>then send an email to:<br>
+        <p class="mt-5">If you want to send me a secure message,<br><a href="contact/markbellingham-publickey.asc" download>download my PGP public key</a>,<br>then send an email to:<br>
             <span class="text-info">mark dot bellingham at pm dot me</span>
+        </p>
+
+        <p class="mt-5">
+            If you are looking for my old university projects website it can be found at:<br>
+            <a href="https://markbellingham.me">https://markbellingham.me</a>
         </p>
 
     </div>

@@ -2,6 +2,10 @@
 require_once 'appInit.php';
 
 include_once "common/layout/header.php";
+
+$fn = new Functions();
+$secret = $fn->setServerSecret();
+
 ?>
 <body>
 <div class="col-md-12">

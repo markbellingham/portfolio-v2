@@ -42,7 +42,11 @@
                             <input type="text" id="comment-name" name="name" class="form-control"/>
                             <label for="new-comment" class="text-left">Comment:</label>
                             <textarea id="new-comment" name="comment" class="form-control"></textarea>
+                            <label for="description" class="d-none">Description</label>
+                            <input type="text" name="description" id="description" class="d-none" value=""/>
+                            <input type="hidden" name="secret" value="<?= $secret ?>"/>
                         </div>
+                        <div id="gallery-icons" class="text-center mt-3 btn-group-toggle" data-toggle="buttons"></div>
                         <div class="text-right mt-2">
                             <button type="button" id="submit" class="btn btn-primary">Submit</button>
                         </div>

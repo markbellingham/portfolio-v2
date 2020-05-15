@@ -15,38 +15,58 @@ require_once '../appInit.php';
  *
  * REQUEST_METHOD : 'GET' (select), 'POST' (insert), 'PUT' (update), 'DELETE' (delete)
  */
-
-$requestUrl = $_GET['url'] ?? [];
-$requestElements = explode('/', $requestUrl);
-$request['api_version'] = $requestElements[0] ?? '';
-$request['end_point'] = $requestElements[1] ?? '';
-$request['id'] = $requestElements[2] ?? '';
-$returnType = $_GET['type'] ?? '';
-$response = '';
 $requestMethod = $_SERVER['REQUEST_METHOD'];
+$request = [
+    'api_version' => '',
+    'endpoint' => '',
+    'id' => ''
+];
+$returnType = '';
+$response['data'] = '';
+$fn = new Functions();
 
-switch($request['end_point']) {
+switch($requestMethod) {
+    case 'GET':
+        $requestUrl = $_GET['url'] ?? [];
+        $requestElements = explode('/', $requestUrl);
+        $request['api_version'] = $requestElements[0] ?? '';
+        $request['endpoint'] = $requestElements[1] ?? '';
+        $request['id'] = $requestElements[2] ?? '';
+        $request['qty'] = $requestElements[3] ?? '';
+        $returnType = $_GET['type'] ?? '';
+        break;
+    case 'POST':
+    case 'PUT':
+    case 'DELETE':
+        parse_str(file_get_contents("php://input"),$request);
+        if($fn->requestedByTheSameDomain($request['secret'])) {
+
+        }
+        break;
+}
+
+switch($request['endpoint']) {
     case 'albums':
     case 'album':
     case 'tracks':
     case 'track':
     case 'playlist':
         $musicController = new MusicController($request, $requestMethod);
-        $response = $musicController->fulfilRequest();
+        $response['data'] = $musicController->fulfilRequest();
         break;
     case 'photos':
     case 'photo':
         $picturesController = new PicturesController($request, $requestMethod);
-        $response = $picturesController->fulfilRequest();
+        $response['data'] = $picturesController->fulfilRequest();
         break;
     case 'contact':
         $contactController = new ContactController($request, $requestMethod);
-        $response = $contactController->fulfilRequest();
+        $response['data'] = $contactController->fulfilRequest();
         break;
     case 'users':
     case 'user':
         $peopleController = new PeopleController($request, $requestMethod);
-        $response = $peopleController->fulfilRequest();
+        $response['data'] = $peopleController->fulfilRequest();
         break;
     case 'lastfm':
         $lastFmController = new LastFmController();
@@ -58,6 +78,7 @@ switch($request['end_point']) {
 
 switch($returnType) {
     case 'json':
+    case 'datatables':
         echo json_encode($response);
         break;
     case 'xml':
@@ -68,9 +89,6 @@ switch($returnType) {
         break;
     case 'csv':
 //        echo csv_encode($response);
-        break;
-    case 'datatables':
-        echo '{"data":' . json_encode($response) . '}';
         break;
     default:
         echo json_encode($response);

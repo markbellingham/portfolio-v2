@@ -1,10 +1,18 @@
 import { photos, userFaves, userId } from './application-data.js';
 import * as c from '../../common/functions/cookies.js';
+import { buildCaptchaIcons } from '../../common/functions/general.js';
+
+let chosenIcon = {};
+
+buildCaptchaIcons(4, icons => {
+    $('#gallery-icons').html(icons.chosenIconHtml + icons.iconsHtml);
+    chosenIcon = icons.chosenIcon;
+});
 
 const cookie = c.getCookie();
 
-getPhotos().then( data => {
-        const photoMarkup = formatPhotoGrid(data);
+getPhotos().then( response => {
+        const photoMarkup = formatPhotoGrid(response.data);
         $('#photos').html(photoMarkup);
     });
 
@@ -95,8 +103,8 @@ function formatComments(comments) {
  */
 $('#photos').on('click', 'img', function() {
     const photoId = Number(this.getAttribute('data-id'));
-    getPhotoDetails(photoId).then( photoData => {
-        const commentMarkup = formatComments(photoData.comments);
+    getPhotoDetails(photoId).then( response => {
+        const commentMarkup = formatComments(response.data.comments);
         $('#comments').html(commentMarkup);
     });
     const photo = photos.find(p => p.id === photoId );

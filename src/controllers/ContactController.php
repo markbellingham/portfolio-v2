@@ -42,7 +42,7 @@ class ContactController {
         $contact = new Contact();
         switch($this->params['id']) {
             case 'icons':
-                $this->response = $contact->getIcons();
+                $this->response = $contact->getIcons($this->params['qty']);
                 break;
         }
     }

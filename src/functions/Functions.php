@@ -1,4 +1,6 @@
 <?php
+session_start();
+$configs = require_once $_SERVER['DOCUMENT_ROOT'] .  '../config/config.php';
 
 class Functions {
 
@@ -36,5 +38,20 @@ class Functions {
                 $object->addChild($key, htmlspecialchars($value));
             }
         }
+    }
+
+    public function setServerSecret($username = '')
+    {
+        global $configs;
+        $secret = $configs['server_secret'];
+        $date = date('Y-m-d H:i:s');
+        $hash = password_hash($secret . $date . $username, PASSWORD_DEFAULT);
+        $_SESSION['secret'] = $hash;
+        return $hash;
+    }
+
+    public function requestedByTheSameDomain($nonce)
+    {
+        return $nonce === $_SESSION['secret'];
     }
 }

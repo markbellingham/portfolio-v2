@@ -15,7 +15,7 @@ export const table = $('#musicList').DataTable({
         },
         {
             data: "image",
-            render: value => `<img alt="cover" src="../Resources/${value}_sm.jpg"/>`
+            render: value => `<img alt="cover" src="../Resources/${value}_sm.jpg" loading="lazy"/>`
         },
         {
             data: "album_artist",
@@ -136,7 +136,7 @@ table.on('click', 'td.details-control', function () {
  */
 function format(data, callback) {
     getTracks(data.album_id).then( tracks => {
-        const template = fn.printTrackList(tracks, data.image);
+        const template = fn.printTrackList(tracks.data, data.image);
         callback(template, 'no-padding').show();
         $('#tracks').removeClass('table table-hover dt-responsive table-sm');
         $('div.slider', callback()).slideDown();
@@ -156,11 +156,11 @@ table.on('click', 'button.add-album', function() {
  */
 table.on('click', 'button.add-track', function() {
     const trackId = this.getAttribute('data-id');
-    getOneTrack(trackId).then( track => {
+    getOneTrack(trackId).then( response => {
         if(playlist.length === 0) {
-            fn.setPlayingTrack(track);
+            fn.setPlayingTrack(response.data);
         }
-        playlist.push(track);
+        playlist.push(response.data);
         fn.printPlayList();
     });
 });
@@ -182,7 +182,7 @@ async function getOneTrack(trackId) {
 function addAlbumToPlaylist(albumId) {
     getTracks(albumId)
         .then( response => {
-            for(let r of response) {
+            for(let r of response.data) {
                 if( playlist.length === 0 ) {
                     fn.setPlayingTrack(r);
                 }

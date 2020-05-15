@@ -12,12 +12,13 @@ class Contact
         $this->db = MyPDO::instance('Contact');
     }
 
-    public function getIcons()
+    public function getIcons($qty)
     {
+        $params = [$qty];
         $sql = "SELECT icon_id, icon, name, colour
                 FROM icons
                 ORDER BY RAND()
-                LIMIT 6";
-        return $this->db->run($sql)->fetchAll();
+                LIMIT ?";
+        return $this->db->run($sql, $params)->fetchAll();
     }
 }
