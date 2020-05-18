@@ -142,7 +142,6 @@ $('#make-favourite').on('click', function() {
         photo.fave_count++;
         $('#fave-count').text(photo.fave_count);
     }
-    console.log(userFaves);
 });
 
 /**

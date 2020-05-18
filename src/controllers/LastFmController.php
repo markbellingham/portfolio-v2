@@ -45,7 +45,6 @@ class LastFmController
                 $filename = $_SERVER['DOCUMENT_ROOT'] . '/playlists/json/top-' . $key . '.json';
                 $value = json_decode($value);
                 file_put_contents($filename, json_encode(["date" => $date, "data" => $value]));
-
             }
         }
     }

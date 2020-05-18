@@ -26,10 +26,12 @@ class Pictures
                 LEFT JOIN (
                     SELECT photo_id, COUNT(comment) AS cmt_count
                     FROM photo_comments 
+                    GROUP BY photo_id
                 ) AS cmt ON cmt.photo_id = p.id
                 LEFT JOIN (
                     SELECT photo_id, COUNT(user_id) AS fave_count
                     FROM photo_faves
+                    GROUP BY photo_id
                 ) AS fv ON fv.photo_id = p.id   
                 WHERE p.directory = ?
                 ORDER BY RAND()";

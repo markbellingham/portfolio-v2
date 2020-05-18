@@ -5,7 +5,6 @@ const objParams = { icon_id: '' };
  * @param callback
  */
 export function buildCaptchaIcons(numberOfIcons = 6, callback) {
-    console.log(numberOfIcons);
     getIcons(numberOfIcons).then( response => {
         const icons = buildIconChooser(response.data);
         callback(icons);

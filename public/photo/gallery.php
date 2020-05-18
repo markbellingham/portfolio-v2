@@ -10,10 +10,10 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="row">
-                    <div id="modal-image-container" class="col-md-7">
+                    <div id="modal-image-container" class="col-md-9 col-sm-12">
                         <img id="modal-image" src="" alt="">
                     </div>
-                    <div id="modal-text-container" class="col-md-5">
+                    <div id="modal-text-container" class="col-md-3 col-sm-12">
                         <div class="text-right">
                             <button class="btn btn-outline-dark btn-rounded btn-md" type="button" id="full-size-photo" data-photoid="">Full Size</button>
                             <button class="btn btn-outline-primary btn-rounded btn-md" data-dismiss="modal" type="button">Close</button>
@@ -41,6 +41,7 @@
                             <input type="text" name="description" id="description" class="d-none" value=""/>
                             <input type="hidden" name="secret" value="<?= $secret ?>"/>
                         </div>
+                        <div id="photo-error-message" class="text-danger"></div>
                         <div id="gallery-icons" class="text-center mt-3 btn-group-toggle" data-toggle="buttons"></div>
                         <div class="text-right mt-2">
                             <button type="button" id="submit" class="btn btn-primary">Submit</button>

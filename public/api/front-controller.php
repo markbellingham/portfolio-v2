@@ -1,5 +1,5 @@
 <?php
-require_once '../appInit.php';
+require_once '../autoload.php';
 
 /**
  * API URL format: /api/v{number}/{end-point}/{id}.{format}
@@ -88,7 +88,7 @@ switch($returnType) {
         echo $xml->asXML();
         break;
     case 'csv':
-//        echo csv_encode($response);
+//        echo csv_encode($response['data']);
         break;
     default:
         echo json_encode($response);

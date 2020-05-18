@@ -25,5 +25,3 @@
     <link id="stylesheet" type="text/css" href="common/css/style.css" rel="stylesheet">
 
 </head>
-<body>
-<div id="container">
