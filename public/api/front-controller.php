@@ -1,95 +1,115 @@
 <?php
 require_once '../autoload.php';
+$frontController = new FrontController();
 
 /**
+ * Class FrontController
+ * /**
  * API URL format: /api/v{number}/{end-point}/{id}.{format}
  * API example: /api/v1/photo/371.json
  * $request = array(
- *          [0] => /api/
- *          [1] => string api version ('v1','v2')
- *          [2] => string end point controller ('albums','tracks','playlists','pictures','contact')
- *          [3] => int id
+ *          [0] => string api version ('v1','v2')
+ *          [1] => string end point controller ('albums','tracks','playlists','pictures','contact')
+ *          [2] => int id
  *      )
  *
  * Supported formats: 'json','xml','csv'
  *
  * REQUEST_METHOD : 'GET' (select), 'POST' (insert), 'PUT' (update), 'DELETE' (delete)
  */
-$requestMethod = $_SERVER['REQUEST_METHOD'];
-$request = [
-    'api_version' => '',
-    'endpoint' => '',
-    'id' => ''
-];
-$returnType = '';
-$response['data'] = '';
-$fn = new Functions();
+class FrontController
+{
+    private $requestMethod;
+    private $request = [];
+    private $response = [];
+    private $returnType;
 
-switch($requestMethod) {
-    case 'GET':
-        $requestUrl = $_GET['url'] ?? [];
-        $requestElements = explode('/', $requestUrl);
-        $request['api_version'] = $requestElements[0] ?? '';
-        $request['endpoint'] = $requestElements[1] ?? '';
-        $request['id'] = $requestElements[2] ?? '';
-        $request['qty'] = $requestElements[3] ?? '';
-        $returnType = $_GET['type'] ?? '';
-        break;
-    case 'POST':
-    case 'PUT':
-    case 'DELETE':
-        parse_str(file_get_contents("php://input"),$request);
-        if($fn->requestedByTheSameDomain($request['secret'])) {
+    public function __construct()
+    {
+        $this->requestMethod = $_SERVER['REQUEST_METHOD'];
+        $this->returnType = $_GET['type'] ?? '';
+        $this->response['data'] = '';
+        $this->parseURI();
+        $this->callEndpoint();
+        $this->echoResponse();
+    }
 
+    protected function parseURI()
+    {
+        switch($this->requestMethod) {
+            case 'GET':
+                $requestUrl = $_GET['url'] ?? '';
+                $requestElements = explode('/', $requestUrl);
+                $this->request['api_version'] = $requestElements[0] ?? '';
+                $this->request['endpoint'] = $requestElements[1] ?? '';
+                $this->request['id'] = $requestElements[2] ?? '';
+                $this->request['qty'] = $requestElements[3] ?? '';
+                break;
+            case 'POST':
+            case 'PUT':
+            case 'DELETE':
+                $fn = new Functions();
+                parse_str(file_get_contents("php://input"),$request);
+                if($fn->requestedByTheSameDomain($request['secret'])) {
+
+                }
+                break;
         }
-        break;
-}
+    }
 
-switch($request['endpoint']) {
-    case 'albums':
-    case 'album':
-    case 'tracks':
-    case 'track':
-    case 'playlist':
-        $musicController = new MusicController($request, $requestMethod);
-        $response['data'] = $musicController->fulfilRequest();
-        break;
-    case 'photos':
-    case 'photo':
-        $picturesController = new PicturesController($request, $requestMethod);
-        $response['data'] = $picturesController->fulfilRequest();
-        break;
-    case 'contact':
-        $contactController = new ContactController($request, $requestMethod);
-        $response['data'] = $contactController->fulfilRequest();
-        break;
-    case 'users':
-    case 'user':
-        $peopleController = new PeopleController($request, $requestMethod);
-        $response['data'] = $peopleController->fulfilRequest();
-        break;
-    case 'lastfm':
-        $lastFmController = new LastFmController();
-        $lastFmController->refreshData();
-        break;
-    default:
-        header('/');
-}
+    protected function callEndpoint()
+    {
+        switch($this->request['endpoint']) {
+            case 'albums':
+            case 'album':
+            case 'tracks':
+            case 'track':
+            case 'playlist':
+                $musicController = new MusicController($this->request, $this->requestMethod);
+                $this->response['data'] = $musicController->fulfilRequest();
+                break;
+            case 'photos':
+            case 'photo':
+                $picturesController = new PicturesController($this->request, $this->requestMethod);
+                $this->response['data'] = $picturesController->fulfilRequest();
+                break;
+            case 'contact':
+                $contactController = new ContactController($this->request, $this->requestMethod);
+                $this->response['data'] = $contactController->fulfilRequest();
+                break;
+            case 'users':
+            case 'user':
+                $peopleController = new PeopleController($this->request, $this->requestMethod);
+                $this->response['data'] = $peopleController->fulfilRequest();
+                break;
+            case 'lastfm':
+                $lastFmController = new LastFmController();
+                $lastFmController->refreshData();
+                break;
+            default:
+                header('/');
+        }
+    }
 
-switch($returnType) {
-    case 'json':
-    case 'datatables':
-        echo json_encode($response);
-        break;
-    case 'xml':
-        $fn = new Functions();
-        $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" ?><rootTag/>');
-        $fn->xml_encode($xml, (array) $response);
-        echo $xml->asXML();
-        break;
-    case 'csv':
-//        echo csv_encode($response['data']);
-        break;
-    default:
-        echo json_encode($response);
+    protected function echoResponse()
+    {
+        switch($this->returnType) {
+            case 'json':
+            case 'datatables':
+                echo json_encode($this->response);
+                break;
+            case 'xml':
+                $fn = new Functions();
+                $xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" ?><rootTag/>');
+                $fn->xml_encode($xml, (array) $this->response);
+                echo $xml->asXML();
+                break;
+            case 'csv':
+                // echo csv_encode($response['data']);
+                break;
+            default:
+                echo json_encode($this->response);
+        }
+    }
+
 }
