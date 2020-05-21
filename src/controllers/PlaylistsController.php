@@ -2,32 +2,20 @@
 
 class PlaylistsController
 {
-    private $requestType;
+    private $requestMethod;
     private $params;
     private $response = '';
 
     public function __construct($request)
     {
-        $this->requestType = array_shift($request) ?? 'get';
+        $this->requestMethod = array_shift($request) ?? 'GET';
         $this->params = $request;
     }
 
     public function fulfilRequest()
     {
-        switch($this->requestType) {
-            case 'get':
-                $this->get();
-                break;
-            case 'post':
-                $this->post();
-                break;
-            case 'put':
-                $this->put();
-                break;
-            case 'delete':
-                $this->delete();
-                break;
-        }
+        $action = strtolower($this->requestMethod);
+        call_user_func(array($this, $action));
         return $this->response;
     }
 

@@ -7,28 +7,60 @@ class People
     protected $db;
     protected $data;
 
+    /**
+     * People constructor.
+     */
     public function __construct()
     {
         $this->db = MyPDO::instance('People');
     }
 
+    /**
+     * @return User[]
+     */
     public function findAllUsers()
     {
-        $sql = "SELECT id, name, cookie_ref FROM users";
+        $sql = "SELECT id, name, uuid FROM users";
         return $this->db->run($sql)->fetchAll();
     }
 
-    public function findUserByCookie($cookie)
+    /**
+     * @param string $column
+     * @param string $value
+     * @return bool|User
+     */
+    public function findUserByValue(string $column, string $value)
     {
-        $params = [$cookie];
-        $sql = "SELECT id, name, cookie_ref FROM users WHERE cookie_ref = ?";
+        if( !in_array( $column, ['id','name','uuid'] ) ) {
+            return false;
+        }
+        $params = [$value];
+        $sql = "SELECT id, name, uuid FROM users WHERE $column = ?";
         return $this->db->run($sql, $params)->fetch();
     }
 
-    public function findUserById($id)
+    /**
+     * @param $user
+     * @return User
+     */
+    public function saveUser(User $user)
     {
-        $params = [$id];
-        $sql = "SELECT id, name, cookie_ref FROM users WHERE id = ?";
-        return $this->db->run($sql, $params)->fetch();
+        $params = [$user->getUsername(), $user->getUuid()];
+        $sql = "INSERT INTO users (name, uuid) VALUES (?, ?)";
+        $this->db->run($sql, $params);
+        if(!$this->db->errors()) {
+            $user->setId($this->getLastInsertId());
+        }
+        return $user;
+    }
+
+    /**
+     * @return int
+     */
+    private function getLastInsertId()
+    {
+        $sql = "SELECT LAST_INSERT_ID() AS last_id";
+        $result = $this->db->run($sql)->fetch();
+        return (int) $result->last_id;
     }
 }

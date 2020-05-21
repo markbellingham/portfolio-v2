@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 $configs = require_once $_SERVER['DOCUMENT_ROOT'] .  '../config/config.php';
 
 class Functions {
@@ -44,14 +46,23 @@ class Functions {
     {
         global $configs;
         $secret = $configs['server_secret'];
-        $date = date('Y-m-d H:i:s');
+        $date = date('YmdHis');
         $hash = password_hash($secret . $date . $username, PASSWORD_DEFAULT);
-        $_SESSION['secret'] = $hash;
+        $_SESSION['server-secret'] = $hash;
         return $hash;
     }
 
-    public function requestedByTheSameDomain($nonce)
+    public function RandomToken($length = 32){
+        if(!isset($length) || intval($length) <= 8 ){
+            $length = 32;
+        }
+        if (function_exists('openssl_random_pseudo_bytes')) {
+            return bin2hex(openssl_random_pseudo_bytes($length));
+        }
+    }
+
+    public function requestedByTheSameDomain($secret)
     {
-        return $nonce === $_SESSION['secret'];
+        return $secret === $_SESSION['server-secret'];
     }
 }

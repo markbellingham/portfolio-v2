@@ -550,11 +550,11 @@ VALUES
 
 CREATE TABLE IF NOT EXISTS users (
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
-    cookie_ref VARCHAR(255)
+    name VARCHAR(255) NOT NULL UNIQUE,
+    uuid VARCHAR(255)
 );
 
-INSERT INTO users (name) VALUES ('Anonymous'), ('Mark');
+INSERT INTO users (name, uuid) VALUES ('Anonymous', '95c7cdac-6a6f-44ca-a28f-fc62ef61405d');
 
 CREATE TABLE IF NOT EXISTS photo_faves (
     user_id INT NOT NULL,

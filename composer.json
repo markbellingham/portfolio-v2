@@ -8,6 +8,7 @@
     "components/jquery": "^3.4",
     "ext-http": "*",
     "ext-simplexml": "*",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "ext-openssl": "*"
   }
 }

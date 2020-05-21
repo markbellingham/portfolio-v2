@@ -1,3 +1,10 @@
+<?php
+session_start();
+$cookie = (object) json_decode($_COOKIE['settings'] ?? '{}');
+$_SESSION['username'] = $cookie->username ?? '';
+$_SESSION['uuid'] = $cookie->uuid ?? '';
+?>
+
 <!doctype html>
 
 <html lang="en-gb">

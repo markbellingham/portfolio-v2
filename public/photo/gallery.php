@@ -34,7 +34,7 @@
                         </div>
                         <div class="text-left mt-2">
                             <label for="comment-name">Name:</label>
-                            <input type="text" id="comment-name" name="name" class="form-control"/>
+                            <input type="text" id="comment-name" name="name" class="form-control" value="<?= $_SESSION['username'] ?? '' ?>" disabled/>
                             <label for="new-comment" class="text-left">Comment:</label>
                             <textarea id="new-comment" name="comment" class="form-control"></textarea>
                             <label for="description" class="d-none">Description</label>

@@ -6,6 +6,8 @@ class MyPDO extends PDO
 {
     protected static $instance;
     protected $pdo;
+    protected $error = false;
+    protected $errorInfo;
 
     public function __construct($db_name)
     {
@@ -39,11 +41,21 @@ class MyPDO extends PDO
     // A helper function to run prepared statements smoothly
     public function run($sql, $args = NULL)
     {
+        $this->error = false;
         if(!$args) {
             return $this->query($sql);
         }
         $stmt = $this->prepare($sql);
+        if(!$stmt) {
+            $this->errorInfo = $stmt->errorInfo();
+            $this->error = true;
+        }
         $stmt->execute($args);
         return $stmt;
+    }
+
+    public function errors()
+    {
+        return $this->error;
     }
 }

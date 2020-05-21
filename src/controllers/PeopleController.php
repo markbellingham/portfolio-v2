@@ -4,30 +4,26 @@ class PeopleController
 {
     private $requestMethod;
     private $params;
-    private $response = '';
+    private $response;
 
+    /**
+     * PeopleController constructor.
+     * @param array $request
+     * @param string $requestMethod
+     */
     public function __construct(array $request, string $requestMethod)
     {
         $this->requestMethod = $requestMethod ?? 'GET';
         $this->params = $request;
     }
 
+    /**
+     * @return mixed
+     */
     public function fulfilRequest()
     {
-        switch($this->requestMethod) {
-            case 'GET':
-                $this->get();
-                break;
-            case 'POST':
-                $this->post();
-                break;
-            case 'PUT':
-                $this->put();
-                break;
-            case 'DELETE':
-                $this->delete();
-                break;
-        }
+        $action = strtolower($this->requestMethod);
+        call_user_func(array($this, $action));
         return $this->response;
     }
 
@@ -39,14 +35,30 @@ class PeopleController
                 $this->response = $people->findAllUsers();
                 break;
             case 'user':
-                $this->response = $people->findUserByCookie($this->params['id']);
+                $this->response = $people->findUserByValue('uuid', $this->params['id']);
                 break;
         }
     }
 
     private function post()
     {
-
+        $people = new People();
+        $fn = new Functions();
+        $stringValidator = new StringValidator();
+        if($fn->requestedByTheSameDomain($this->params['values']['secret'] ?? '')) {
+            $user = new User($this->params['values']['username'], $this->params['values']['uuid']);
+            foreach($user as $key => $value) {
+                try {
+                    $user->$key = $stringValidator->validate($value);
+                } catch (Exception $e) {
+                    $this->response = $e;
+                    return;
+                }
+            }
+            $this->response = $people->saveUser($user);
+        } else {
+            $this->response = 'Sorry, user registrations via the website interface only';
+        }
     }
 
     private function put()

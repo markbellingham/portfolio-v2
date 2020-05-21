@@ -1,4 +1,7 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 require_once '../autoload.php';
 $frontController = new FrontController();
 
@@ -22,42 +25,38 @@ class FrontController
     private $requestMethod;
     private $request = [];
     private $response = [];
-    private $returnType;
+    private $responseType;
 
     public function __construct()
     {
         $this->requestMethod = $_SERVER['REQUEST_METHOD'];
-        $this->returnType = $_GET['type'] ?? '';
         $this->response['data'] = '';
         $this->parseURI();
         $this->callEndpoint();
         $this->echoResponse();
     }
 
-    protected function parseURI()
+    private function parseURI()
     {
+        $requestUrl = $_GET['url'] ?? '';
+        $requestElements = explode('/', $requestUrl);
+        $this->request['api_version'] = $requestElements[0] ?? '';
+        $this->request['endpoint'] = $requestElements[1] ?? '';
+        $this->request['id'] = $requestElements[2] ?? '';
+        $this->request['qty'] = $requestElements[3] ?? '';
+        $this->responseType = $_GET['type'] ?? '';
         switch($this->requestMethod) {
             case 'GET':
-                $requestUrl = $_GET['url'] ?? '';
-                $requestElements = explode('/', $requestUrl);
-                $this->request['api_version'] = $requestElements[0] ?? '';
-                $this->request['endpoint'] = $requestElements[1] ?? '';
-                $this->request['id'] = $requestElements[2] ?? '';
-                $this->request['qty'] = $requestElements[3] ?? '';
                 break;
             case 'POST':
             case 'PUT':
             case 'DELETE':
-                $fn = new Functions();
-                parse_str(file_get_contents("php://input"),$request);
-                if($fn->requestedByTheSameDomain($request['secret'])) {
-
-                }
+                $this->request['values'] = json_decode(file_get_contents("php://input"), true);
                 break;
         }
     }
 
-    protected function callEndpoint()
+    private function callEndpoint()
     {
         switch($this->request['endpoint']) {
             case 'albums':
@@ -91,9 +90,9 @@ class FrontController
         }
     }
 
-    protected function echoResponse()
+    private function echoResponse()
     {
-        switch($this->returnType) {
+        switch($this->responseType) {
             case 'json':
             case 'datatables':
                 echo json_encode($this->response);

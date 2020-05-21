@@ -6,7 +6,7 @@ $title = 'Music';
         <div id="player-container" class="col-md-8 offset-2">
             <div class="col-md-3 offset-1">
                 <audio id="player" controls>
-                    <source src="" type="">
+
                 </audio>
             </div>
             <div class="col-md-7 pl-5" id="now-playing">

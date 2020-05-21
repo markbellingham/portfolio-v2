@@ -20,20 +20,8 @@ class ContactController {
 
     public function fulfilRequest()
     {
-        switch($this->requestMethod) {
-            case 'GET':
-                $this->get();
-                break;
-            case 'POST':
-                $this->post();
-                break;
-            case 'PUT':
-                $this->put();
-                break;
-            case 'DELETE':
-                $this->delete();
-                break;
-        }
+        $action = strtolower($this->requestMethod);
+        call_user_func(array($this, $action));
         return $this->response;
     }
 
