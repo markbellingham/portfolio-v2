@@ -1,6 +1,17 @@
+<?php
+$cookie = $_COOKIE['settings'] ?? '{"permission": "no", "uuid": "", "username": "Anonymous"}';
+$cookieSettings = json_decode($cookie);
+$cookiePermission = $cookieSettings->permission ?? false;
+$showCookiePermission = $cookiePermission ? 'd-none' : '';
+$showChangeCookiePermission = $cookiePermission ? '' : 'd-none';
+?>
+<div class="d-none" id="cookie-settings"><?= $cookie ?></div>
+
 <div class="col-md-12">
-    <div class="card d-none" id="change-cookie-permissions-div"><button class="btn btn-link" id="change-cookie-permissions-btn">Change Cookie Permissions</button></div>
-    <div class="card" id="cookie-permissions">
+    <div class="card <?= $showChangeCookiePermission ?>" id="change-cookie-permissions-div">
+        <button class="btn btn-link" id="change-cookie-permissions-btn">Change Cookie Permissions</button>
+    </div>
+    <div class="card <?= $showCookiePermission ?>" id="cookie-permissions">
         <h3 class="card-header bg-light">
             <span class="text-dark mr-5">Can this website remember you?</span>
             <button class="btn btn-danger cookie-permissions-btn" data-permission="no">No</button>

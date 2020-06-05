@@ -1,9 +1,7 @@
 import * as c from '../../common/functions/cookies.js';
 import * as g from '../../common/functions/general.js';
 
-let permission = 'no';
-let uuid = '';
-let username = 'Anonymous';
+const settings = JSON.parse($('#cookie-settings').text());
 let users = [];
 
 fetch(`/api/v1/users`)
@@ -13,13 +11,13 @@ fetch(`/api/v1/users`)
     });
 
 
+
 $('.cookie-permissions-btn').click( function() {
-    permission = this.getAttribute('data-permission');
-    uuid = permission === 'yes' ? g.uuidv4() : "";
-    if(permission === 'yes') {
+    settings.permission = this.getAttribute('data-permission');
+    settings.uuid = settings.permission === 'yes' ? g.uuidv4() : "";
+    if(settings.permission === 'yes') {
         $('#usernameModal').modal();
     } else {
-        const settings = { 'permission': permission, 'uuid': uuid, 'username': username };
         c.setCookie('settings', JSON.stringify(settings));
     }
 });
@@ -29,10 +27,9 @@ $('#username').on('keyup', function() {
 });
 
 $('#save-username-btn').click( function() {
-    const username = $('#username').val();
+    settings.username = $('#username').val();
     const secret = $('#secret').val();
-    if(checkConditions(username)) {
-        const settings = { 'permission': permission, 'uuid': uuid, 'username': username };
+    if(checkConditions(settings.username)) {
         c.setCookie('settings', JSON.stringify(settings));
         $('#usernameModal').modal('hide');
         $('#username').val('');

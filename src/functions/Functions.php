@@ -42,17 +42,7 @@ class Functions {
         }
     }
 
-    public function setServerSecret($username = '')
-    {
-        global $configs;
-        $secret = $configs['server_secret'];
-        $date = date('YmdHis');
-        $hash = password_hash($secret . $date . $username, PASSWORD_DEFAULT);
-        $_SESSION['server-secret'] = $hash;
-        return $hash;
-    }
-
-    public function RandomToken($length = 32){
+    public function randomToken($length = 32){
         if(!isset($length) || intval($length) <= 8 ){
             $length = 32;
         }

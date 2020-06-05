@@ -3,7 +3,7 @@ require_once 'autoload.php';
 include_once "common/layout/header.php";
 
 $fn = new Functions();
-$secret = $fn->RandomToken();
+$secret = $fn->randomToken();
 $_SESSION['server-secret'] = $secret;
 
 ?>
