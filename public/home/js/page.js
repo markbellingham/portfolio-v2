@@ -33,6 +33,7 @@ $('#save-username-btn').click( function() {
         c.setCookie('settings', JSON.stringify(settings));
         $('#usernameModal').modal('hide');
         $('#username').val('');
+        $('#photo-comment-username').val(settings.username);
         saveUser(settings, secret);
     }
 });

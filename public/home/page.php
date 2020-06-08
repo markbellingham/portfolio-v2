@@ -1,5 +1,5 @@
 <?php
-$cookie = $_COOKIE['settings'] ?? '{"permission": "no", "uuid": "", "username": "Anonymous"}';
+$cookie = $_COOKIE['settings'] ?? '{"permission": false, "uuid": "", "username": "Anonymous"}';
 $cookieSettings = json_decode($cookie);
 $cookiePermission = $cookieSettings->permission ?? false;
 $showCookiePermission = $cookiePermission ? 'd-none' : '';
