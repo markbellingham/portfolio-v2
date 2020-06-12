@@ -1,6 +1,6 @@
 import { photos, userFaves, userId } from './application-data.js';
 import * as c from '../../common/functions/cookies.js';
-import { buildCaptchaIcons } from '../../common/functions/general.js';
+import { buildCaptchaIcons, formToJSON } from '../../common/functions/general.js';
 
 let chosenIcon = {};
 
@@ -127,6 +127,7 @@ $('#photos').on('click', 'img', function() {
     }
     $('#full-size-photo').attr('data-photoid', photoId.toString());
     $('#fave-count').text(photo.fave_count);
+    $('#comment-photoId').val(photoId);
     $('#modalIMG').modal();
 });
 
@@ -151,4 +152,24 @@ $('#full-size-photo').on('click', function() {
     const photoId = Number(this.getAttribute('data-photoid'));
     const photo = photos.find(p => p.id === photoId );
     window.open('/Resources/Pictures/Favourites/' + photo.filename);
+});
+
+$('#photo-comment-submit').click( function(e) {
+    e.preventDefault();
+    const form = document.getElementById('photo-comment-form');
+    if(form.reportValidity()) {
+        const formData = formToJSON(form);
+        console.log(formData);
+        formData.chosenIcon = chosenIcon;
+        fetch(`/api/v1/photo/${form.photo_id.value}`, {
+            method: 'POST',
+            body: JSON.stringify(formData),
+            credentials: 'include'
+        })
+            .then( res => res.json() )
+            .then( response => {
+                console.log(response);
+                $('#photo-comment').val('');
+            });
+    }
 });

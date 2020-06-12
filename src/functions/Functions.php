@@ -55,4 +55,12 @@ class Functions {
     {
         return $secret === $_SESSION['server-secret'];
     }
+
+    public function validateUser($cookie)
+    {
+        $cookie = is_object($cookie) ? $cookie : json_decode($cookie);
+        $people = new People();
+        $user = $people->findUserByValue('uuid', $cookie->uuid);
+        return $user && $user->name == $cookie->username ? $user->id : false;
+    }
 }

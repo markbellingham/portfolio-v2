@@ -32,7 +32,7 @@ function buildIconChooser(icons) {
     let iconsHtml = '';
     for(let i of icons) {
         iconsHtml += `<label for="r-${i.icon_id}" class="btn btn-warning ml-1" title="${i.name}">
-            <input type="radio" class="" name="icon" id="r-${i.icon_id}" value="${i.icon_id}"/>
+            <input type="radio" name="icon" id="r-${i.icon_id}" value="${i.icon_id}" required/>
             ${i.icon}
             </label>`
     }
@@ -49,6 +49,21 @@ export function uuidv4() {
     );
 }
 
+/**
+ * Returns an object literal of form names and values
+ * @param {HTMLFormElement} form
+ * @returns {object}
+ */
+export const formToJSON = form => {
+    return Array.from(new FormData(form).entries())
+        .reduce((m, [key, value]) => Object.assign(m, {[key]: value}), {})
+}
+
+/**
+ * Pure JavaScript element slide up
+ * @param {string} selector
+ * @param {int} duration
+ */
 export function slideUp(selector, duration) {
     let target = document.querySelector(selector);
     /* Slide Up Logic 8 */
@@ -78,6 +93,11 @@ export function slideUp(selector, duration) {
 
 }
 
+/**
+ * Pure JavaScript element slide down
+ * @param selector
+ * @param duration
+ */
 export function slideDown(selector, duration) {
     let target = document.querySelector(selector);
     /* Slide Down Logic */
@@ -114,11 +134,11 @@ export function slideDown(selector, duration) {
     }, duration);
 }
 
-function removeCSSProperties(target, duration) {
-
-
-}
-
+/**
+ * Pure JavaScript element slide toggle
+ * @param {string} selector
+ * @param {int} duration
+ */
 export function slideToggle(selector, duration) {
     let target = document.querySelector(selector);
     /* Slide Toggle Logic */

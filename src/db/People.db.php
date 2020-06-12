@@ -27,7 +27,7 @@ class People
     /**
      * @param string $column
      * @param string $value
-     * @return bool|User
+     * @return bool|object
      */
     public function findUserByValue(string $column, string $value)
     {

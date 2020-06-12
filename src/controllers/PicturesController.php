@@ -42,7 +42,16 @@ class PicturesController
 
     private function post()
     {
-        return '';
+        if($this->commentConditions()) {
+            $comment = (object) [
+                'userId' => $this->params['userId'],
+                'photoId' => $this->params['id'],
+                'comment' => $this->params['values']['comment']
+            ];
+            $pictures = new Pictures();
+            return $pictures->savePhotoComment($comment);
+        }
+        return false;
     }
 
     private function put()
@@ -53,5 +62,37 @@ class PicturesController
     private function delete()
     {
         return '';
+    }
+
+    private function commentConditions()
+    {
+        $fn = new Functions();
+        $paramValues = $this->params['values'];
+
+        if(!$fn->requestedByTheSameDomain($paramValues['secret'])) {
+            return false;
+        }
+
+        $this->params['userId'] = $fn->validateUser($_COOKIE['settings']);
+        if(!$this->params['userId']) {
+            return false;
+        }
+
+        if(strlen($paramValues['description']) > 0) {
+            return false; // honey trap
+        }
+
+        if((int) $paramValues['icon'] != $paramValues['chosenIcon']['icon_id']) {
+            return false; // captcha
+        }
+
+        try {
+            $stringValidator = new StringValidator();
+            $this->params['values']['comment'] = $stringValidator->validate($paramValues['comment']);
+        } catch (Exception $e) {
+            return false;
+        }
+
+        return true;
     }
 }

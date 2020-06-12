@@ -6,7 +6,7 @@ class MyPDO extends PDO
 {
     protected static $instance;
     protected $pdo;
-    protected $error = false;
+    public $error = false;
     protected $errorInfo;
 
     public function __construct($db_name)
@@ -26,7 +26,7 @@ class MyPDO extends PDO
     // A classical static method to make it universally available
     public static function instance($db_name)
     {
-        if(self::$instance[$db_name] === null) {
+        if(!isset(self::$instance[$db_name]) || self::$instance[$db_name] === null) {
             self::$instance[$db_name] = new MyPDO($db_name);
         }
         return self::$instance[$db_name];

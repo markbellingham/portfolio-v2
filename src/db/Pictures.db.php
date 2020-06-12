@@ -81,4 +81,13 @@ class Pictures
     }
 
 
+    public function savePhotoComment($comment)
+    {
+        $params = [$comment->userId, $comment->photoId, $comment->comment];
+        $sql = "INSERT INTO photo_comments (user_id, photo_id, comment) VALUES (?,?,?)";
+        $this->db->run($sql, $params);
+        return $this->db->error ? false : true;
+    }
+
+
 }

@@ -21,7 +21,8 @@ class StringValidator implements Validator
         switch($type) {
             case 'string':
                 $this->response = $this->cleanTagsFromString($data);
-                $this->checkProhibitedLinks($data);
+                $this->checkProhibitedLinks($this->response);
+                $this->checkProhibitedWords($this->response);
                 break;
             case 'email':
                 break;
@@ -55,6 +56,12 @@ class StringValidator implements Validator
         if(strpos($data, 'www')) {
             $this->errors[] = self::ERROR_MESSAGE;
         }
+    }
+
+    private function checkProhibitedWords(string $data)
+    {
+        // TODO: fix this
+        return $data;
     }
 
 }
