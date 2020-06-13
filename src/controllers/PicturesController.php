@@ -53,10 +53,10 @@ class PicturesController
             $pictures = new Pictures();
             $success =  $pictures->savePhotoComment($comment);
             if($success) {
-                $comments = $pictures->getPhotoComments($comment['photoId']);
+                $comments = $pictures->getPhotoComments($comment->photoId);
             }
         }
-        $this->response = ['success' => $success, 'data' => $comments];
+        $this->response = ['success' => $success, 'comments' => $comments];
     }
 
     private function put()

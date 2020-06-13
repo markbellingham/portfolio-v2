@@ -102,7 +102,7 @@ function formatComments(comments) {
 $('#photos').on('click', 'img', function() {
     const photoId = Number(this.getAttribute('data-id'));
     getPhotoDetails(photoId).then( response => {
-        const commentMarkup = formatComments(response.data.comments);
+        const commentMarkup = formatComments(response.comments);
         $('#comments').html(commentMarkup);
     });
     buildCaptchaIcons(4, icons => {
@@ -168,7 +168,10 @@ $('#photo-comment-submit').click( function(e) {
         })
             .then( res => res.json() )
             .then( response => {
-                console.log(response);
+                if(response.success) {
+                    const commentMarkup = formatComments(response.comments);
+                    $('#comments').html(commentMarkup);
+                }
                 $('#photo-comment').val('');
             });
     }
