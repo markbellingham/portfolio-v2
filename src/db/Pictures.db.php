@@ -72,7 +72,7 @@ class Pictures
     public function getPhotoComments($photoId)
     {
         $params = [$photoId];
-        $sql = "SELECT pc.id, pc.user_id, u.name, pc.photo_id, pc.comment, DATE_FORMAT(pc.created, 'd-m-Y @ HH:mm') AS created
+        $sql = "SELECT pc.id, pc.user_id, u.name, pc.photo_id, pc.comment, DATE_FORMAT(pc.created, '%d-%m-%Y @ %H:%i') AS created
                 FROM photo_comments pc
                 JOIN people.users u ON pc.user_id = u.id
                 WHERE pc.photo_id = ?

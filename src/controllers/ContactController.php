@@ -5,7 +5,7 @@ class ContactController {
 
     private $requestMethod;
     private $params;
-    private $response = '';
+    private $response = [];
 
     /**
      * ContactController constructor.
@@ -30,7 +30,7 @@ class ContactController {
         $contact = new Contact();
         switch($this->params['id']) {
             case 'icons':
-                $this->response = $contact->getIcons($this->params['qty']);
+                $this->response['data'] = $contact->getIcons($this->params['qty']);
                 break;
         }
     }

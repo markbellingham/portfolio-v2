@@ -65,21 +65,22 @@ class FrontController
             case 'track':
             case 'playlist':
                 $musicController = new MusicController($this->request, $this->requestMethod);
-                $this->response['data'] = $musicController->fulfilRequest();
+                $this->response = $musicController->fulfilRequest();
                 break;
             case 'photos':
             case 'photo':
                 $picturesController = new PicturesController($this->request, $this->requestMethod);
-                $this->response['data'] = $picturesController->fulfilRequest();
+                $this->response = $picturesController->fulfilRequest();
                 break;
             case 'contact':
+            case 'icons':
                 $contactController = new ContactController($this->request, $this->requestMethod);
-                $this->response['data'] = $contactController->fulfilRequest();
+                $this->response = $contactController->fulfilRequest();
                 break;
             case 'users':
             case 'user':
                 $peopleController = new PeopleController($this->request, $this->requestMethod);
-                $this->response['data'] = $peopleController->fulfilRequest();
+                $this->response = $peopleController->fulfilRequest();
                 break;
             case 'lastfm':
                 $lastFmController = new LastFmController();

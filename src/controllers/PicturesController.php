@@ -4,7 +4,7 @@ class PicturesController
 {
     private $requestMethod;
     private $params;
-    private $response = '';
+    private $response = [];
 
     /**
      * PicturesController constructor.
@@ -29,11 +29,11 @@ class PicturesController
         $pictures = new Pictures();
         switch($this->params['endpoint']) {
             case 'photos':
-                $this->response = $pictures->findAll();
+                $this->response['data'] = $pictures->findAll();
                 break;
             case 'photo':
-                $this->response = $pictures->findOne($this->params['id']);
-                $this->response->comments = $pictures->getPhotoComments($this->params['id']);
+                $this->response['data'] = $pictures->findOne($this->params['id']);
+                $this->response['comments'] = $pictures->getPhotoComments($this->params['id']);
                 break;
             case 'search':
                 break;
@@ -42,6 +42,8 @@ class PicturesController
 
     private function post()
     {
+        $success = false;
+        $comments = [];
         if($this->commentConditions()) {
             $comment = (object) [
                 'userId' => $this->params['userId'],
@@ -49,9 +51,12 @@ class PicturesController
                 'comment' => $this->params['values']['comment']
             ];
             $pictures = new Pictures();
-            return $pictures->savePhotoComment($comment);
+            $success =  $pictures->savePhotoComment($comment);
+            if($success) {
+                $comments = $pictures->getPhotoComments($comment['photoId']);
+            }
         }
-        return false;
+        $this->response = ['success' => $success, 'data' => $comments];
     }
 
     private function put()

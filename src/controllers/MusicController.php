@@ -4,7 +4,7 @@ class MusicController {
 
     private $requestMethod;
     private $params;
-    private $response = '';
+    private $response = [];
 
     /**
      * MusicController constructor.
@@ -29,16 +29,16 @@ class MusicController {
         $albums = new Albums();
         switch($this->params['endpoint']) {
             case 'albums':
-                $this->response = $albums->findAll();
+                $this->response['data'] = $albums->findAll();
                 break;
             case 'album':
-                $this->response = $albums->findOne($this->params['id']);
+                $this->response['data'] = $albums->findOne($this->params['id']);
                 break;
             case 'tracks':
-                $this->response = $albums->getTracks($this->params['id']);
+                $this->response['data'] = $albums->getTracks($this->params['id']);
                 break;
             case 'track':
-                $this->response = $albums->getOneTrack($this->params['id']);
+                $this->response['data'] = $albums->getOneTrack($this->params['id']);
         }
     }
 

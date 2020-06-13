@@ -32,10 +32,10 @@ class PeopleController
         $people = new People();
         switch($this->params['endpoint']) {
             case 'users':
-                $this->response = $people->findAllUsers();
+                $this->response['data'] = $people->findAllUsers();
                 break;
             case 'user':
-                $this->response = $people->findUserByValue('uuid', $this->params['id']);
+                $this->response['data'] = $people->findUserByValue('uuid', $this->params['id']);
                 break;
         }
     }
@@ -51,13 +51,13 @@ class PeopleController
                 try {
                     $user->$key = $stringValidator->validate($value);
                 } catch (Exception $e) {
-                    $this->response = $e;
+                    $this->response['message'] = $e;
                     return;
                 }
             }
-            $this->response = $people->saveUser($user);
+            $this->response['data'] = $people->saveUser($user);
         } else {
-            $this->response = 'Sorry, user registrations via the website interface only';
+            $this->response['message'] = 'Sorry, user registrations via the website interface only';
         }
     }
 
