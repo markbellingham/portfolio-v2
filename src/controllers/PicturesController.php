@@ -44,6 +44,7 @@ class PicturesController
     {
         $success = false;
         $comments = [];
+        $commentCount = 0;
         if($this->commentConditions()) {
             $comment = (object) [
                 'userId' => $this->params['userId'],
@@ -54,9 +55,14 @@ class PicturesController
             $success =  $pictures->savePhotoComment($comment);
             if($success) {
                 $comments = $pictures->getPhotoComments($comment->photoId);
+                $commentCount = count($comments);
             }
         }
-        $this->response = ['success' => $success, 'comments' => $comments];
+        $this->response = [
+            'success' => $success,
+            'comments' => $comments,
+            'commentCount' => $commentCount
+        ];
     }
 
     private function put()

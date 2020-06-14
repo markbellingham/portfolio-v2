@@ -57,14 +57,16 @@ function formatPhotoGrid(data) {
             <div class="img-overlay">
                 <h5 class="ml-2">${p.title}</h5>
                 <p class="ml-2" style="float: left;">${p.town}, ${p.country}</p>
-                <p class="mr-2" style="float: right;">`;
+                <p class="mr-2" style="float: right;">
+                    <span id="pfavecount-${p.id}">`;
                     if(p.fave_count > 0) {
                         markup += `<i class="fas fa-heart"></i> ${p.fave_count}`;
                     }
+                    markup += `</span><span id="pcommcount-${p.id}">`
                     if(p.comment_count > 0) {
                         markup += `<i class="fas fa-comment-alt"></i> ${p.comment_count}`;
                     }
-                markup += `</p>
+                markup += `</span></p>
             </div>
         </div>
         `;
@@ -171,6 +173,7 @@ $('#photo-comment-submit').click( function(e) {
                 if(response.success) {
                     const commentMarkup = formatComments(response.comments);
                     $('#comments').html(commentMarkup);
+                    $(`#pcommcount-${form.photo_id.value}`).html(`<i class="fas fa-comment-alt"></i> ${response.commentCount}`)
                 }
                 $('#photo-comment').val('');
             });

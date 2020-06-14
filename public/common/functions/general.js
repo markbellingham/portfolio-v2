@@ -51,7 +51,7 @@ export function uuidv4() {
 
 /**
  * Returns an object literal of form names and values
- * @param {HTMLFormElement} form
+ * @param {HTMLElement} form
  * @returns {object}
  */
 export const formToJSON = form => {
