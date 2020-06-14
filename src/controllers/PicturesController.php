@@ -42,27 +42,14 @@ class PicturesController
 
     private function post()
     {
-        $success = false;
-        $comments = [];
-        $commentCount = 0;
-        if($this->commentConditions()) {
-            $comment = (object) [
-                'userId' => $this->params['userId'],
-                'photoId' => $this->params['id'],
-                'comment' => $this->params['values']['comment']
-            ];
-            $pictures = new Pictures();
-            $success =  $pictures->savePhotoComment($comment);
-            if($success) {
-                $comments = $pictures->getPhotoComments($comment->photoId);
-                $commentCount = count($comments);
-            }
+        switch($this->params['values']['task']) {
+            case 'addComment':
+                $this->add_comment();
+                break;
+            case 'addFave':
+                $this->add_fave();
+                break;
         }
-        $this->response = [
-            'success' => $success,
-            'comments' => $comments,
-            'commentCount' => $commentCount
-        ];
     }
 
     private function put()
@@ -75,7 +62,67 @@ class PicturesController
         return '';
     }
 
-    private function commentConditions()
+    /**
+     * Add a user comment to a photo
+     */
+    private function add_comment()
+    {
+        $success = false;
+        $comments = [];
+        $commentCount = $faveCount = 0;
+        if($this->comment_conditions()) {
+            $comment = (object) [
+                'userId' => $this->params['userId'],
+                'photoId' => $this->params['id'],
+                'comment' => $this->params['values']['comment']
+            ];
+            $pictures = new Pictures();
+            $success =  $pictures->savePhotoComment($comment);
+            if($success) {
+                $comments = $pictures->getPhotoComments($comment->photoId);
+                $commentCount = count($comments);
+                $faveCount = $pictures->getFaveCount($comment->photoId);
+            }
+        }
+        $this->response = [
+            'success' => $success,
+            'comments' => $comments,
+            'comment_count' => $commentCount,
+            'fave_count' => $faveCount
+        ];
+    }
+
+    /**
+     * Add a favourite to a photo for that user
+     */
+    private function add_fave()
+    {
+        $success = false;
+        $faveCount = $commentCount = 0;
+        $people = new People();
+        $cookieSettings = json_decode($_COOKIE['settings']);
+        $user = $people->findUserByValue('uuid', $cookieSettings->uuid);
+        if($this->fave_conditions()) {
+            $fave = (object) [
+                'userId' => $user->id,
+                'photoId' => $this->params['id']
+            ];
+            $pictures = new Pictures();
+            $success = $pictures->saveFave($fave);
+            if($success) {
+                $comments = $pictures->getPhotoComments($this->params['id']);
+                $commentCount = count($comments);
+                $faveCount = $pictures->getFaveCount($this->params['id']);
+            }
+        }
+        $this->response = [
+            'success' => $success,
+            'fave_count' => $faveCount,
+            'comment_count' => $commentCount
+        ];
+    }
+
+    private function comment_conditions()
     {
         $fn = new Functions();
         $paramValues = $this->params['values'];
@@ -104,6 +151,22 @@ class PicturesController
             return false;
         }
 
+        return true;
+    }
+
+    private function fave_conditions()
+    {
+        $fn = new Functions();
+        $paramValues = $this->params['values'];
+
+        if(!$fn->requestedByTheSameDomain($paramValues['secret'])) {
+            return false;
+        }
+
+        $this->params['userId'] = $fn->validateUser($_COOKIE['settings']);
+        if(!$this->params['userId']) {
+            return false;
+        }
         return true;
     }
 }

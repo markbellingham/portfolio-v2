@@ -554,12 +554,11 @@ CREATE TABLE IF NOT EXISTS users (
     uuid VARCHAR(255)
 );
 
-INSERT INTO users (name, uuid) VALUES ('Anonymous', '95c7cdac-6a6f-44ca-a28f-fc62ef61405d');
+INSERT INTO people.users (name, uuid) VALUES ('Anonymous', '95c7cdac-6a6f-44ca-a28f-fc62ef61405d');
 
 CREATE TABLE IF NOT EXISTS photo_faves (
     user_id INT NOT NULL,
-    photo_id INT NOT NULL,
-    PRIMARY KEY (user_id, photo_id)
+    photo_id INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS photo_comments (

@@ -40,7 +40,7 @@
                                 <textarea id="photo-comment" name="comment" class="form-control" required></textarea>
                                 <label for="description" class="d-none">Description</label>
                                 <input type="text" name="description" id="description" class="d-none" value=""/>
-                                <input type="hidden" name="secret" value="<?= $secret ?>"/>
+                                <input type="hidden" name="secret" id="server-secret" value="<?= $secret ?>"/>
                                 <input type="hidden" name="uuid" value="<?= $cookieSettings->uuid; ?>"/>
                                 <input type="hidden" name="photo_id" id="comment-photoId" value=""/>
                             </div>

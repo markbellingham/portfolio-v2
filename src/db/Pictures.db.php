@@ -66,10 +66,10 @@ class Pictures
 
     /**
      * Get a list of comments for one photo
-     * @param $photoId
+     * @param int $photoId
      * @return array
      */
-    public function getPhotoComments($photoId)
+    public function getPhotoComments(int $photoId)
     {
         $params = [$photoId];
         $sql = "SELECT pc.id, pc.user_id, u.name, pc.photo_id, pc.comment, DATE_FORMAT(pc.created, '%d-%m-%Y @ %H:%i') AS created
@@ -80,8 +80,11 @@ class Pictures
         return $this->db->run($sql, $params)->fetchAll();
     }
 
-
-    public function savePhotoComment($comment)
+    /**
+     * @param object $comment
+     * @return bool
+     */
+    public function savePhotoComment(object $comment)
     {
         $params = [$comment->userId, $comment->photoId, $comment->comment];
         $sql = "INSERT INTO photo_comments (user_id, photo_id, comment) VALUES (?,?,?)";
@@ -89,5 +92,28 @@ class Pictures
         return $this->db->error ? false : true;
     }
 
+    /**
+     * @param object $fave
+     * @return bool
+     */
+    public function saveFave(object $fave)
+    {
+        $params = [$fave->userId, $fave->photoId];
+        $sql = "INSERT INTO photo_faves (user_id, photo_id) VALUES (?,?)";
+        $this->db->run($sql, $params);
+        return $this->db->error ? false : true;
+    }
+
+    /**
+     * @param int $photoId
+     * @return int
+     */
+    public function getFaveCount(int $photoId)
+    {
+        $params = [$photoId];
+        $sql = "SELECT COUNT(photo_id) AS fave_count FROM photo_faves WHERE photo_id = ?";
+        $result = $this->db->run($sql, $params)->fetch();
+        return $result->fave_count;
+    }
 
 }

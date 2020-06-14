@@ -4,7 +4,7 @@ import { buildCaptchaIcons, formToJSON } from '../../common/functions/general.js
 
 let chosenIcon = {};
 
-const cookie = c.getCookie();
+const userSettings = JSON.parse(c.getCookie('settings'));
 
 getPhotos().then( response => {
         const photoMarkup = formatPhotoGrid(response.data);
@@ -58,11 +58,10 @@ function formatPhotoGrid(data) {
                 <h5 class="ml-2">${p.title}</h5>
                 <p class="ml-2" style="float: left;">${p.town}, ${p.country}</p>
                 <p class="mr-2" style="float: right;">
-                    <span id="pfavecount-${p.id}">`;
+                    <span id="pcounts-${p.id}">`;
                     if(p.fave_count > 0) {
-                        markup += `<i class="fas fa-heart"></i> ${p.fave_count}`;
+                        markup += `<i class="fas fa-heart"></i> ${p.fave_count} `;
                     }
-                    markup += `</span><span id="pcommcount-${p.id}">`
                     if(p.comment_count > 0) {
                         markup += `<i class="fas fa-comment-alt"></i> ${p.comment_count}`;
                     }
@@ -130,6 +129,7 @@ $('#photos').on('click', 'img', function() {
     $('#full-size-photo').attr('data-photoid', photoId.toString());
     $('#fave-count').text(photo.fave_count);
     $('#comment-photoId').val(photoId);
+    $('#photo-comment').val('');
     $('#modalIMG').modal();
 });
 
@@ -137,13 +137,32 @@ $('#photos').on('click', 'img', function() {
  * Event handler when clicking on a heart on an image modal
  */
 $('#make-favourite').on('click', function() {
-    $(this).addClass('text-danger');
     const photoId = Number(this.getAttribute('data-photoid'));
     const photo = photos.find(p => p.id === photoId );
+    const secret = $('#server-secret').val();
     if(userFaves.indexOf(photoId) < 0) {
-        userFaves.push(photoId);
-        photo.fave_count++;
-        $('#fave-count').text(photo.fave_count);
+        fetch(`/api/v1/photo/${photoId}`, {
+            method: 'POST',
+            body: JSON.stringify({'task': 'addFave', 'secret': secret}),
+            credentials: 'include'
+        })
+            .then( res => res.json() )
+            .then( response => {
+                if(response.success) {
+                    this.classList.add('text-danger');
+                    userFaves.push(photoId);
+                    photo.fave_count = response.fave_count;
+                    $('#fave-count').text(photo.fave_count);
+                    let markup = '';
+                    if(response.fave_count > 0) {
+                        markup += `<i class="fas fa-heart"></i> ${response.fave_count} `;
+                    }
+                    if(response.comment_count > 0) {
+                        markup += `<i class="fas fa-comment-alt"></i> ${response.comment_count}`;
+                    }
+                    $(`#pcounts-${photoId}`).html(markup);
+                }
+            });
     }
 });
 
@@ -156,13 +175,16 @@ $('#full-size-photo').on('click', function() {
     window.open('/Resources/Pictures/Favourites/' + photo.filename);
 });
 
+/**
+ * Event handler for submitting a comment
+ */
 $('#photo-comment-submit').click( function(e) {
     e.preventDefault();
     const form = document.getElementById('photo-comment-form');
     if(form.reportValidity()) {
         const formData = formToJSON(form);
-        console.log(formData);
         formData.chosenIcon = chosenIcon;
+        formData.task = 'addComment';
         fetch(`/api/v1/photo/${form.photo_id.value}`, {
             method: 'POST',
             body: JSON.stringify(formData),
@@ -173,9 +195,16 @@ $('#photo-comment-submit').click( function(e) {
                 if(response.success) {
                     const commentMarkup = formatComments(response.comments);
                     $('#comments').html(commentMarkup);
-                    $(`#pcommcount-${form.photo_id.value}`).html(`<i class="fas fa-comment-alt"></i> ${response.commentCount}`)
+                    let markup = '';
+                    if(response.fave_count > 0) {
+                        markup += `<i class="fas fa-heart"></i> ${response.fave_count} `;
+                    }
+                    if(response.comment_count > 0) {
+                        markup += `<i class="fas fa-comment-alt"></i> ${response.comment_count}`;
+                    }
+                    $(`#pcounts-${form.photo_id.value}`).html(markup);
+                    $('#photo-comment').val('');
                 }
-                $('#photo-comment').val('');
             });
     }
 });
