@@ -97,6 +97,17 @@ function formatComments(comments) {
     return markup;
 }
 
+function setThumbnailFaveCommentCount(response, photoId) {
+    let markup = '';
+    if(response.fave_count > 0) {
+        markup += `<i class="fas fa-heart"></i> ${response.fave_count} `;
+    }
+    if(response.comment_count > 0) {
+        markup += `<i class="fas fa-comment-alt"></i> ${response.comment_count}`;
+    }
+    $(`#pcounts-${photoId}`).html(markup);
+}
+
 /**
  * Event handler to show large modal when clicking on a photo thumbnail
  */
@@ -105,6 +116,8 @@ $('#photos').on('click', 'img', function() {
     getPhotoDetails(photoId).then( response => {
         const commentMarkup = formatComments(response.comments);
         $('#comments').html(commentMarkup);
+        $('#fave-count').text(response.fave_count);
+        setThumbnailFaveCommentCount(response, photoId);
     });
     buildCaptchaIcons(4, icons => {
         $('#gallery-icons').html(icons.chosenIconHtml + icons.iconsHtml);
@@ -127,7 +140,6 @@ $('#photos').on('click', 'img', function() {
         $('#make-favourite').removeClass('text-danger').attr('data-photoId', photoId.toString());
     }
     $('#full-size-photo').attr('data-photoid', photoId.toString());
-    $('#fave-count').text(photo.fave_count);
     $('#comment-photoId').val(photoId);
     $('#photo-comment').val('');
     $('#modalIMG').modal();
@@ -152,15 +164,7 @@ $('#make-favourite').on('click', function() {
                     this.classList.add('text-danger');
                     userFaves.push(photoId);
                     photo.fave_count = response.fave_count;
-                    $('#fave-count').text(photo.fave_count);
-                    let markup = '';
-                    if(response.fave_count > 0) {
-                        markup += `<i class="fas fa-heart"></i> ${response.fave_count} `;
-                    }
-                    if(response.comment_count > 0) {
-                        markup += `<i class="fas fa-comment-alt"></i> ${response.comment_count}`;
-                    }
-                    $(`#pcounts-${photoId}`).html(markup);
+                    setThumbnailFaveCommentCount(response, photoId);
                 }
             });
     }
@@ -195,14 +199,7 @@ $('#photo-comment-submit').click( function(e) {
                 if(response.success) {
                     const commentMarkup = formatComments(response.comments);
                     $('#comments').html(commentMarkup);
-                    let markup = '';
-                    if(response.fave_count > 0) {
-                        markup += `<i class="fas fa-heart"></i> ${response.fave_count} `;
-                    }
-                    if(response.comment_count > 0) {
-                        markup += `<i class="fas fa-comment-alt"></i> ${response.comment_count}`;
-                    }
-                    $(`#pcounts-${form.photo_id.value}`).html(markup);
+                    setThumbnailFaveCommentCount(response, form.photo_id.value);
                     $('#photo-comment').val('');
                 }
             });

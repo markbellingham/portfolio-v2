@@ -34,6 +34,9 @@ class PicturesController
             case 'photo':
                 $this->response['data'] = $pictures->findOne($this->params['id']);
                 $this->response['comments'] = $pictures->getPhotoComments($this->params['id']);
+                $comments = $pictures->getPhotoComments($this->params['id']);
+                $this->response['comment_count'] = count($comments);
+                $this->response['fave_count'] = $pictures->getFaveCount($this->params['id']);
                 break;
             case 'search':
                 break;
