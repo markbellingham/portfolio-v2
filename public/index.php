@@ -10,11 +10,13 @@ $_SESSION['server-secret'] = $secret;
 <body>
 <div id="container">
 
-    <div class="col-md-12">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
         <?php
         include_once 'music/player.php';
         ?>
     </div>
+    <div class="col-md-2"></div>
     <div id="main-page" class="col-md-12">
         <div class="col-md-2">
             <!-- Nav tabs -->

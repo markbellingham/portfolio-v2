@@ -29,7 +29,7 @@ class PicturesController
         $pictures = new Pictures();
         switch($this->params['endpoint']) {
             case 'photos':
-                $this->response['data'] = $pictures->findAll();
+                $this->response['data'] = $pictures->findAll($this->params['id']);
                 break;
             case 'photo':
                 $this->response['data'] = $pictures->findOne($this->params['id']);

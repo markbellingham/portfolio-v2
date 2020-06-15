@@ -3,8 +3,20 @@ import * as c from '../../common/functions/cookies.js';
 import { buildCaptchaIcons, formToJSON } from '../../common/functions/general.js';
 
 let chosenIcon = {};
+let timeout = null;
 
 const userSettings = JSON.parse(c.getCookie('settings'));
+
+$('#photo-search-input').on('keyup', function() {
+    clearTimeout(timeout);
+    let input = this;
+    timeout = setTimeout(function() {
+        getPhotos(input.value).then( response => {
+            const photoMarkup = formatPhotoGrid(response.data);
+            $('#photos').html(photoMarkup);
+        });
+    }, 500);
+});
 
 getPhotos().then( response => {
         const photoMarkup = formatPhotoGrid(response.data);
@@ -15,8 +27,9 @@ getPhotos().then( response => {
  * Get a list of photos from the database
  * @returns {Promise<any>}
  */
-async function getPhotos() {
-    const result = await fetch(`/api/v1/photos.json`);
+async function getPhotos(searchTerm = null) {
+    const url = searchTerm ? `/api/v1/photos/${searchTerm}` : '/api/v1/photos';
+    const result = await fetch(url);
     return await result.json();
 }
 
@@ -97,6 +110,11 @@ function formatComments(comments) {
     return markup;
 }
 
+/**
+ * Adds icon and number to the photo thumbnail if it has comments and/or favourites
+ * @param {object} response
+ * @param {int} photoId
+ */
 function setThumbnailFaveCommentCount(response, photoId) {
     let markup = '';
     if(response.fave_count > 0) {

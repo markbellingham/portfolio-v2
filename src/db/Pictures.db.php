@@ -13,10 +13,11 @@ class Pictures
 
     /**
      * Get all photos (width and height is for thumbnails)
+     * @param string $searchTerm
      * @param string $directory
      * @return array
      */
-    public function findAll(string $directory = 'Favourites')
+    public function findAll(string $searchTerm = "", string $directory = 'Favourites')
     {
         $params = [$directory];
         $sql = "SELECT p.id, p.title, p.description, p.town, c.name AS country, p.filename, p.directory, p.width, p.height,
@@ -32,9 +33,14 @@ class Pictures
                     SELECT photo_id, COUNT(user_id) AS fave_count
                     FROM photo_faves
                     GROUP BY photo_id
-                ) AS fv ON fv.photo_id = p.id   
-                WHERE p.directory = ?
-                ORDER BY RAND()";
+                ) AS fv ON fv.photo_id = p.id
+                WHERE p.directory = ?";
+        if($searchTerm != "") {
+            $params[] = $searchTerm;
+            $sql .= " AND MATCH(p.title, p.description, p.town) AGAINST(? WITH QUERY EXPANSION)";
+        } else {
+            $sql .= " ORDER BY RAND()";
+        }
         return $this->db->run($sql, $params)->fetchAll();
     }
 

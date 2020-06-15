@@ -1,6 +1,12 @@
 <!-- Area for photo grid -->
-<div class="">
-    <div id="photos">
+<div class="row">
+    <div class="col-md-4 col-xs-12" style="margin-top: -15px;">
+        <input type="text" class="form-control" id="photo-search-input" placeholder="Search Photos"/>
+    </div>
+</div>
+
+<div class="row">
+    <div id="photos" class="col-md-12" style="margin-top: -15px;">
     </div>
 </div>
 
