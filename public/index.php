@@ -37,6 +37,9 @@ $_SESSION['server-secret'] = $secret;
                     <a href="#blog" class="nav-link" data-toggle="tab">Blog</a>
                 </li>
                 <li class="nav-item">
+                    <a href="#games" class="nav-link" data-toggle="tab">Games</a>
+                </li>
+                <li class="nav-item">
                     <a href="#contact" class="nav-link" data-toggle="tab">Contact</a>
                 </li>
             </ul>
@@ -65,7 +68,12 @@ $_SESSION['server-secret'] = $secret;
                     include_once 'photo/gallery.php';
                     ?>
                 </div>
-                <div class="tab-pane" id="blog">Tutorials Tab.</div>
+                <div class="tab-pane" id="blog">
+                    Blog Tab.
+                </div>
+                <div class="tab-pane" id="games">
+                    Games Tab.
+                </div>
                 <div class="tab-pane" id="contact">
                     <?php
                     include_once 'contact/me.php';

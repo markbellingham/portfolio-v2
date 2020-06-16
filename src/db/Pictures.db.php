@@ -19,9 +19,11 @@ class Pictures
      */
     public function findAll(string $searchTerm = "", string $directory = 'Favourites')
     {
-        $params = [$directory];
+        $params = [$searchTerm, $searchTerm, $directory];
         $sql = "SELECT p.id, p.title, p.description, p.town, c.name AS country, p.filename, p.directory, p.width, p.height,
-                    IFNULL(cmt.cmt_count, 0) AS comment_count, IFNULL(fv.fave_count, 0) AS fave_count
+                    IFNULL(cmt.cmt_count, 0) AS comment_count, IFNULL(fv.fave_count, 0) AS fave_count,       
+                    MATCH(p.title, p.description, p.town) AGAINST(? WITH QUERY EXPANSION) AS pscore,
+                    MATCH(c.name) AGAINST(?) AS cscore
                 FROM photos p
                 JOIN countries c ON c.Id = p.country
                 LEFT JOIN (
@@ -37,7 +39,10 @@ class Pictures
                 WHERE p.directory = ?";
         if($searchTerm != "") {
             $params[] = $searchTerm;
-            $sql .= " AND MATCH(p.title, p.description, p.town) AGAINST(? WITH QUERY EXPANSION)";
+            $params[] = $searchTerm;
+            $sql .= " AND MATCH(p.title, p.description, p.town) AGAINST(?)
+                    OR MATCH(c.name) AGAINST(?)
+                    ORDER BY (pscore + cscore) DESC";
         } else {
             $sql .= " ORDER BY RAND()";
         }

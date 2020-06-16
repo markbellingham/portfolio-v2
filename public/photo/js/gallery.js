@@ -12,11 +12,28 @@ $('#photo-search-input').on('keyup', function() {
     let input = this;
     timeout = setTimeout(function() {
         getPhotos(input.value).then( response => {
+            response.data = reorder(response.data, 4);
             const photoMarkup = formatPhotoGrid(response.data);
             $('#photos').html(photoMarkup);
         });
     }, 500);
 });
+
+const reorder = (arr, columns) => {
+        let cols = columns;
+        const out = [];
+        let col = 0;
+
+    while(col < cols) {
+        for (let i = 0; i < arr.length; i += cols) {
+            const val = arr[i + col];
+            if (val !== undefined)
+                out.push(val);
+        }
+        col++;
+    }
+    return out;
+}
 
 getPhotos().then( response => {
         const photoMarkup = formatPhotoGrid(response.data);
