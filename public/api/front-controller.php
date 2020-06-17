@@ -42,7 +42,7 @@ class FrontController
         $requestElements = explode('/', $requestUrl);
         $this->request['api_version'] = $requestElements[0] ?? '';
         $this->request['endpoint'] = $requestElements[1] ?? '';
-        $this->request['id'] = $requestElements[2] ?? '';
+        $this->request['ref'] = $requestElements[2] ?? '';
         $this->request['qty'] = $requestElements[3] ?? '';
         $this->responseType = $_GET['type'] ?? '';
         switch($this->requestMethod) {

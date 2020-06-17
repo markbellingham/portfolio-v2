@@ -28,9 +28,9 @@ class ContactController {
     private function get()
     {
         $contact = new Contact();
-        switch($this->params['id']) {
+        switch($this->params['endpoint']) {
             case 'icons':
-                $this->response['data'] = $contact->getIcons($this->params['qty']);
+                $this->response['data'] = $contact->getIcons($this->params['ref']);
                 break;
         }
     }

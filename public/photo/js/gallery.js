@@ -5,7 +5,8 @@ import { buildCaptchaIcons, formToJSON } from '../../common/functions/general.js
 let chosenIcon = {};
 let timeout = null;
 
-const userSettings = JSON.parse(c.getCookie('settings'));
+const cookie = c.getCookie('settings');
+const userSettings = cookie ? JSON.parse(cookie) : {};
 
 $('#photo-search-input').on('keyup', function() {
     clearTimeout(timeout);

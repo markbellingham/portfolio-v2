@@ -29,14 +29,14 @@ class PicturesController
         $pictures = new Pictures();
         switch($this->params['endpoint']) {
             case 'photos':
-                $this->response['data'] = $pictures->findAll($this->params['id']);
+                $this->response['data'] = $pictures->findAll($this->params['ref']);
                 break;
             case 'photo':
-                $this->response['data'] = $pictures->findOne($this->params['id']);
-                $this->response['comments'] = $pictures->getPhotoComments($this->params['id']);
-                $comments = $pictures->getPhotoComments($this->params['id']);
+                $this->response['data'] = $pictures->findOne($this->params['ref']);
+                $this->response['comments'] = $pictures->getPhotoComments($this->params['ref']);
+                $comments = $pictures->getPhotoComments($this->params['ref']);
                 $this->response['comment_count'] = count($comments);
-                $this->response['fave_count'] = $pictures->getFaveCount($this->params['id']);
+                $this->response['fave_count'] = $pictures->getFaveCount($this->params['ref']);
                 break;
             case 'search':
                 break;
@@ -76,7 +76,7 @@ class PicturesController
         if($this->comment_conditions()) {
             $comment = (object) [
                 'userId' => $this->params['userId'],
-                'photoId' => $this->params['id'],
+                'photoId' => $this->params['ref'],
                 'comment' => $this->params['values']['comment']
             ];
             $pictures = new Pictures();
@@ -108,14 +108,14 @@ class PicturesController
         if($this->fave_conditions()) {
             $fave = (object) [
                 'userId' => $user->id,
-                'photoId' => $this->params['id']
+                'photoId' => $this->params['ref']
             ];
             $pictures = new Pictures();
             $success = $pictures->saveFave($fave);
             if($success) {
-                $comments = $pictures->getPhotoComments($this->params['id']);
+                $comments = $pictures->getPhotoComments($this->params['ref']);
                 $commentCount = count($comments);
-                $faveCount = $pictures->getFaveCount($this->params['id']);
+                $faveCount = $pictures->getFaveCount($this->params['ref']);
             }
         }
         $this->response = [

@@ -35,7 +35,7 @@ class PeopleController
                 $this->response['data'] = $people->findAllUsers();
                 break;
             case 'user':
-                $this->response['data'] = $people->findUserByValue('uuid', $this->params['id']);
+                $this->response['data'] = $people->findUserByValue('uuid', $this->params['ref']);
                 break;
         }
     }

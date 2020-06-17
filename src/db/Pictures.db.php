@@ -22,7 +22,7 @@ class Pictures
         $params = [$searchTerm, $searchTerm, $directory];
         $sql = "SELECT p.id, p.title, p.description, p.town, c.name AS country, p.filename, p.directory, p.width, p.height,
                     IFNULL(cmt.cmt_count, 0) AS comment_count, IFNULL(fv.fave_count, 0) AS fave_count,       
-                    MATCH(p.title, p.description, p.town) AGAINST(? WITH QUERY EXPANSION) AS pscore,
+                    MATCH(p.title, p.description, p.town) AGAINST(?) AS pscore,
                     MATCH(c.name) AGAINST(?) AS cscore
                 FROM photos p
                 JOIN countries c ON c.Id = p.country

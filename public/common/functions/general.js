@@ -17,7 +17,7 @@ export function buildCaptchaIcons(numberOfIcons = 6, callback) {
  * @returns {Promise<any>}
  */
 async function getIcons(num) {
-    const result = await fetch(`/api/v1/contact/icons/${num}`);
+    const result = await fetch(`/api/v1/icons/${num}`);
     return await result.json();
 }
 

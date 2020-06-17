@@ -32,13 +32,13 @@ class MusicController {
                 $this->response['data'] = $albums->findAll();
                 break;
             case 'album':
-                $this->response['data'] = $albums->findOne($this->params['id']);
+                $this->response['data'] = $albums->findOne($this->params['ref']);
                 break;
             case 'tracks':
-                $this->response['data'] = $albums->getTracks($this->params['id']);
+                $this->response['data'] = $albums->getTracks($this->params['ref']);
                 break;
             case 'track':
-                $this->response['data'] = $albums->getOneTrack($this->params['id']);
+                $this->response['data'] = $albums->getOneTrack($this->params['ref']);
         }
     }
 
