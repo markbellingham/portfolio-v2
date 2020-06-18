@@ -76,4 +76,47 @@ class Albums
                 WHERE trackId = ?";
         return $this->db->run($sql, $params)->fetch();
     }
+
+    public function getArtistByName($artistName)
+    {
+        $params = ['%'.$artistName.'%'];
+        $sql = "SELECT artist_id, artist FROM artists WHERE artist LIKE ?";
+        return $this->db->run($sql, $params)->fetch();
+    }
+
+    public function saveTop50Album($rank, $data)
+    {
+        $artist = $this->getArtistByName($data->artist->name);
+        $params = [$rank, $data->playcount, '%'.$data->name.'%', $artist->artist_id];
+        $sql = "UPDATE albums SET top50 = ?, playcount = ? WHERE title LIKE ? AND artist_id = ?";
+        $this->db->run($sql, $params);
+        return $this->db->error ? false : true;
+    }
+
+    public function saveTop50Artist($rank, $data)
+    {
+        $params = [$rank, $data->playcount, '%'.$data->name.'%'];
+        $sql = "UPDATE artists SET top50 = ?, playcount = ? WHERE artist LIKE ?";
+        $this->db->run($sql, $params);
+        return $this->db->error ? false : true;
+    }
+
+    public function saveTop50Track($rank, $data)
+    {
+        $artist = $this->getArtistByName($data->artist->name);
+        $params = [$rank, $data->playcount, '%'.$data->name.'%', $artist->artist_id];
+        $sql = "UPDATE tracks SET top50 = ?, playcount = ? WHERE track_name LIKE ?";
+        if($artist) {
+            $sql .= " AND artist_id = ?";
+        }
+        $this->db->run($sql, $params);
+        return $this->db->error ? false : true;
+    }
+
+    public function clearTop50($table) {
+        if(!in_array($table, ['albums','artists','tracks'])) { return false; }
+        $sql = "UPDATE $table SET top50 = NULL";
+        $this->db->run($sql);
+        return $this->db->error ? false : true;
+    }
 }

@@ -9,12 +9,16 @@ CREATE TABLE IF NOT EXISTS albums (
     YEAR VARCHAR(255),
     image VARCHAR(255),
     genre_id INT(5),
-    artist_id INT(5)
+    artist_id INT(5),
+    top50 INT,
+    playcount INT
 );
 
 CREATE TABLE IF NOT EXISTS artists (
     artist_id INT(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     artist VARCHAR(255) NOT NULL,
+    top50 INT,
+    playcount INT
 );
 
 CREATE TABLE IF NOT EXISTS genres (
@@ -28,7 +32,9 @@ CREATE TABLE IF NOT EXISTS tracks (
     track_name VARCHAR(255),
     duration INT(5),
     filename VARCHAR(255),
-    album_id INT(7)
+    album_id INT(7),
+    top50 INT,
+    playcount INT
 );
 
 CREATE DATABASE contact;

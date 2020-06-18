@@ -34,7 +34,7 @@ function buildIconChooser(icons) {
         iconsHtml += `<label for="r-${i.icon_id}" class="btn btn-warning ml-1" title="${i.name}">
             <input type="radio" name="icon" id="r-${i.icon_id}" value="${i.icon_id}" required/>
             ${i.icon}
-            </label>`
+            </label>`;
     }
     return { chosenIcon: chosenIcon, chosenIconHtml: chosenIconHtml, iconsHtml: iconsHtml };
 }
