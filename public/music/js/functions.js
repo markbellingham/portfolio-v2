@@ -72,11 +72,11 @@ export function printTrackList(tracks, image) {
                 <table id="tracks" class="table-condensed">`;
                     for(let [i, track] of tracks.entries()) {
                         const trackNo = (i + 1).toString().padStart(2,'0');
-                        const highlight = track.track_top50 > 0 ? 'row-highlight' : '';
+                        const trackName = track.track_top50 > 0 ? track.track_name + ' <i class="fas fa-star text-warning"></i>' : track.track_name;
                         template += `
-                        <tr class="${highlight}">
+                        <tr>
                             <td class="tracks align-text-top">${trackNo}</td>
-                            <td class="tracks align-middle">${track.track_name}</td>
+                            <td class="tracks align-middle">${trackName}</td>
                             <td class="tracks align-text-top">${track.duration}</td>
                             <td class="align-middle">
                                 <button class="btn btn-outline-secondary btn-sm add-track" data-id="${track.trackId}">Add</button>

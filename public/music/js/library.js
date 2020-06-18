@@ -19,11 +19,13 @@ export const table = $('#musicList').DataTable({
         },
         {
             data: "album_artist",
-            className: "align-middle"
+            className: "align-middle",
+            render: (data, type, row) => row.artist_top50 > 0 ? data + ` <i class="fas fa-star text-warning"></i>` : data
         },
         {
             data: "title",
-            className: "align-middle"
+            className: "align-middle",
+            render: (data, type, row) => row.album_top50 > 0 ? data + ` <i class="fas fa-star text-warning"></i>` : data
         },
         {
             data: "year",
@@ -55,14 +57,6 @@ export const table = $('#musicList').DataTable({
     dom : "<'row'tr><'row'<'col-md-3'l><'col-md-2'i><'col-md-7 searchStyle'p>>",
     orderCellsTop: true,
     fixedHeader: true,
-    createdRow: function(row, data) {
-        if(data.album_top50 > 0) {
-            $(row).find('td:eq(3)').addClass('row-highlight');
-        }
-        if(data.artist_top50 > 0) {
-            $(row).find('td:eq(2)').addClass('row-highlight');
-        }
-    },
     // function that shows the filtering options at the top of each column
     initComplete: function() {
         table.columns().every(function () {

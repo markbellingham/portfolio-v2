@@ -158,7 +158,7 @@ VALUES
     ('Sunset','Chamula',142,'P1120644.JPG', 'Favourites'),
     ('Russian Hill','San Francisco',236,'P1140662.JPG', 'Favourites'),
     ('Trams','San Francisco',236,'P1140665.JPG', 'Favourites'),
-    ('Golden Gate Brisge','San Francisco',236,'P1140864.JPG', 'Favourites'),
+    ('Golden Gate Bridge','San Francisco',236,'P1140864.JPG', 'Favourites'),
     ('Golden Gate Bridge','San Francisco',236,'P1140872.JPG', 'Favourites'),
     ('Grand Canyon National Park','Arizona',236,'P1140966.JPG', 'Favourites'),
     ('Grand Canyon National Park','Arizona',236,'P1140967.JPG', 'Favourites'),
