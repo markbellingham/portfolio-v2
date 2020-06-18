@@ -69,7 +69,7 @@ class LastFmController
         } else if($action == 'save') {
             $date = date('Y-m-d');
             foreach($this->response as $key => $value) {
-                $filename = $_SERVER['DOCUMENT_ROOT'] . '/playlists/json/top-' . $key . '.json';
+                $filename = $_SERVER['DOCUMENT_ROOT'] . '/music/json/top-' . $key . '.json';
                 $jsonDecoded = json_decode($value);
                 file_put_contents($filename, json_encode(["date" => $date, "data" => $jsonDecoded]));
             }

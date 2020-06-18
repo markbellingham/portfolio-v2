@@ -10,3 +10,4 @@
     </table>
 </div>
 <script type="module" src="music/js/library.js"></script>
+<script type="module" src="music/js/playlists.js"></script>

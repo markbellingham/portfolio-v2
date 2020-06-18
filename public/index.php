@@ -28,9 +28,6 @@ $_SESSION['server-secret'] = $secret;
                     <a href="#music" class="nav-link" data-toggle="tab">Music</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#playlists" class="nav-link" data-toggle="tab">Playlists</a>
-                </li>
-                <li class="nav-item">
                     <a href="#gallery" class="nav-link" data-toggle="tab">Gallery</a>
                 </li>
                 <li class="nav-item">
@@ -56,11 +53,6 @@ $_SESSION['server-secret'] = $secret;
                 <div class="tab-pane" id="music" style="width: 100%;">
                     <?php
                     include_once 'music/library.php';
-                    ?>
-                </div>
-                <div class="tab-pane" id="playlists">
-                    <?php
-                    include_once 'playlists/playlists.php';
                     ?>
                 </div>
                 <div class="tab-pane" id="gallery">
