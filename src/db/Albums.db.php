@@ -18,7 +18,8 @@ class Albums
      */
     public function findAll()
     {
-        $sql = "SELECT al.album_id, al.image, al.album_artist, ar.artist, al.title, al.year, g.genre, al.top50, al.playcount
+        $sql = "SELECT al.album_id, al.image, al.album_artist, ar.artist, al.title, al.year, g.genre, al.top50 AS album_top50,
+                    al.playcount AS album_playcount, ar.top50 AS artist_top50, ar.playcount AS artist_playcount
                 FROM albums al
                 LEFT JOIN artists ar ON al.artist_id = ar.artist_id
                 LEFT JOIN genres g ON g.genre_id = al.genre_id

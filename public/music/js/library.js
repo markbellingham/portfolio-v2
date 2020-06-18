@@ -52,12 +52,15 @@ export const table = $('#musicList').DataTable({
     // Don't show hidden items as child items on small screen sizes (because child rows are used for the tracks)
     responsive: { details: false },
     // Items outside of the main table (lengthMenu, info, pagination)
-    dom : "<'row'<'col-md-3'l><'col-md-2'i><'col-md-7 searchStyle'p>>",
+    dom : "<'row'tr><'row'<'col-md-3'l><'col-md-2'i><'col-md-7 searchStyle'p>>",
     orderCellsTop: true,
     fixedHeader: true,
     createdRow: function(row, data) {
-        if(data.top50 > 0) {
-            $(row).addClass('row-highlight');
+        if(data.album_top50 > 0) {
+            $(row).find('td:eq(3)').addClass('row-highlight');
+        }
+        if(data.artist_top50 > 0) {
+            $(row).find('td:eq(2)').addClass('row-highlight');
         }
     },
     // function that shows the filtering options at the top of each column
