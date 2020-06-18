@@ -90,6 +90,12 @@ table.dataTable tbody td.no-padding {
     padding-right: 0.5em;
     font-size: 14px;
 }
+.row-highlight {
+    background-color: moccasin;
+}
+.row-highlight:hover {
+    background-color: navajowhite;
+}
 
 
 

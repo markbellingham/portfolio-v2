@@ -55,25 +55,37 @@ export function printPlayList() {
 export function printTrackList(tracks, image) {
     let template = `
     <div class="slider">
-        <div class="col-md-3">
-            <img alt="cover" src="../Resources/${image}.jpg" width="100%"/>
-        </div>
-        <div class="col-md-5">
-            <table id="tracks" class="table-condensed">`;
-                for(let [i, track] of tracks.entries()) {
-                    const trackNo = (i + 1).toString().padStart(2,'0');
-                    template += `
-                    <tr>
-                        <td class="tracks align-text-top">${trackNo}</td>
-                        <td class="tracks align-middle">${track.track_name}</td>
-                        <td class="tracks align-text-top">${track.duration}</td>
-                        <td class="align-middle">
-                            <button class="btn btn-outline-secondary btn-sm add-track" data-id="${track.trackId}">Add</button>
-                        </td>
-                    </tr>`;
+        <div class="row">`;
+                if(tracks[0].artist_top50 > 0) {
+                    template += `<div class="col-md-4"><h6>Top 50 artist ranked ${tracks[0].artist_top50} with ${tracks[0].artist_playcount} plays</h6></div>`;
                 }
-            template += `
-            </table>
+                if(tracks[0].album_top50 > 0) {
+                    template += `<div class="col-md-4"><h6>Top 50 album ranked ${tracks[0].album_top50} with ${tracks[0].album_playcount} plays</h6></div>`;
+                    template += `<div class="col-md-4"></div>`;
+                }
+        template += `</div>
+        <div class="row">
+            <div class="col-md-3">
+                <img alt="cover" src="../Resources/${image}.jpg" width="100%"/>
+            </div>
+            <div class="col-md-5">
+                <table id="tracks" class="table-condensed">`;
+                    for(let [i, track] of tracks.entries()) {
+                        const trackNo = (i + 1).toString().padStart(2,'0');
+                        const highlight = track.track_top50 > 0 ? 'row-highlight' : '';
+                        template += `
+                        <tr class="${highlight}">
+                            <td class="tracks align-text-top">${trackNo}</td>
+                            <td class="tracks align-middle">${track.track_name}</td>
+                            <td class="tracks align-text-top">${track.duration}</td>
+                            <td class="align-middle">
+                                <button class="btn btn-outline-secondary btn-sm add-track" data-id="${track.trackId}">Add</button>
+                            </td>
+                        </tr>`;
+                    }
+                template += `
+                </table>
+            </div>
         </div>
     </div>`;
     return template;

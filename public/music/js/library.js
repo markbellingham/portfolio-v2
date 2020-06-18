@@ -55,6 +55,11 @@ export const table = $('#musicList').DataTable({
     dom : "<'row'<'col-md-3'l><'col-md-2'i><'col-md-7 searchStyle'p>>",
     orderCellsTop: true,
     fixedHeader: true,
+    createdRow: function(row, data) {
+        if(data.top50 > 0) {
+            $(row).addClass('row-highlight');
+        }
+    },
     // function that shows the filtering options at the top of each column
     initComplete: function() {
         table.columns().every(function () {

@@ -18,11 +18,11 @@ class Albums
      */
     public function findAll()
     {
-        $sql = "SELECT al.album_id, al.image, al.album_artist, ar.artist, al.title, al.year, g.genre
-            FROM albums al
-            LEFT JOIN artists ar ON al.artist_id = ar.artist_id
-            LEFT JOIN genres g ON g.genre_id = al.genre_id
-            ORDER BY ar.artist, al.year, al.album_id";
+        $sql = "SELECT al.album_id, al.image, al.album_artist, ar.artist, al.title, al.year, g.genre, al.top50, al.playcount
+                FROM albums al
+                LEFT JOIN artists ar ON al.artist_id = ar.artist_id
+                LEFT JOIN genres g ON g.genre_id = al.genre_id
+                ORDER BY ar.artist, al.year, al.album_id";
         return $this->db->run($sql)->fetchAll();
     }
 
@@ -35,12 +35,13 @@ class Albums
     public function findOne($albumId)
     {
         $params = [$albumId];
-        $sql = "SELECT al.album_id, al.image, ar.artist, al.title, al.year, g.genre 
-            FROM albums al
-            LEFT JOIN artists ar ON al.artist_id = ar.artist_id
-            LEFT JOIN genres g ON g.genre_id = al.genre_id
-            WHERE al.album_id = ?
-            ORDER BY ar.artist, al.year, al.album_id";
+        $sql = "SELECT al.album_id, al.image, ar.artist, al.title, al.year, g.genre, al.top50 AS album_top50, 
+                    al.playcount AS album_playcount, ar.top50 AS artist_top50, ar.playcount AS artist_playcount  
+                FROM albums al
+                LEFT JOIN artists ar ON al.artist_id = ar.artist_id
+                LEFT JOIN genres g ON g.genre_id = al.genre_id
+                WHERE al.album_id = ?
+                ORDER BY ar.artist, al.year, al.album_id";
         return $this->db->run($sql, $params)->fetch();
     }
 
@@ -52,7 +53,9 @@ class Albums
     public function getTracks($albumId)
     {
         $params = [$albumId];
-        $sql = "SELECT t.trackId, t.track_no, t.track_name, t.duration, t.filename, al.title, al.image, ar.artist 
+        $sql = "SELECT t.trackId, t.track_no, t.track_name, t.duration, t.filename, al.title, al.image, ar.artist,
+                    t.top50 AS track_top50, t.playcount AS track_playcount, ar.top50 AS artist_top50,       
+                    ar.playcount AS artist_playcount, al.top50 AS album_top50, al.playcount AS album_playcount
                 FROM tracks t
                 JOIN albums al ON t.album_id = al.album_id
                 JOIN artists ar ON al.artist_id = ar.artist_id
@@ -69,7 +72,9 @@ class Albums
     public function getOneTrack($trackId)
     {
         $params = [$trackId];
-        $sql = "SELECT t.trackId, t.track_no, t.track_name, t.duration, t.filename, al.title, al.image, ar.artist 
+        $sql = "SELECT t.trackId, t.track_no, t.track_name, t.duration, t.filename, al.title, al.image, ar.artist,
+                    t.top50 AS track_top50, t.playcount AS track_playcount, ar.top50 AS artist_top50,       
+                    ar.playcount AS artist_playcount, al.top50 AS album_top50, al.playcount AS album_playcount
                 FROM tracks t
                 JOIN albums al ON t.album_id = al.album_id
                 JOIN artists ar ON al.artist_id = ar.artist_id
