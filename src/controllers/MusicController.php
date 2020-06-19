@@ -29,7 +29,11 @@ class MusicController {
         $albums = new Albums();
         switch($this->params['endpoint']) {
             case 'albums':
-                $this->response['data'] = $albums->findAll();
+                if($this->params['ref'] == 'top50tracks') {
+                    $this->response['data'] = $albums->getTop50Tracks();
+                } else {
+                    $this->response['data'] = $albums->findAll($this->params['ref']);
+                }
                 break;
             case 'album':
                 $this->response['data'] = $albums->findOne($this->params['ref']);

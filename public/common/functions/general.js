@@ -1,7 +1,7 @@
 const objParams = { icon_id: '' };
 
 /**
- * @param {int} numberOfIcons
+ * @param {number} numberOfIcons
  * @param callback
  */
 export function buildCaptchaIcons(numberOfIcons = 6, callback) {

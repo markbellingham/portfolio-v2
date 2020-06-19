@@ -1,13 +1,20 @@
 import { playlist, objParams } from './application-data.js';
 import * as fn from './functions.js';
 
+$('.music-library-filter').click( function() {
+    const filter = this.getAttribute('data-filter');
+    table.ajax.url(`/api/v1/albums/${filter}.datatables`).load( function() {
+        setDatatablesColumnFilters(table, [2,3], [4,5]);
+    });
+});
+
 /**
  * DataTables setup - list of albums
  * @type {jQuery}
  * @var data.album_id
  */
 export const table = $('#musicList').DataTable({
-    ajax: "/api/v1/albums.datatables",
+    ajax: "/api/v1/albums/top50albums.datatables",
     columns: [
         {
             defaultContent: "<i class='fa fa-plus-circle text-success gi-1-3x'></i>",
@@ -59,39 +66,51 @@ export const table = $('#musicList').DataTable({
     fixedHeader: true,
     // function that shows the filtering options at the top of each column
     initComplete: function() {
-        table.columns().every(function () {
-            const column = this;
-            const columnIndex = this.index();
-
-            // text search
-            if([2,3].indexOf(columnIndex) > -1) {
-                $('<input type="text" class="form-control form-control-sm" />')
-                    .appendTo($("thead tr:eq(1) td").eq(columnIndex))
-                    .on("keyup", function () {
-                        column.search($(this).val()).draw();
-                    });
-            }
-
-            // select dropdown
-            if([4,5].indexOf(columnIndex) > -1) {
-                const select = $('<select class="form-control form-control-sm"><option value=""></option></select>')
-                    .appendTo($("thead tr:eq(1) td").eq(columnIndex))
-                    .on('change', function () {
-                        const val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-                        column
-                            .search(val ? '^' + val + '$' : '', true, false)
-                            .draw();
-                    });
-
-                column.data().unique().sort().each(function (d, j) {
-                    select.append(`<option value="${d}">${d}</option>`)
-                });
-            }
-        });
-    }
+        setDatatablesColumnFilters(table, [2,3], [4,5]);
+    },
+    order: []
 });
+
+/**
+ *
+ * @param {jQuery} table
+ * @param {array} textInput
+ * @param {array} selectDropdown
+ */
+function setDatatablesColumnFilters(table, textInput, selectDropdown) {
+    $('#musicList').find('thead > tr:eq(1) td').html('');
+    table.columns().every(function () {
+        const column = this;
+        const columnIndex = this.index();
+
+        // text search
+        if(textInput.indexOf(columnIndex) > -1) {
+            $('<input type="text" class="form-control form-control-sm" />')
+                .appendTo($("thead tr:eq(1) td").eq(columnIndex))
+                .on("keyup", function () {
+                    column.search($(this).val()).draw();
+                });
+        }
+
+        // select dropdown
+        if(selectDropdown.indexOf(columnIndex) > -1) {
+            const select = $('<select class="form-control form-control-sm"><option value=""></option></select>')
+                .appendTo($("thead tr:eq(1) td").eq(columnIndex))
+                .on('change', function () {
+                    const val = $.fn.dataTable.util.escapeRegex(
+                        $(this).val()
+                    );
+                    column
+                        .search(val ? '^' + val + '$' : '', true, false)
+                        .draw();
+                });
+
+            column.data().unique().sort().each(function (d, j) {
+                select.append(`<option value="${d}">${d}</option>`)
+            });
+        }
+    });
+}
 
 /**
  * rebuild the albums table when the page is resized

@@ -12,18 +12,34 @@ class Albums
         $this->db = MyPDO::instance('Music');
     }
 
+
+    /*****************************
+     * Functions that GET data
+     *****************************/
+
     /**
      * Get all albums
+     * @param string $filter
      * @return array
      */
-    public function findAll()
+    public function findAll(string $filter)
     {
         $sql = "SELECT al.album_id, al.image, al.album_artist, ar.artist, al.title, al.year, g.genre, al.top50 AS album_top50,
                     al.playcount AS album_playcount, ar.top50 AS artist_top50, ar.playcount AS artist_playcount
                 FROM albums al
                 LEFT JOIN artists ar ON al.artist_id = ar.artist_id
-                LEFT JOIN genres g ON g.genre_id = al.genre_id
-                ORDER BY ar.artist, al.year, al.album_id";
+                LEFT JOIN genres g ON g.genre_id = al.genre_id";
+        switch($filter) {
+            case 'top50artists':
+                $sql .= " WHERE ar.top50 > 0 ORDER BY ar.top50";
+                break;
+            case 'top50albums':
+                $sql .= " WHERE al.top50 > 0 ORDER BY al.top50";
+                break;
+            case 'all':
+                $sql .= " ORDER BY ar.artist, al.year, al.album_id";
+                BREAK;
+        }
         return $this->db->run($sql)->fetchAll();
     }
 
@@ -94,6 +110,23 @@ class Albums
         return $this->db->run($sql, $params)->fetch();
     }
 
+    public function getTop50tracks()
+    {
+        $sql = "SELECT al.album_id, al.image, al.album_artist, ar.artist, al.title, al.year, g.genre, al.top50 AS album_top50,
+                    al.playcount AS album_playcount, ar.top50 AS artist_top50, ar.playcount AS artist_playcount
+                FROM albums al
+                LEFT JOIN artists ar ON al.artist_id = ar.artist_id
+                LEFT JOIN genres g ON g.genre_id = al.genre_id
+                WHERE al.top50 > 0
+                ORDER BY al.top50";
+        return $this->db->run($sql)->fetchAll();
+    }
+
+
+    /**************************************
+     * Functions that SAVE or UPDATE data
+     **************************************/
+
     /**
      * @param int $rank
      * @param object $data
@@ -137,6 +170,11 @@ class Albums
         $this->db->run($sql, $params);
         return $this->db->error ? false : true;
     }
+
+
+    /************************************
+     * Functions that DELETE data
+     ************************************/
 
     /**
      * @param string $table
