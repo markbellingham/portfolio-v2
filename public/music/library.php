@@ -1,15 +1,15 @@
 <div class="col-md-12 btn-group-toggle" data-toggle="buttons">
     <label for="show-top50-artists-btn" class="btn btn-light music-library-filter" title="Show Top 50 Artists" data-filter="top50artists">
         <input type="radio" name="top50_artists" id="show-top50-artists-btn"/>
-        Show Top 50 Artists
+        Show Top Artists
     </label>
     <label for="show-top50-albums-btn" class="btn btn-light active music-library-filter" title="Show Top 50 Albums" data-filter="top50albums">
         <input type="radio" name="top50_albums" id="show-top50-albums-btn" checked/>
-        Show Top 50 Albums
+        Show Top Albums
     </label>
     <label for="show-top50-tracks-btn" class="btn btn-light music-library-filter" title="Show Top 50 Tracks" data-filter="top50tracks">
         <input type="radio" name="top50_tracks" id="show-top50-tracks-btn"/>
-        Show Top 50 Tracks
+        Show Top Tracks
     </label>
     <label for="show-all-albums-btn" class="btn btn-light music-library-filter" title="Show All Albums" data-filter="all">
         <input type="radio" name="all_albums" id="show-all-albums-btn"/>
