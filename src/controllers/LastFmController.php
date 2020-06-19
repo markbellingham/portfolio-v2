@@ -40,26 +40,24 @@ class LastFmController
         $albums = new Albums();
         foreach($this->response as $key => $value) {
             $jsonDecoded = json_decode($value);
+            $albums->clearTop50($key);
             switch($key) {
                 case 'albums':
-                    $albums->clearTop50('albums');
                     $albumData = $jsonDecoded->topalbums->album;
                     foreach($albumData as $rank => $data) {
-                        $albums->saveTop50Album($rank, $data);
+                        $albums->saveTop50Album($rank + 1, $data);
                     }
                     break;
                 case 'artists':
-                    $albums->clearTop50('artists');
                     $artistData =  $jsonDecoded->topartists->artist;
                     foreach($artistData as $rank => $data) {
-                        $albums->saveTop50Artist($rank, $data);
+                        $albums->saveTop50Artist($rank + 1, $data);
                     }
                     break;
                 case 'tracks':
-                    $albums->clearTop50('tracks');
                     $trackData = $jsonDecoded->toptracks->track;
                     foreach($trackData as $rank => $data) {
-                        $albums->saveTop50Track($rank, $data);
+                        $albums->saveTop50Track($rank + 1, $data);
                     }
             }
         }

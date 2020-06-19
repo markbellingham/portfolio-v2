@@ -32,7 +32,6 @@ class Albums
      * @param $albumId
      * @return object
      */
-
     public function findOne($albumId)
     {
         $params = [$albumId];
@@ -83,14 +82,24 @@ class Albums
         return $this->db->run($sql, $params)->fetch();
     }
 
-    public function getArtistByName($artistName)
+    /**
+     * Return an artist object given a name (fuzzy search)
+     * @param string $artistName
+     * @return object|bool
+     */
+    public function getArtistByName(string $artistName)
     {
         $params = ['%'.$artistName.'%'];
         $sql = "SELECT artist_id, artist FROM artists WHERE artist LIKE ?";
         return $this->db->run($sql, $params)->fetch();
     }
 
-    public function saveTop50Album($rank, $data)
+    /**
+     * @param int $rank
+     * @param object $data
+     * @return bool
+     */
+    public function saveTop50Album(int $rank, object $data)
     {
         $artist = $this->getArtistByName($data->artist->name);
         $params = [$rank, $data->playcount, '%'.$data->name.'%', $artist->artist_id];
@@ -99,7 +108,12 @@ class Albums
         return $this->db->error ? false : true;
     }
 
-    public function saveTop50Artist($rank, $data)
+    /**
+     * @param int $rank
+     * @param object $data
+     * @return bool
+     */
+    public function saveTop50Artist(int $rank, object $data)
     {
         $params = [$rank, $data->playcount, '%'.$data->name.'%'];
         $sql = "UPDATE artists SET top50 = ?, playcount = ? WHERE artist LIKE ?";
@@ -107,7 +121,12 @@ class Albums
         return $this->db->error ? false : true;
     }
 
-    public function saveTop50Track($rank, $data)
+    /**
+     * @param int $rank
+     * @param object $data
+     * @return bool
+     */
+    public function saveTop50Track(int $rank, object $data)
     {
         $artist = $this->getArtistByName($data->artist->name);
         $params = [$rank, $data->playcount, '%'.$data->name.'%', $artist->artist_id];
@@ -119,7 +138,11 @@ class Albums
         return $this->db->error ? false : true;
     }
 
-    public function clearTop50($table) {
+    /**
+     * @param string $table
+     * @return bool
+     */
+    public function clearTop50(string $table) {
         if(!in_array($table, ['albums','artists','tracks'])) { return false; }
         $sql = "UPDATE $table SET top50 = NULL";
         $this->db->run($sql);
