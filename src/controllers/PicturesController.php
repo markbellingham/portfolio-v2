@@ -134,8 +134,11 @@ class PicturesController
             return false;
         }
 
-        $this->params['userId'] = $fn->validateUser($_COOKIE['settings']);
-        if(!$this->params['userId']) {
+        $userValidator = new UserValidator();
+        $user = $userValidator->validate($_COOKIE['settings'], 'cookie');
+        if($user) {
+            $this->params['userId'] = $user->id;
+        } else {
             return false;
         }
 
@@ -166,8 +169,11 @@ class PicturesController
             return false;
         }
 
-        $this->params['userId'] = $fn->validateUser($_COOKIE['settings']);
-        if(!$this->params['userId']) {
+        $userValidator = new UserValidator();
+        $user = $userValidator->validate($_COOKIE['settings'], 'cookie');
+        if($user) {
+            $this->params['userId'] = $user->id;
+        } else {
             return false;
         }
         return true;

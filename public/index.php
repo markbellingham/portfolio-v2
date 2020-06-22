@@ -20,7 +20,7 @@ $_SESSION['server-secret'] = $secret;
     <div id="main-page" class="col-md-12">
         <div class="col-md-2">
             <!-- Nav tabs -->
-            <ul class="nav flex-column">
+            <ul class="nav flex-column" style="height: 80vh;">
                 <li class="active nav-item active">
                     <a href="#home" class="nav-link active" data-toggle="tab">Home</a>
                 </li>

@@ -1,4 +1,4 @@
-<div class="col-md-12 btn-group-toggle" data-toggle="buttons">
+<div class="col-md-12 btn-group-toggle" data-toggle="buttons" style="z-index: 1;">
     <label for="show-top50-artists-btn" class="btn btn-light music-library-filter" title="Show Top 50 Artists" data-filter="top50artists">
         <input type="radio" name="top50_artists" id="show-top50-artists-btn"/>
         Show Top Artists
