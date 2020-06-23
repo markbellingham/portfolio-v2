@@ -113,19 +113,19 @@ class Albums
     public function getTop50tracks()
     {
         $sql = "SELECT 
-                    t.top50 AS track_top50, 
-                    MAX(t.trackId) AS trackId, 
-                    MAX(al.album_id) AS album_id, 
-                    MAX(al.image) AS image, 
-                    MAX(ar.artist) AS album_artist, 
-                    MAX(t.track_name) AS title, 
-                    MAX(al.year) AS year, 
-                    MAX(g.genre) AS genre,
-                    MAX(t.playcount) AS track_playcount, 
-                    MAX(al.top50) AS album_top50, 
-                    MAX(al.playcount) AS album_playcount, 
-                    MAX(ar.top50) AS artist_top50, 
-                    MAX(ar.playcount) AS artist_playcount
+                    t.top50             AS track_top50, 
+                    MAX(t.trackId)      AS trackId, 
+                    MAX(al.album_id)    AS album_id, 
+                    MAX(al.image)       AS image, 
+                    MAX(ar.artist)      AS album_artist, 
+                    MAX(t.track_name)   AS title, 
+                    MAX(al.year)        AS year, 
+                    MAX(g.genre)        AS genre,
+                    MAX(t.playcount)    AS track_playcount, 
+                    MAX(al.top50)       AS album_top50, 
+                    MAX(al.playcount)   AS album_playcount, 
+                    MAX(ar.top50)       AS artist_top50, 
+                    MAX(ar.playcount)   AS artist_playcount
                 FROM tracks t
                 LEFT JOIN albums al ON t.album_id = al.album_id
                 LEFT JOIN artists ar ON al.artist_id = ar.artist_id
@@ -133,8 +133,7 @@ class Albums
                 WHERE t.top50 > 0
                 GROUP BY t.top50
                 ORDER BY t.top50";
-        $result = $this->db->run($sql)->fetchAll();
-        return $result;
+        return $this->db->run($sql)->fetchAll();
     }
 
 

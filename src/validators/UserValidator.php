@@ -24,7 +24,7 @@ class UserValidator implements Validator
     }
 
     /**
-     * @param $cookie
+     * @param object|string $cookie
      * @return bool|object
      */
     private function checkCookie($cookie)

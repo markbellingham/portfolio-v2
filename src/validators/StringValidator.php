@@ -19,6 +19,7 @@ class StringValidator implements Validator
     public function validate($data, $type = 'string')
     {
         switch($type) {
+            // change to 'comment'
             case 'string':
                 $this->response = $this->cleanTagsFromString($data);
                 $this->checkProhibitedLinks($this->response);
@@ -52,9 +53,11 @@ class StringValidator implements Validator
     {
         if(strpos($data, 'http')) {
             $this->errors[] = self::ERROR_MESSAGE;
+            return;
         }
         if(strpos($data, 'www')) {
             $this->errors[] = self::ERROR_MESSAGE;
+            return;
         }
     }
 
