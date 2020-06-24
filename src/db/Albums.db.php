@@ -31,7 +31,10 @@ class Albums
                 LEFT JOIN genres g ON g.genre_id = al.genre_id";
         switch($filter) {
             case 'top50artists':
-                $sql .= " WHERE ar.top50 > 0 ORDER BY ar.top50";
+                $sql .= " WHERE ar.top50 > 0 
+                    GROUP BY ar.artist, al.image, al.album_artist, al.album_id, al.title, al.year, g.genre, al.top50, al.playcount, ar.top50, ar.playcount
+                    HAVING al.playcount = MAX(al.playcount) 
+                    ORDER BY ar.top50, al.playcount";
                 break;
             case 'top50albums':
                 $sql .= " WHERE al.top50 > 0 ORDER BY al.top50";

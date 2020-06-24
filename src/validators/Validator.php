@@ -11,5 +11,5 @@ interface Validator
      * @param string $type
      * @return array An array of error messages
      */
-    public function validate($data, $type = 'string');
+    public function validate($data, string $type);
 }

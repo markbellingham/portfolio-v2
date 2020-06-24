@@ -127,27 +127,21 @@ class PicturesController
 
     private function comment_conditions()
     {
-        $fn = new Functions();
         $paramValues = $this->params['values'];
 
-        if(!$fn->requestedByTheSameDomain($paramValues['secret'])) {
+        $formSecurityValidator = new FormSecurityValidator();
+        $formSecurity = $formSecurityValidator->validate($paramValues, 'form');
+        if($formSecurity['success'] == false) {
             return false;
         }
 
         $userValidator = new UserValidator();
-        $user = $userValidator->validate($_COOKIE['settings'], 'cookie');
+        $anon = '{"permission": false, "uuid": "95c7cdac-6a6f-44ca-a28f-fc62ef61405d", "username": "Anonymous"}';
+        $user = $userValidator->validate($_COOKIE['settings'] ?? $anon, 'cookie');
         if($user) {
             $this->params['userId'] = $user->id;
         } else {
             return false;
-        }
-
-        if(strlen($paramValues['description']) > 0) {
-            return false; // honey trap
-        }
-
-        if((int) $paramValues['icon'] != $paramValues['chosenIcon']['icon_id']) {
-            return false; // captcha
         }
 
         try {

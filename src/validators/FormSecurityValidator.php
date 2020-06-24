@@ -6,26 +6,29 @@ if (session_status() == PHP_SESSION_NONE) {
 class FormSecurityValidator implements Validator
 {
     private $response = array(
-        'ht' => false,
-        'icon' => false,
-        'domain_check' => false,
-        'errors' => []
+        'success' => false,
+        'errors' => false,
     );
-    private $errors = [];
 
     const ERROR_MESSAGE = 'Security Validation Error';
 
     public function __construct() {}
 
-    public function validate($data, $type = 'string')
+    /**
+     * @param mixed $data
+     * @param string $type
+     * @return array|bool[]
+     */
+    public function validate($data, string $type)
     {
         try {
             $this->checkHoneyTrap($data);
             $this->checkIcon($data);
             $this->requestedByTheSameDomain($data);
-        } catch (Exception $e) {
-            $this->errors[] = $e;
+        } catch (Throwable $e) {
+            $this->response['errors'] = $e;
         }
+        $this->response['success'] = $this->response['errors'] ? false : true;
         return $this->response;
     }
 
@@ -38,7 +41,6 @@ class FormSecurityValidator implements Validator
         if(strlen($params['description']) > 0) {
             throw new Exception(self::ERROR_MESSAGE);
         }
-        $this->response['ht'] = true;
     }
 
     /**
@@ -50,7 +52,6 @@ class FormSecurityValidator implements Validator
         if((int) $params['icon'] != $params['chosenIcon']['icon_id']) {
             throw new Exception(self::ERROR_MESSAGE);
         }
-        $this->response['icon'] = true;
     }
 
     /**
@@ -62,6 +63,5 @@ class FormSecurityValidator implements Validator
         if($secret === $_SESSION['server-secret']) {
             throw new Exception(self::ERROR_MESSAGE);
         }
-        $this->response['domain_check'] = true;
     }
 }
