@@ -64,7 +64,9 @@ $_SESSION['server-secret'] = $secret;
                     Blog Tab.
                 </div>
                 <div class="tab-pane" id="games">
-                    Games Tab.
+                    <?php
+                    include_once 'games/index.php';
+                    ?>
                 </div>
                 <div class="tab-pane" id="contact">
                     <?php
