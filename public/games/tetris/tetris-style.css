@@ -23,8 +23,8 @@ body {
 }
 
 .grid {
-    width: 220px;
-    height: 440px;
+    width: 200px;
+    height: 400px;
     display: flex;
     flex-wrap: wrap;
     background-color: lightgoldenrodyellow;
@@ -66,6 +66,8 @@ body {
     position: absolute;
     top: 20%;
     left: 50%;
+    width: 500px;
+    height: 150px;
     transform: translate(-50%, -20%);
     background-color: white;
     padding-left: 50px;

@@ -5,8 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="games/tetris/app.js" charset="utf-8"></script>
-    <link rel="stylesheet" href="games/tetris/style.css"/>
+    <link rel="stylesheet" href="games/tetris/tetris-style.css"/>
     <script src="https://kit.fontawesome.com/0825dd3daf.js" crossorigin="anonymous"></script>
     <title>Tetris</title>
 </head>
@@ -25,7 +24,7 @@
     </div>
 </div>
 <div class="right">
-    <h3>Next Piece</h3>
+    <h5>Next Piece</h5>
     <div class="mini-grid">
         <script>
             for(let i = 0; i < 16; i++) {
@@ -35,11 +34,13 @@
     </div>
 
     <div class="controls">
-        <h5>Score: <span id="score">0</span></h5>
-        <h5>Level: <span id="level">1</span></h5>
+        <h6>Score: <span id="score">0</span></h6>
+        <h6>Level: <span id="level">1</span></h6>
         <button id="start-button" class="btn btn-default">Start/Pause</button>
         <button id="instructions-button" class="btn">Instructions</button>
-        <h3>Top Scores</h3>
+    </div>
+    <div class="controls mt-3">
+        <h5>Top Scores</h5>
         <div>
             <table>
                 <thead>
@@ -91,5 +92,7 @@
     <p>Level increases every 20 complete lines</p>
     <button class="close-btn">Close</button>
 </div>
+
+<script type="module" src="games/tetris/app.js?t=123123" charset="utf-8"></script>
 </body>
 </html>

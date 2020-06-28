@@ -1,5 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
+(function () {
     const grid = document.querySelector('.grid');
+    createBoard();
     let squares = Array.from(document.querySelectorAll('.grid div'));
     const scoreDisplay = document.querySelector('#score');
     const startBtn = document.querySelector('#start-button');
@@ -69,6 +70,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const theTetrominoes = [lTetromino, jTetromino, sTetromino, zTetromino, tTetromino, oTetromino, iTetromino];
     let currentPosition = 4;
     let currentRotation = 0;
+
+    function createBoard() {
+        for(let i = 0; i < 200; i++) {
+            const square = document.createElement('div');
+            square.setAttribute('class', 'main-board');
+            grid.appendChild(square);
+        }
+        for(let i = 0; i < 10; i++) {
+            const square = document.createElement('div');
+            square.setAttribute('class','taken');
+            grid.appendChild(square);
+        }
+        const miniGrid = document.querySelector('.mini-grid');
+        for(let i = 0; i < 16; i++) {
+            const square = document.createElement('div');
+            miniGrid.appendChild(square);
+        }
+    }
 
     // Randomly select a Tetromino and its first rotation
     let random = Math.floor(Math.random()*theTetrominoes.length);
@@ -209,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Add functionality to the button
+    // Add functionality to the start button
     startBtn.addEventListener('click', () => {
         if(timerId) {
             clearInterval(timerId);
@@ -324,4 +343,4 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('instructions-div').style.display = 'block';
     })
 
-});
+}());
