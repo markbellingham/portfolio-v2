@@ -1,15 +1,18 @@
 /**
- *
  * @param {string} name - cookie name
  * @param {string} value - data to be saved to the cookie
  * @param {number} days - time before expiry
  * @param {string} path -
  */
 export const setCookie = (name, value, days = 365, path = '/') => {
-    const expires = new Date(Date.now() + days * 864e5).toUTCString()
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
     document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=' + path
 }
 
+/**
+ * @param {string} name - of the cookie
+ * @returns {boolean|string}
+ */
 export const getCookie = (name) => {
     const cookie = document.cookie.split('; ').reduce((r, v) => {
         const parts = v.split('=')
@@ -17,13 +20,16 @@ export const getCookie = (name) => {
     }, false)
     if(cookie) {
         setCookie(name, cookie, 365, '/');
-        console.log('cookie reset');
         return cookie;
     } else {
         return false;
     }
 }
 
-export const deleteCookie = (name, path) => {
-    setCookie(name, '', -1, path)
+/**
+ * @param {string} name
+ * @param {string} path
+ */
+export const deleteCookie = (name, path = '/') => {
+    setCookie(name, '', -1, path);
 }

@@ -5,6 +5,7 @@
             <option value=""> --- </option>
             <option value="tetris">Tetris</option>
             <option value="minesweeper">Minesweeper</option>
+            <option value="spaceinvaders">Space Invaders</option>
         </select>
     </div>
 </div>
