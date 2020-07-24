@@ -199,7 +199,9 @@ $('#make-favourite').on('click', function() {
                 if(response.success) {
                     this.classList.add('text-danger');
                     userFaves.push(photoId);
+                    localStorage.faves = JSON.stringify(userFaves);
                     photo.fave_count = response.fave_count;
+                    $('#fave-count').text(photo.fave_count);
                     setThumbnailFaveCommentCount(response, photoId);
                 }
             });
