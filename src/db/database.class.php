@@ -11,7 +11,7 @@ class MyPDO extends PDO
 
     public function __construct($db_name)
     {
-        $configs = include  "../../config/config.php";
+        $configs = include  $_SERVER['DOCUMENT_ROOT'] . "../config/config.php";
         $dbConfig = $configs[$db_name];
         $default_options = array(
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
