@@ -11,6 +11,12 @@ class Pictures
         $this->db = MyPDO::instance('Pictures');
     }
 
+
+
+    /*********************************************
+     * Functions that GET data from the database
+     *********************************************/
+
     /**
      * Get all photos (width and height is for thumbnails). Optional search parameters.
      * @param string $searchTerm
@@ -92,6 +98,52 @@ class Pictures
     }
 
     /**
+     * @param int $photoId
+     * @return int
+     */
+    public function getFaveCount(int $photoId)
+    {
+        $params = [$photoId];
+        $sql = "SELECT COUNT(photo_id) AS fave_count FROM photo_faves WHERE photo_id = ?";
+        $result = $this->db->run($sql, $params)->fetch();
+        return $result->fave_count;
+    }
+
+    /**
+     * @param int|null $photoId
+     * @return array
+     */
+    public function getTags(int $photoId = null)
+    {
+        $sql = "SELECT tags.id, tags.tag FROM tags";
+        if($photoId) {
+            $params = [$photoId];
+            $sql .= " JOIN photo_tags ON photo_tags.tag_id = tags.id
+                     WHERE photo_tags.photo_id = ?";
+            return $this->db->run($sql, $params)->fetchAll();
+        } else {
+            return $this->db->run($sql)->fetchAll();
+        }
+    }
+
+    /**
+     * @return int
+     */
+    private function getLastInsertId()
+    {
+        $sql = "SELECT LAST_INSERT_ID() AS last_id";
+        $result = $this->db->run($sql)->fetch();
+        return (int) $result->last_id;
+    }
+
+
+
+
+    /*****************************************************
+     * Functions that SAVE or UPDATE data in the database
+     *****************************************************/
+
+    /**
      * @param object $comment
      * @return bool
      */
@@ -116,15 +168,34 @@ class Pictures
     }
 
     /**
-     * @param int $photoId
-     * @return int
+     * @param Tag $tag
+     * @return bool
      */
-    public function getFaveCount(int $photoId)
+    public function saveTag(Tag $tag)
     {
-        $params = [$photoId];
-        $sql = "SELECT COUNT(photo_id) AS fave_count FROM photo_faves WHERE photo_id = ?";
-        $result = $this->db->run($sql, $params)->fetch();
-        return $result->fave_count;
+        $params = [$tag->getTag()];
+        $sql = "INSERT INTO tags (tag) values (?)";
+        $this->db->run($sql, $params);
+        return $this->db->error ? false : $this->getLastInsertId();
     }
+
+    /**
+     * @param int $photoId
+     * @param int $tagId
+     * @return bool
+     */
+    public function savePhotoTag(int $photoId, int $tagId)
+    {
+        $params = [$photoId, $tagId];
+        $sql = "INSERT INTO photo_tags (photo_id, tag_id) VALUES (?, ?)";
+        $this->db->run($sql, $params);
+        return $this->db->error ? false : true;
+    }
+
+
+
+    /**********************************************
+     * Functions that DELETE data in the database
+     **********************************************/
 
 }

@@ -4,6 +4,8 @@ import { buildCaptchaIcons, formToJSON } from '../../common/functions/general.js
 
 let chosenIcon = {};
 let timeout = null;
+let tagObjects = [];
+let selectedPhotoId = null;
 
 const cookie = c.getCookie('settings');
 const userSettings = cookie ? JSON.parse(cookie) : {};
@@ -41,6 +43,10 @@ getPhotos().then( response => {
         $('#photos').html(photoMarkup);
     });
 
+getPhotoTags().then( response => {
+    tagObjects = response.data;
+});
+
 /**
  * Get a list of photos from the database
  * @returns {Promise<any>}
@@ -53,11 +59,10 @@ async function getPhotos(searchTerm = null) {
 
 /**
  * Get full information about one photo
- * @param {int} photoId
  * @returns {Promise<any>}
  */
-async function getPhotoDetails(photoId) {
-    const result = await fetch(`/api/v1/photo/${photoId}`);
+async function getPhotoDetails() {
+    const result = await fetch(`/api/v1/photo/${selectedPhotoId}`);
     return await result.json();
 }
 
@@ -69,6 +74,11 @@ async function getPhotoDetails(photoId) {
 async function getUserDetails(userId) {
     const result = await fetch(`/api/v1/user/${userId}`);
     return result.json();
+}
+
+async function getPhotoTags() {
+    const result = await fetch(`/api/v1/photo-tags`);
+    return await result.json();
 }
 
 /**
@@ -131,9 +141,8 @@ function formatComments(comments) {
 /**
  * Adds icon and number to the photo thumbnail if it has comments and/or favourites
  * @param {object} response
- * @param {int} photoId
  */
-function setThumbnailFaveCommentCount(response, photoId) {
+function setThumbnailFaveCommentCount(response) {
     let markup = '';
     if(response.fave_count > 0) {
         markup += `<i class="fas fa-heart"></i> ${response.fave_count} `;
@@ -141,25 +150,25 @@ function setThumbnailFaveCommentCount(response, photoId) {
     if(response.comment_count > 0) {
         markup += `<i class="fas fa-comment-alt"></i> ${response.comment_count}`;
     }
-    $(`#pcounts-${photoId}`).html(markup);
+    $(`#pcounts-${selectedPhotoId}`).html(markup);
 }
 
 /**
  * Event handler to show large modal when clicking on a photo thumbnail
  */
 $('#photos').on('click', 'img', function() {
-    const photoId = Number(this.getAttribute('data-id'));
-    getPhotoDetails(photoId).then( response => {
+    selectedPhotoId = Number(this.getAttribute('data-id'));
+    getPhotoDetails().then( response => {
         const commentMarkup = formatComments(response.comments);
         $('#comments').html(commentMarkup);
         $('#fave-count').text(response.fave_count);
-        setThumbnailFaveCommentCount(response, photoId);
+        setThumbnailFaveCommentCount(response);
     });
     buildCaptchaIcons(4, icons => {
         $('#gallery-icons').html(icons.chosenIconHtml + icons.iconsHtml);
         chosenIcon = icons.chosenIcon;
     });
-    const photo = photos.find(p => p.id === photoId );
+    const photo = photos.find(p => p.id === selectedPhotoId );
     if(photo.width/photo.height < 0.90) {
         $('#modal-image-container').removeClass('col-md-9').addClass('col-md-7');
         $('#modal-text-container').removeClass('col-md-3').addClass('col-md-5');
@@ -170,13 +179,11 @@ $('#photos').on('click', 'img', function() {
     $('#modal-image').attr({'src': `/Resources/Pictures/${photo.directory}/${photo.filename}`, 'alt': photo.title});
     $('#modal-photo-title').text(photo.title);
     $('#modal-photo-location').text(photo.town + ', ' + photo.country);
-    if(userFaves.indexOf(photoId) > -1) {
-        $('#make-favourite').addClass('text-danger').attr('data-photoId', photoId.toString());
+    if(userFaves.indexOf(selectedPhotoId) > -1) {
+        $('#make-favourite').addClass('text-danger');
     } else {
-        $('#make-favourite').removeClass('text-danger').attr('data-photoId', photoId.toString());
+        $('#make-favourite').removeClass('text-danger');
     }
-    $('#full-size-photo').attr('data-photoid', photoId.toString());
-    $('#comment-photoId').val(photoId);
     $('#photo-comment').val('');
     $('#modalIMG').modal();
 });
@@ -185,11 +192,10 @@ $('#photos').on('click', 'img', function() {
  * Event handler when clicking on a heart on an image modal
  */
 $('#make-favourite').on('click', function() {
-    const photoId = Number(this.getAttribute('data-photoid'));
-    const photo = photos.find(p => p.id === photoId );
+    const photo = photos.find(p => p.id === selectedPhotoId );
     const secret = $('#server-secret').val();
-    if(userFaves.indexOf(photoId) < 0) {
-        fetch(`/api/v1/photo/${photoId}`, {
+    if(userFaves.indexOf(selectedPhotoId) < 0) {
+        fetch(`/api/v1/photo/${selectedPhotoId}`, {
             method: 'POST',
             body: JSON.stringify({'task': 'addFave', 'secret': secret}),
             credentials: 'include'
@@ -198,11 +204,11 @@ $('#make-favourite').on('click', function() {
             .then( response => {
                 if(response.success) {
                     this.classList.add('text-danger');
-                    userFaves.push(photoId);
+                    userFaves.push(selectedPhotoId);
                     localStorage.faves = JSON.stringify(userFaves);
                     photo.fave_count = response.fave_count;
                     $('#fave-count').text(photo.fave_count);
-                    setThumbnailFaveCommentCount(response, photoId);
+                    setThumbnailFaveCommentCount(response);
                 }
             });
     }
@@ -212,8 +218,7 @@ $('#make-favourite').on('click', function() {
  * Event handler for full size photo button on image modal
  */
 $('#full-size-photo').on('click', function() {
-    const photoId = Number(this.getAttribute('data-photoid'));
-    const photo = photos.find(p => p.id === photoId );
+    const photo = photos.find(p => p.id === selectedPhotoId );
     window.open('/Resources/Pictures/Favourites/' + photo.filename);
 });
 
@@ -227,7 +232,7 @@ $('#photo-comment-submit').click( function(e) {
         const formData = formToJSON(form);
         formData.chosenIcon = chosenIcon;
         formData.task = 'addComment';
-        fetch(`/api/v1/photo/${form.photo_id.value}`, {
+        fetch(`/api/v1/photo/${selectedPhotoId}`, {
             method: 'POST',
             body: JSON.stringify(formData),
             credentials: 'include'
@@ -237,9 +242,63 @@ $('#photo-comment-submit').click( function(e) {
                 if(response.success) {
                     const commentMarkup = formatComments(response.comments);
                     $('#comments').html(commentMarkup);
-                    setThumbnailFaveCommentCount(response, form.photo_id.value);
+                    setThumbnailFaveCommentCount(response);
                     $('#photo-comment').val('');
                 }
             });
     }
 });
+
+$('#add-photo-tags').on('keyup', function() {
+    const filteredTags = [];
+    const inputTags = this.value.split(',');
+    for(let tag of inputTags) {
+        tag.trim();
+        const result = fuzzysort.go(tag, tagObjects, {
+            limit: 10,
+            threshold: -10000,
+            key: "tag",
+        });
+        result.forEach( r => {
+            filteredTags.push(r);
+        })
+    }
+    showTags(filteredTags);
+});
+
+function showTags(tags) {
+    console.log(tags);
+    let buttons = '';
+    tags.forEach( tag => {
+        buttons += `<button class="btn btn-info tag-btn" data-id="${tag.id}">${tag.tag}</button>`;
+    });
+    $('#available-photo-tags').html(buttons);
+}
+
+$('#add-tag-btn').on('click', function(e) {
+    e.preventDefault();
+    const inputTags = $('#add-photo-tags').val().split(',');
+    const tagsToSave = [];
+    for(let tag of inputTags) {
+        tag.trim();
+        let tagObject = tagObjects.find( t => t.tag === tag );
+        if(!tagObject) {
+            tagObject = { id: 'new', tag: tag };
+        }
+        tagsToSave.push(tagObject);
+    }
+    saveTags(tagsToSave);
+});
+
+function saveTags(tags) {
+    const secret = $('#server-secret').val();
+    fetch(`/api/v1/photo/${selectedPhotoId}`, {
+        method: 'POST',
+        body: JSON.stringify({ 'task': 'addTags', 'tags': tags, 'secret': secret }),
+        credentials: 'include'
+    })
+        .then( res => res.json() )
+        .then( response => {
+            console.log(response);
+        });
+}

@@ -37,8 +37,10 @@ class PicturesController
                 $comments = $pictures->getPhotoComments($this->params['ref']);
                 $this->response['comment_count'] = count($comments);
                 $this->response['fave_count'] = $pictures->getFaveCount($this->params['ref']);
+                $this->response['tags'] = $pictures->getTags($this->params['ref']);
                 break;
-            case 'search':
+            case 'photo-tags':
+                $this->response['data'] = $pictures->getTags(null);
                 break;
         }
     }
@@ -52,6 +54,8 @@ class PicturesController
             case 'addFave':
                 $this->add_fave();
                 break;
+            case 'addTags':
+                $this->add_tags();
         }
     }
 
@@ -125,6 +129,27 @@ class PicturesController
         ];
     }
 
+    private function add_tags()
+    {
+        $success = false;
+        if($this->tag_conditions()) {
+            $pictures = new Pictures();
+            foreach($this->params['values']['tags'] as $tag) {
+                if($tag['id'] == 'new') {
+                    $tag['id'] = $pictures->saveTag(new Tag($tag['tag']));
+                }
+                if(!$tag['id']) { break; }
+                $success = $pictures->savePhotoTag($this->params['ref'], $tag['id']);
+                if(!$success) { break; }
+            }
+            $this->response = [
+                'success' => $success,
+                'tags' => $pictures->getTags(),
+                'photo_tags' => $pictures->getTags($this->params['ref'])
+            ];
+        }
+    }
+
     private function comment_conditions()
     {
         $paramValues = $this->params['values'];
@@ -171,5 +196,23 @@ class PicturesController
             return false;
         }
         return true;
+    }
+
+    private function tag_conditions()
+    {
+        $fn = new Functions();
+        $paramValues = $this->params['values'];
+
+        if(!$fn->requestedByTheSameDomain($paramValues['secret'])) {
+            return false;
+        }
+
+        $userValidator = new UserValidator();
+        $user = $userValidator->validate($_COOKIE['settings'], 'cookie');
+        if($user) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

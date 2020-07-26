@@ -69,6 +69,7 @@ class FrontController
                 break;
             case 'photos':
             case 'photo':
+            case 'photo-tags':
                 $picturesController = new PicturesController($this->request, $this->requestMethod);
                 $this->response = $picturesController->fulfilRequest();
                 break;

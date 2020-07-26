@@ -78,6 +78,7 @@ $_SESSION['server-secret'] = $secret;
     </div>
 
 </div>
+<script type="module" src="/vendor/fuzzysort/fuzzysort.js"></script>
 </body>
 
 
