@@ -267,20 +267,18 @@ $('#add-photo-tags').on('keyup', function() {
 });
 
 function showTags(tags) {
-    console.log(tags);
     let buttons = '';
     tags.forEach( tag => {
-        buttons += `<button class="btn btn-info tag-btn" data-id="${tag.id}">${tag.tag}</button>`;
+        buttons += `<button class="btn btn-info mr-1 tag-btn" data-id="${tag.obj.id}">${tag.obj.tag}</button>`;
     });
     $('#available-photo-tags').html(buttons);
 }
 
 $('#add-tag-btn').on('click', function(e) {
     e.preventDefault();
-    const inputTags = $('#add-photo-tags').val().split(',');
+    const inputTags = getInputTags()
     const tagsToSave = [];
     for(let tag of inputTags) {
-        tag.trim();
         let tagObject = tagObjects.find( t => t.tag === tag );
         if(!tagObject) {
             tagObject = { id: 'new', tag: tag };
@@ -289,6 +287,14 @@ $('#add-tag-btn').on('click', function(e) {
     }
     saveTags(tagsToSave);
 });
+
+function getInputTags() {
+    const inputTags = $('#add-photo-tags').val().split(',');
+    for(let tag of inputTags) {
+        tag.trim();
+    }
+    return inputTags;
+}
 
 function saveTags(tags) {
     const secret = $('#server-secret').val();
@@ -299,6 +305,15 @@ function saveTags(tags) {
     })
         .then( res => res.json() )
         .then( response => {
-            console.log(response);
+            tagObjects = response.tags;
         });
 }
+
+$('#available-photo-tags').on('click', '.tag-btn', function() {
+    const inputTags = getInputTags();
+    inputTags.pop();
+    const selectedButton = this.innerText;
+    inputTags.push(selectedButton);
+    const inputText = inputTags.join(', ') + ', ';
+    $('#add-photo-tags').val(inputText);
+});

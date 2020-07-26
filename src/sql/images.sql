@@ -570,7 +570,7 @@ CREATE TABLE IF NOT EXISTS photo_comments (
 );
 
 CREATE TABLE IF NOT EXISTS photo_tags (
-    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     photo_id INT NOT NULL,
-    tag_id INT NOT NULL
+    tag_id INT NOT NULL,
+    PRIMARY KEY (photo_id, tag_id)
 );

@@ -67,8 +67,10 @@ $tags = $pictures->getTags();
                                     ?>
                                     <label for="add-photo-tags" class="text-primary">Add Tags:</label>
                                     <div class="row">
-                                        <input type="text" id="add-photo-tags" class="form-control col-md-10" placeholder="Add tags separated by a comma"/>
-                                        <button type="submit" class="btn btn-primary" id="add-tag-btn">Add</button>
+                                        <div class="col-md-12">
+                                            <input type="text" id="add-photo-tags" class="form-control col-md-10" placeholder="Add tags separated by a comma"/>
+                                            <button type="submit" class="btn btn-primary" id="add-tag-btn">Add</button>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div id="available-photo-tags" class="col-md-12">
