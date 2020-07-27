@@ -5,6 +5,7 @@ import { buildCaptchaIcons, formToJSON } from '../../common/functions/general.js
 let chosenIcon = {};
 let timeout = null;
 let tagObjects = [];
+let photoTags = [];
 let selectedPhotoId = null;
 
 const cookie = c.getCookie('settings');
@@ -163,6 +164,7 @@ $('#photos').on('click', 'img', function() {
         $('#comments').html(commentMarkup);
         $('#fave-count').text(response.fave_count);
         setThumbnailFaveCommentCount(response);
+        photoTags = response.tags;
     });
     buildCaptchaIcons(4, icons => {
         $('#gallery-icons').html(icons.chosenIconHtml + icons.iconsHtml);
@@ -251,17 +253,19 @@ $('#photo-comment-submit').click( function(e) {
 
 $('#add-photo-tags').on('keyup', function() {
     const filteredTags = [];
-    const inputTags = this.value.split(',');
+    const inputTags = getInputTags();
     for(let tag of inputTags) {
-        tag.trim();
-        const result = fuzzysort.go(tag, tagObjects, {
-            limit: 10,
-            threshold: -10000,
-            key: "tag",
-        });
-        result.forEach( r => {
-            filteredTags.push(r);
-        })
+        const alreadyHave = photoTags.find( t => t.tag === tag );
+        if(!alreadyHave) {
+            const result = fuzzysort.go(tag, tagObjects, {
+                limit: 10,
+                threshold: -10000,
+                key: "tag",
+            });
+            result.forEach( r => {
+                filteredTags.push(r);
+            });
+        }
     }
     showTags(filteredTags);
 });
@@ -283,7 +287,10 @@ $('#add-tag-btn').on('click', function(e) {
         if(!tagObject) {
             tagObject = { id: 'new', tag: tag };
         }
-        tagsToSave.push(tagObject);
+        let alreadySet = photoTags.find( t => t.tag === tag );
+        if(!alreadySet) {
+            tagsToSave.push(tagObject);
+        }
     }
     saveTags(tagsToSave);
 });
@@ -306,6 +313,7 @@ function saveTags(tags) {
         .then( res => res.json() )
         .then( response => {
             tagObjects = response.tags;
+            photoTags = response.photo_tags;
         });
 }
 
