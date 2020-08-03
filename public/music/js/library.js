@@ -156,11 +156,22 @@ table.on('click', 'td.details-control', function () {
  * @param callback
  */
 function format(data, callback) {
-    getTracks(data.album_id).then( tracks => {
-        const template = fn.printTrackList(tracks.data, data.image);
+    const promise1 = fetch(`https://en.wikipedia.org/w/api.php?formatversion=2&origin=*&action=query&prop=extracts&exintro&explaintext&format=json&generator=search&gsrnamespace=0&gsrlimit=1&gsrsearch=${data.album_artist}%20${data.title}`);
+    const promise2 = fetch(`/api/v1/tracks/${data.album_id}`);
+    Promise.all([promise1, promise2])
+        .then( responses => {
+        return Promise.all(responses.map(function (response) {
+            return response.json();
+        }));
+    }).then(function ( details) {
+        const extract = details[0].query ? details[0].query.pages[0].extract : '';
+        const pageLink = details[0].query ? details[0].query.pages[0].pageid : false;
+        const template = fn.printTrackList(details[1].data, data.image, extract, pageLink);
         callback(template, 'no-padding').show();
         $('#tracks').removeClass('table table-hover dt-responsive table-sm');
         $('div.slider', callback()).slideDown();
+    }).catch(function (error) {
+        console.log(error);
     });
 }
 

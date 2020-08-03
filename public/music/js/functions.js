@@ -50,25 +50,30 @@ export function printPlayList() {
  * Format the track list for displaying in the album browser
  * @param tracks
  * @param image
+ * @param extract
+ * @param pageLink
  * @returns {string}
  */
-export function printTrackList(tracks, image) {
+export function printTrackList(tracks, image, extract, pageLink) {
     let template = `
     <div class="slider">
-        <div class="row">`;
+        <div class="row ml-2">`;
                 if(tracks[0].artist_top50 > 0) {
-                    template += `<div class="col-md-4"><h6>Top 50 artist ranked ${tracks[0].artist_top50} with ${tracks[0].artist_playcount} plays</h6></div>`;
+                    template += `<div class="col-md-6">
+                        <h5 class="text-primary">Top 50 artist ranked ${tracks[0].artist_top50} with ${tracks[0].artist_playcount} plays</h5>
+                    </div>`;
                 }
                 if(tracks[0].album_top50 > 0) {
-                    template += `<div class="col-md-4"><h6>Top 50 album ranked ${tracks[0].album_top50} with ${tracks[0].album_playcount} plays</h6></div>`;
-                    template += `<div class="col-md-4"></div>`;
+                    template += `<div class="col-md-6">
+                        <h5 class="text-primary">Top 50 album ranked ${tracks[0].album_top50} with ${tracks[0].album_playcount} plays</h5>
+                    </div>`;
                 }
         template += `</div>
-        <div class="row">
+        <div class="row ml-2">
             <div class="col-md-3">
                 <img alt="cover" src="../Resources/${image}.jpg" width="100%"/>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-auto">
                 <table id="tracks" class="table-condensed">`;
                     for(let [i, track] of tracks.entries()) {
                         const trackNo = (i + 1).toString().padStart(2,'0');
@@ -85,6 +90,10 @@ export function printTrackList(tracks, image) {
                     }
                 template += `
                 </table>
+            </div>
+            <div id="album-info" class="col-md-4">
+                <p>${extract}</p>
+                <p>Extract taken from <a href="http://en.wikipedia.org/?curid=${pageLink}">Wikipedia</a></p>
             </div>
         </div>
     </div>`;
