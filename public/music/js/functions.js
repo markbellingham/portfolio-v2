@@ -93,7 +93,7 @@ export function printTrackList(tracks, image, extract, pageLink) {
             </div>
             <div id="album-info" class="col-md-4">
                 <p>${extract}</p>
-                <p>Extract taken from <a href="http://en.wikipedia.org/?curid=${pageLink}">Wikipedia</a></p>
+                <small>Extract taken from <a href="http://en.wikipedia.org/?curid=${pageLink}">Wikipedia</a></small>
             </div>
         </div>
     </div>`;

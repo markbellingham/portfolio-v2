@@ -156,7 +156,9 @@ table.on('click', 'td.details-control', function () {
  * @param callback
  */
 function format(data, callback) {
-    const promise1 = fetch(`https://en.wikipedia.org/w/api.php?formatversion=2&origin=*&action=query&prop=extracts&exintro&explaintext&format=json&generator=search&gsrnamespace=0&gsrlimit=1&gsrsearch=${data.album_artist}%20${data.title}`);
+    const artist = data.album_artist.replace(/[^0-9a-z]/gi, ' ');
+    const title = data.title.replace(/[^0-9a-z]/gi, ' ');
+    const promise1 = fetch(`https://en.wikipedia.org/w/api.php?formatversion=2&origin=*&action=query&prop=extracts&exintro&explaintext&format=json&generator=search&gsrnamespace=0&gsrlimit=1&gsrsearch=${artist}%20${title}`);
     const promise2 = fetch(`/api/v1/tracks/${data.album_id}`);
     Promise.all([promise1, promise2])
         .then( responses => {
