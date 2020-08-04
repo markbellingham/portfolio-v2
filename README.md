@@ -7,6 +7,14 @@ Can list and filter all music files on my computer. Can add files to the player,
 
 ![Music Browser](screenshots/music-page.png?raw=true "Title")
 
+Single album view. Information paragraph retrived from Wikipedia using their API. Can add individual tracks to the playlist.
+
+![Album View](screenshots/album-view.png?raw=true "Title")
+
+Playlist slides down over the website content. Can double click on a track to change the currently playing one.
+
+![Playlist View](screenshots/playlist-view.png?raw=true "Title")
+
 Displays all photos in the gallery. Can filter photos using titles, tags, descriptions, location.
 
 ![Photo Gallery](screenshots/photos-page.png?raw=true "Title")
