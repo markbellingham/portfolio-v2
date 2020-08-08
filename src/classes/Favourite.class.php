@@ -3,19 +3,19 @@
 class Favourite implements JsonSerializable
 {
     private $userId;
-    private $photoId;
+    private $itemId;
 
-    public function __construct($userId, $photoId)
+    public function __construct($userId, $itemId)
     {
         $this->userId = $userId;
-        $this->photoId = $photoId;
+        $this->itemId = $itemId;
     }
 
     public function jsonSerialize()
     {
         return [
             'userId' => $this->userId,
-            'photoId' => $this->photoId
+            'itemId' => $this->itemId
         ];
     }
 
@@ -38,16 +38,16 @@ class Favourite implements JsonSerializable
     /**
      * @return int
      */
-    public function getPhotoId(): int
+    public function getItemId(): int
     {
-        return $this->photoId;
+        return $this->itemId;
     }
 
     /**
-     * @param int $photoId
+     * @param int $itemId
      */
-    public function setPhotoId(int $photoId)
+    public function setItemId(int $itemId)
     {
-        $this->photoId = $photoId;
+        $this->itemId = $itemId;
     }
 }

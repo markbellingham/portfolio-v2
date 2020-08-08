@@ -144,24 +144,24 @@ class Pictures
      *****************************************************/
 
     /**
-     * @param object $comment
+     * @param Comment $comment
      * @return bool
      */
-    public function savePhotoComment(object $comment)
+    public function savePhotoComment(Comment $comment)
     {
-        $params = [$comment->userId, $comment->photoId, $comment->comment];
+        $params = [$comment->getUserId(), $comment->getItemId(), $comment->getComment()];
         $sql = "INSERT INTO photo_comments (user_id, photo_id, comment) VALUES (?,?,?)";
         $this->db->run($sql, $params);
         return $this->db->error ? false : true;
     }
 
     /**
-     * @param object $fave
+     * @param Favourite $fave
      * @return bool
      */
-    public function saveFave(object $fave)
+    public function saveFave(Favourite $fave)
     {
-        $params = [$fave->userId, $fave->photoId];
+        $params = [$fave->getUserId(), $fave->getItemId()];
         $sql = "INSERT INTO photo_faves (user_id, photo_id) VALUES (?,?)";
         $this->db->run($sql, $params);
         return $this->db->error ? false : true;
@@ -169,24 +169,28 @@ class Pictures
 
     /**
      * @param Tag $tag
-     * @return bool
+     * @return bool|Tag
      */
     public function saveTag(Tag $tag)
     {
         $params = [$tag->getTag()];
         $sql = "INSERT INTO tags (tag) values (?)";
         $this->db->run($sql, $params);
-        return $this->db->error ? false : $this->getLastInsertId();
+        if($this->db->error) {
+            return false;
+        }
+        $tag->setTagId($this->getLastInsertId());
+        return $tag;
     }
 
     /**
-     * @param int $photoId
-     * @param int $tagId
+     * @param $photoId
+     * @param Tag $tag
      * @return bool
      */
-    public function savePhotoTag(int $photoId, int $tagId)
+    public function savePhotoTag($photoId, Tag $tag)
     {
-        $params = [$photoId, $tagId];
+        $params = [$photoId, $tag->getTagId()];
         $sql = "INSERT INTO photo_tags (photo_id, tag_id) VALUES (?, ?)";
         $this->db->run($sql, $params);
         return $this->db->error ? false : true;

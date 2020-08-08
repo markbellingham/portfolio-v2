@@ -78,17 +78,17 @@ class PicturesController
         $comments = [];
         $commentCount = $faveCount = 0;
         if($this->comment_conditions()) {
-            $comment = (object) [
-                'userId' => $this->params['userId'],
-                'photoId' => $this->params['ref'],
-                'comment' => $this->params['values']['comment']
-            ];
+            $comment = new Comment(
+                $this->params['ref'],
+                $this->params['userId'],
+                $this->params['values']['comment']
+            );
             $pictures = new Pictures();
             $success =  $pictures->savePhotoComment($comment);
             if($success) {
-                $comments = $pictures->getPhotoComments($comment->photoId);
+                $comments = $pictures->getPhotoComments($comment->getItemId());
                 $commentCount = count($comments);
-                $faveCount = $pictures->getFaveCount($comment->photoId);
+                $faveCount = $pictures->getFaveCount($comment->getItemId());
             }
         }
         $this->response = [
@@ -110,10 +110,10 @@ class PicturesController
         $cookieSettings = json_decode($_COOKIE['settings']);
         $user = $people->findUserByValue('uuid', $cookieSettings->uuid);
         if($this->fave_conditions()) {
-            $fave = (object) [
-                'userId' => $user->id,
-                'photoId' => $this->params['ref']
-            ];
+            $fave = new Favourite(
+                $user->id,
+                $this->params['ref']
+            );
             $pictures = new Pictures();
             $success = $pictures->saveFave($fave);
             if($success) {
@@ -136,10 +136,12 @@ class PicturesController
             $pictures = new Pictures();
             foreach($this->params['values']['tags'] as $tag) {
                 if($tag['id'] == 'new') {
-                    $tag['id'] = $pictures->saveTag(new Tag($tag['tag']));
+                    $tag = $pictures->saveTag(new Tag($tag['tag']));
+                } else {
+                    $tag = new Tag($tag['tag'], $tag['id']);
                 }
-                if(!$tag['id']) { break; }
-                $success = $pictures->savePhotoTag($this->params['ref'], $tag['id']);
+                if(!$tag) { break; }
+                $success = $pictures->savePhotoTag($this->params['ref'], $tag);
                 if(!$success) { break; }
             }
             $this->response = [

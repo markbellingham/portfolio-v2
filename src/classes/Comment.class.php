@@ -3,16 +3,14 @@
 class Comment implements JsonSerializable
 {
     private $userId;
-    private $photoId;
+    private $itemId;
     private $comment;
     private $created;
 
-    public function __construct($photoId, $username, $comment)
+    public function __construct($itemId, $userId, $comment)
     {
-        $this->photoId = $photoId;
-        $people = new People();
-        $user = $people->findUserByValue('name', $username);
-        $this->userId = $user->getId();
+        $this->itemId = $itemId;
+        $this->userId = $userId;
         $this->comment = $comment;
         $this->created = date('Y-m-d H:i:s');
     }
@@ -21,7 +19,7 @@ class Comment implements JsonSerializable
     {
         return [
             'userId' => $this->userId,
-            'photoId' => $this->photoId,
+            'itemId' => $this->itemId,
             'comment' => $this->comment,
             'created' => $this->created
         ];
@@ -46,17 +44,17 @@ class Comment implements JsonSerializable
     /**
      * @return int
      */
-    public function getPhotoId()
+    public function getItemId()
     {
-        return $this->photoId;
+        return $this->itemId;
     }
 
     /**
-     * @param int $photoId
+     * @param int $itemId
      */
-    public function setPhotoId(int $photoId)
+    public function setItemId(int $itemId)
     {
-        $this->photoId = $photoId;
+        $this->itemId = $itemId;
     }
 
     /**
