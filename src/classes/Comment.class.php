@@ -2,17 +2,17 @@
 
 class Comment implements JsonSerializable
 {
-    private $userId;
-    private $itemId;
-    private $comment;
-    private $created;
+    private int $userId;
+    private int $itemId;
+    private string $comment;
+    private string $created;
 
-    public function __construct($itemId, $userId, $comment)
+    public function __construct(int $itemId, int $userId, string $comment, string $date = null)
     {
-        $this->itemId = $itemId;
-        $this->userId = $userId;
-        $this->comment = $comment;
-        $this->created = date('Y-m-d H:i:s');
+        $this->setItemId($itemId);
+        $this->setUserId($userId);
+        $this->setComment($comment);
+        $this->setCreated($date);
     }
 
     public function jsonSerialize()
@@ -70,7 +70,12 @@ class Comment implements JsonSerializable
      */
     public function setComment(string $comment)
     {
-        $this->comment = $comment;
+        try {
+            $stringValidator = new StringValidator();
+            $this->comment = $stringValidator->validate($comment);
+        } catch (Exception $e) {
+
+        }
     }
 
     /**
@@ -82,10 +87,10 @@ class Comment implements JsonSerializable
     }
 
     /**
-     * @param string $created
+     * @param string|null $created
      */
-    public function setCreated(string $created)
+    public function setCreated($created)
     {
-        $this->created = $created;
+        $this->created = $created ?? date('Y-m-d H:i:s');
     }
 }

@@ -2,13 +2,13 @@
 
 class Favourite implements JsonSerializable
 {
-    private $userId;
-    private $itemId;
+    private int $userId;
+    private int $itemId;
 
     public function __construct($userId, $itemId)
     {
-        $this->userId = $userId;
-        $this->itemId = $itemId;
+        $this->setUserId($userId);
+        $this->setItemId($itemId);
     }
 
     public function jsonSerialize()

@@ -171,13 +171,6 @@ class PicturesController
             return false;
         }
 
-        try {
-            $stringValidator = new StringValidator();
-            $this->params['values']['comment'] = $stringValidator->validate($paramValues['comment']);
-        } catch (Exception $e) {
-            return false;
-        }
-
         return true;
     }
 
