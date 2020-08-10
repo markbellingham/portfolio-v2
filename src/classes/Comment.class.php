@@ -1,18 +1,31 @@
 <?php
 
-class Comment implements JsonSerializable
+class Comment extends Exception implements JsonSerializable
 {
     private int $userId;
     private int $itemId;
     private string $comment;
     private string $created;
+    private array $errors = [];
 
+    /**
+     * Comment constructor.
+     * @param int $itemId
+     * @param int $userId
+     * @param string $comment
+     * @param string|null $date
+     * @throws Exception
+     */
     public function __construct(int $itemId, int $userId, string $comment, string $date = null)
     {
+        parent::__construct();
         $this->setItemId($itemId);
         $this->setUserId($userId);
         $this->setComment($comment);
         $this->setCreated($date);
+        if(count($this->errors) > 0) {
+            throw new Exception('Comment invalid');
+        }
     }
 
     public function jsonSerialize()

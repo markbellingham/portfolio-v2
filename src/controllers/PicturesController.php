@@ -2,9 +2,15 @@
 
 class PicturesController
 {
-    private $requestMethod;
-    private $params;
-    private $response = [];
+    private string $requestMethod;
+    private array $params;
+    private array $response = [
+        'success' => false,
+        'comments' => [],
+        'comment_count' => 0,
+        'fave_count' => 0,
+        'message' => ''
+    ];
 
     /**
      * PicturesController constructor.
@@ -74,29 +80,25 @@ class PicturesController
      */
     private function add_comment()
     {
-        $success = false;
-        $comments = [];
-        $commentCount = $faveCount = 0;
         if($this->comment_conditions()) {
-            $comment = new Comment(
-                $this->params['ref'],
-                $this->params['userId'],
-                $this->params['values']['comment']
-            );
-            $pictures = new Pictures();
-            $success =  $pictures->savePhotoComment($comment);
-            if($success) {
-                $comments = $pictures->getPhotoComments($comment->getItemId());
-                $commentCount = count($comments);
-                $faveCount = $pictures->getFaveCount($comment->getItemId());
+            try {
+                $comment = new Comment(
+                    $this->params['ref'],
+                    $this->params['userId'],
+                    $this->params['values']['comment']
+                );
+                $pictures = new Pictures();
+                $success =  $pictures->savePhotoComment($comment);
+                if($success) {
+                    $this->response['success'] = true;
+                    $this->response['comments'] = $pictures->getPhotoComments($comment->getItemId());
+                    $this->response['comment_count'] = count($this->response['comments']);
+                    $this->response['fave_count'] = $pictures->getFaveCount($comment->getItemId());
+                }
+            } catch (Exception $e) {
+                $this->response['message'] = $e->getMessage();
             }
         }
-        $this->response = [
-            'success' => $success,
-            'comments' => $comments,
-            'comment_count' => $commentCount,
-            'fave_count' => $faveCount
-        ];
     }
 
     /**
