@@ -28,6 +28,9 @@ class Comment extends Exception implements JsonSerializable
         }
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize()
     {
         return [
@@ -87,7 +90,7 @@ class Comment extends Exception implements JsonSerializable
             $stringValidator = new StringValidator();
             $this->comment = $stringValidator->validate($comment);
         } catch (Exception $e) {
-
+            $this->errors[] = $e->getMessage();
         }
     }
 

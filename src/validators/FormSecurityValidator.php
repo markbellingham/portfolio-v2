@@ -5,7 +5,7 @@ if (session_status() == PHP_SESSION_NONE) {
 
 class FormSecurityValidator implements Validator
 {
-    private $response = array(
+    private array $response = array(
         'success' => false,
         'errors' => false,
     );
@@ -26,7 +26,7 @@ class FormSecurityValidator implements Validator
             $this->checkIcon($data);
             $this->requestedByTheSameDomain($data);
         } catch (Throwable $e) {
-            $this->response['errors'] = $e;
+            $this->response['errors'] = $e->getMessage();
         }
         $this->response['success'] = $this->response['errors'] ? false : true;
         return $this->response;

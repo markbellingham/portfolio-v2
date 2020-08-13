@@ -44,20 +44,13 @@ class PeopleController
     {
         $people = new People();
         $fn = new Functions();
-        $stringValidator = new StringValidator();
         if($fn->requestedByTheSameDomain($this->params['values']['secret'] ?? '')) {
-            $user = new User($this->params['values']['username'], $this->params['values']['uuid']);
-            foreach($user as $key => $value) {
-                try {
-                    $user->$key = $stringValidator->validate($value);
-                } catch (Exception $e) {
-                    $this->response['message'] = $e;
-                    return;
-                }
+            try {
+                $user = new User($this->params['values']['username'], $this->params['values']['uuid']);
+                $this->response['data'] = $people->saveUser($user);
+            } catch (Exception $e) {
+                $this->response['message'] = 'Sorry, user registrations via the website interface only';
             }
-            $this->response['data'] = $people->saveUser($user);
-        } else {
-            $this->response['message'] = 'Sorry, user registrations via the website interface only';
         }
     }
 

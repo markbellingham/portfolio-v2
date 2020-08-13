@@ -2,14 +2,28 @@
 
 class User implements JsonSerializable
 {
-    private $id = null;
-    private $username;
-    private $uuid;
+    private ?int $id = null;
+    private string $username;
+    private string $uuid;
+    private StringValidator $stringValidator;
+    private array $errors = [];
 
-    public function __construct($username, $uuid)
+    /**
+     * User constructor.
+     * @param string $username
+     * @param string $uuid
+     * @param int|null $id
+     * @throws Exception
+     */
+    public function __construct(string $username, string $uuid, ?int $id = null)
     {
-        $this->username = $username;
-        $this->uuid = $uuid;
+        $this->stringValidator = new StringValidator();
+        $this->setUsername($username);
+        $this->setUuid($uuid);
+        $this->setId($id);
+        if(count($this->errors) > 0) {
+            throw new Exception('Invalid User');
+        }
     }
 
     /**
@@ -54,7 +68,11 @@ class User implements JsonSerializable
      */
     public function setUsername($username): void
     {
-        $this->username = $username;
+        try {
+            $this->username = $this->stringValidator->validate($username);
+        } catch (Exception $e) {
+            $this->errors[] = $e->getMessage();
+        }
     }
 
     /**
@@ -70,6 +88,10 @@ class User implements JsonSerializable
      */
     public function setUuid($uuid): void
     {
-        $this->uuid = $uuid;
+        try {
+            $this->uuid = $this->stringValidator->validate($uuid);
+        } catch (Exception $e) {
+            $this->errors[] = $e->getMessage();
+        }
     }
 }
