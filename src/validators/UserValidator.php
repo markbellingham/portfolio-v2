@@ -2,8 +2,7 @@
 
 class UserValidator implements Validator
 {
-    private $response;
-    private $errors = [];
+    private ?string $response;
 
     const ERROR_MESSAGE = 'User validation error';
 

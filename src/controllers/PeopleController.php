@@ -2,9 +2,12 @@
 
 class PeopleController
 {
-    private $requestMethod;
-    private $params;
-    private $response;
+    private string $requestMethod;
+    private array $params;
+    private array $response = [
+        'data' => null,
+        'message' => ''
+    ];
 
     /**
      * PeopleController constructor.
@@ -18,7 +21,7 @@ class PeopleController
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function fulfilRequest()
     {

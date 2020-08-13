@@ -5,7 +5,6 @@ use MyPDO\MyPDO;
 class People
 {
     protected $db;
-    protected $data;
 
     /**
      * People constructor.
