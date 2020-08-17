@@ -1,6 +1,7 @@
 import { photos, userFaves, userId } from './application-data.js';
 import * as c from '../../common/functions/cookies.js';
 import { buildCaptchaIcons, formToJSON } from '../../common/functions/general.js';
+import { Comments } from "../../common/comments/main.js";
 
 let chosenIcon = {};
 let timeout = null;
@@ -140,35 +141,20 @@ function formatComments(comments) {
 }
 
 /**
- * Adds icon and number to the photo thumbnail if it has comments and/or favourites
- * @param {object} response
- */
-function setThumbnailFaveCommentCount(response) {
-    let markup = '';
-    if(response.fave_count > 0) {
-        markup += `<i class="fas fa-heart"></i> ${response.fave_count} `;
-    }
-    if(response.comment_count > 0) {
-        markup += `<i class="fas fa-comment-alt"></i> ${response.comment_count}`;
-    }
-    $(`#pcounts-${selectedPhotoId}`).html(markup);
-}
-
-/**
  * Event handler to show large modal when clicking on a photo thumbnail
  */
 $('#photos').on('click', 'img', function() {
     selectedPhotoId = Number(this.getAttribute('data-id'));
-    getPhotoDetails().then( response => {
-        const commentMarkup = formatComments(response.comments);
-        $('#comments').html(commentMarkup);
-        $('#fave-count').text(response.fave_count);
-        setThumbnailFaveCommentCount(response);
-        photoTags = response.tags;
+    const commentsApp = new Comments({
+        'section': 'photo',
+        'user': userSettings,
+        'itemId': selectedPhotoId,
     });
-    buildCaptchaIcons(4, icons => {
-        $('#gallery-icons').html(icons.chosenIconHtml + icons.iconsHtml);
-        chosenIcon = icons.chosenIcon;
+    getPhotoDetails().then( response => {
+        commentsApp.formatUserComments(response.comments);
+        $('#fave-count').text(response.fave_count);
+        commentsApp.setThumbnailFaveCommentCount(response);
+        photoTags = response.tags;
     });
     const photo = photos.find(p => p.id === selectedPhotoId );
     if(photo.width/photo.height < 0.90) {
@@ -221,34 +207,7 @@ $('#make-favourite').on('click', function() {
  */
 $('#full-size-photo').on('click', function() {
     const photo = photos.find(p => p.id === selectedPhotoId );
-    window.open('/Resources/Pictures/Favourites/' + photo.filename);
-});
-
-/**
- * Event handler for submitting a comment
- */
-$('#photo-comment-submit').click( function(e) {
-    e.preventDefault();
-    const form = document.getElementById('photo-comment-form');
-    if(form.reportValidity()) {
-        const formData = formToJSON(form);
-        formData.chosenIcon = chosenIcon;
-        formData.task = 'addComment';
-        fetch(`/api/v1/photo/${selectedPhotoId}`, {
-            method: 'POST',
-            body: JSON.stringify(formData),
-            credentials: 'include'
-        })
-            .then( res => res.json() )
-            .then( response => {
-                if(response.success) {
-                    const commentMarkup = formatComments(response.comments);
-                    $('#comments').html(commentMarkup);
-                    setThumbnailFaveCommentCount(response);
-                    $('#photo-comment').val('');
-                }
-            });
-    }
+    window.open(`/Resources/Pictures/${photo.directory}/${photo.filename}`);
 });
 
 $('#add-photo-tags').on('keyup', function() {

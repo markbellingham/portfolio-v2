@@ -22,10 +22,10 @@ $frontController = new FrontController();
  */
 class FrontController
 {
-    private $requestMethod;
-    private $request = [];
-    private $response = [];
-    private $responseType;
+    private string $requestMethod;
+    private array $request = [];
+    private array $response = [];
+    private string $responseType;
 
     public function __construct()
     {

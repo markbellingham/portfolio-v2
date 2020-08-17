@@ -39,27 +39,9 @@ $tags = $pictures->getTags();
                             </h3>
                             <p id="modal-photo-location"></p>
                         </div>
-                        <div id="comments" class="text-left mt-2"></div>
-                        <div class="text-left mt-2">
-                            <h5 class="text-primary">Add Comment</h5>
+                        <div class="comments-wrapper" data-section="photo" data-secret="<?= $secret; ?>">
+
                         </div>
-                        <form id="photo-comment-form">
-                            <div class="text-left mt-2">
-                                <label for="photo-comment-username">Name:</label>
-                                <input type="text" name="name" id="photo-comment-username" class="form-control" value="<?= $cookieSettings->username ?? '' ?>" readonly/>
-                                <label for="photo-comment" class="text-left mt-2">Comment:</label>
-                                <textarea id="photo-comment" name="comment" class="form-control" required></textarea>
-                                <label for="description" class="d-none">Description</label>
-                                <input type="text" name="description" id="description" class="d-none" value=""/>
-                                <input type="hidden" name="secret" id="server-secret" value="<?= $secret ?>"/>
-                                <input type="hidden" name="uuid" value="<?= $cookieSettings->uuid; ?>"/>
-                            </div>
-                            <div id="photo-error-message" class="text-danger"></div>
-                            <div id="gallery-icons" class="text-center mt-3 btn-group-toggle" data-toggle="buttons"></div>
-                            <div class="text-right mt-2">
-                                <button type="button" id="photo-comment-submit" class="btn btn-primary" form="add-comment-form">Submit</button>
-                            </div>
-                        </form>
                         <div class="text-left mt-2">
                             <form id="add-tags-form">
                                 <?php
