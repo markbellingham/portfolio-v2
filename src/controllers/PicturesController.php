@@ -89,12 +89,11 @@ class PicturesController
                 );
                 $pictures = new Pictures();
                 $success =  $pictures->savePhotoComment($comment);
-                if($success) {
-                    $this->response['success'] = true;
-                    $this->response['comments'] = $pictures->getPhotoComments($comment->getItemId());
-                    $this->response['comment_count'] = count($this->response['comments']);
-                    $this->response['fave_count'] = $pictures->getFaveCount($comment->getItemId());
-                }
+                $this->response['success'] = $success;
+                $this->response['id'] = $this->params['ref'];
+                $this->response['comments'] = $pictures->getPhotoComments($this->params['ref']);
+                $this->response['comment_count'] = count($this->response['comments']);
+                $this->response['fave_count'] = $pictures->getFaveCount($this->params['ref']);
             } catch (Exception $e) {
                 $this->response['message'] = $e->getMessage();
             }
@@ -125,6 +124,7 @@ class PicturesController
             }
         }
         $this->response = [
+            'id' => $this->params['ref'],
             'success' => $success,
             'fave_count' => $faveCount,
             'comment_count' => $commentCount

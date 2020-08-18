@@ -32,9 +32,8 @@ $tags = $pictures->getTags();
                         <div class="text-left mt-2">
                             <h3>
                                 <span class="text-primary" id="modal-photo-title"></span>
-                                <span  class="float-right">
-                                    <i id="make-favourite" class="fas fa-heart"></i>
-                                    <span id="fave-count"></span>
+                                <span class="faves-wrapper float-right" data-section="photo">
+
                                 </span>
                             </h3>
                             <p id="modal-photo-location"></p>

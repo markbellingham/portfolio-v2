@@ -1,7 +1,8 @@
 import { photos, userFaves, userId } from './application-data.js';
 import * as c from '../../common/functions/cookies.js';
-import { buildCaptchaIcons, formToJSON } from '../../common/functions/general.js';
 import { Comments } from "../../common/comments/main.js";
+import { Favourites } from "../../common/faves/main.js";
+import * as fn from '../../common/functions/general.js';
 
 let chosenIcon = {};
 let timeout = null;
@@ -117,43 +118,24 @@ function formatPhotoGrid(data) {
 }
 
 /**
- * Format the comments for the photo modal
- * @param {array} comments
- */
-function formatComments(comments) {
-    let markup = ``;
-    if(comments.length > 0) {
-        for(let c of comments) {
-            markup += `
-            <div class="text-left mt-2">
-                <h5>
-                    <span class="text-primary">Comments:</span>
-                </h5>
-            </div>
-            <div class="col-md-12">
-                <small class="text-left"><span class="text-primary">${c.name}</span> - ${c.created}</small>
-                <p class="text-left">${c.comment}</p>
-            </div>
-        `;
-        }
-    }
-    return markup;
-}
-
-/**
  * Event handler to show large modal when clicking on a photo thumbnail
  */
 $('#photos').on('click', 'img', function() {
     selectedPhotoId = Number(this.getAttribute('data-id'));
     const commentsApp = new Comments({
-        'section': 'photo',
-        'user': userSettings,
-        'itemId': selectedPhotoId,
+        section: 'photo',
+        user: userSettings,
+        itemId: selectedPhotoId,
+    });
+    const favesApp = new Favourites({
+        section: 'photo',
+        user: userSettings,
+        itemId: selectedPhotoId
     });
     getPhotoDetails().then( response => {
         commentsApp.formatUserComments(response.comments);
-        $('#fave-count').text(response.fave_count);
-        commentsApp.setThumbnailFaveCommentCount(response);
+        favesApp.showFavourite(response.fave_count);
+        fn.setThumbnailFaveCommentCount(response);
         photoTags = response.tags;
     });
     const photo = photos.find(p => p.id === selectedPhotoId );
@@ -167,39 +149,7 @@ $('#photos').on('click', 'img', function() {
     $('#modal-image').attr({'src': `/Resources/Pictures/${photo.directory}/${photo.filename}`, 'alt': photo.title});
     $('#modal-photo-title').text(photo.title);
     $('#modal-photo-location').text(photo.town + ', ' + photo.country);
-    if(userFaves.indexOf(selectedPhotoId) > -1) {
-        $('#make-favourite').addClass('text-danger');
-    } else {
-        $('#make-favourite').removeClass('text-danger');
-    }
-    $('#photo-comment').val('');
     $('#modalIMG').modal();
-});
-
-/**
- * Event handler when clicking on a heart on an image modal
- */
-$('#make-favourite').on('click', function() {
-    const photo = photos.find(p => p.id === selectedPhotoId );
-    const secret = $('#server-secret').val();
-    if(userFaves.indexOf(selectedPhotoId) < 0) {
-        fetch(`/api/v1/photo/${selectedPhotoId}`, {
-            method: 'POST',
-            body: JSON.stringify({'task': 'addFave', 'secret': secret}),
-            credentials: 'include'
-        })
-            .then( res => res.json() )
-            .then( response => {
-                if(response.success) {
-                    this.classList.add('text-danger');
-                    userFaves.push(selectedPhotoId);
-                    localStorage.faves = JSON.stringify(userFaves);
-                    photo.fave_count = response.fave_count;
-                    $('#fave-count').text(photo.fave_count);
-                    setThumbnailFaveCommentCount(response);
-                }
-            });
-    }
 });
 
 /**

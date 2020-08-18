@@ -148,3 +148,18 @@ export function slideToggle(selector, duration) {
         return slideUp(selector, duration);
     }
 }
+
+/**
+ * Adds icon and number to the photo thumbnail if it has comments and/or favourites
+ * @param photo
+ */
+export function setThumbnailFaveCommentCount(photo) {
+    let markup = '';
+    if(photo.fave_count > 0) {
+        markup += `<i class="fas fa-heart"></i> ${photo.fave_count} `;
+    }
+    if(photo.comment_count > 0) {
+        markup += `<i class="fas fa-comment-alt"></i> ${photo.comment_count}`;
+    }
+    $(`#pcounts-${photo.id}`).html(markup);
+}
