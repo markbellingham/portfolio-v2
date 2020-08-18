@@ -2,13 +2,12 @@ import { photos } from '../../photo/js/application-data.js';
 import { blogs } from '../../blog/js/application-data.js';
 import { setThumbnailFaveCommentCount } from "../functions/general.js";
 
+/**
+ * Handles favouriting a photo or blog post
+ */
 export class Favourites {
     constructor(options) {
-        this.opt = {
-            section: '',
-            user: {},
-            itemId: 0
-        }
+        this.opt = { section: '', user: {}, itemId: 0 };
         this.setOptions(options);
         this.favesArea = document.querySelector(`.faves-wrapper[data-section="${this.opt.section}"]`);
         this.userFaves = JSON.parse(localStorage.getItem(`${this.opt.section}-faves`)) || [];
@@ -27,6 +26,9 @@ export class Favourites {
         }
     }
 
+    /**
+     * Get the list of items that this one belongs to
+     */
     setCollection() {
         switch(this.opt.section) {
             case 'photo':
@@ -38,6 +40,10 @@ export class Favourites {
         }
     }
 
+    /**
+     * Show the Favourite icon, highlight if user has favourited this item, show total number of faves
+     * @param faveCount
+     */
     showFavourite(faveCount) {
         const colour = this.userFaves.indexOf(this.opt.itemId) > -1 ? 'text-danger' : '';
         this.favesArea.innerHTML = `
@@ -47,6 +53,9 @@ export class Favourites {
         this.setEvents();
     }
 
+    /**
+     * Event listener for when a user clicks to favourite an item
+     */
     setEvents() {
         const faveBtn = document.querySelector(`#${this.opt.section}-favourite`);
         const faveCountDisplay = document.querySelector(`#${this.opt.section}-fave-count`);

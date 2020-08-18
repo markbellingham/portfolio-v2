@@ -2,18 +2,16 @@ import * as he from './html-elements.js';
 import * as fn from '../functions/general.js';
 
 /**
- *
+ * Handles the comments area for photos/blog posts
  */
 export class Comments {
 
+    /**
+     * @param {object} options
+     */
     constructor(options = {}) {
         // Default values for the options
-        this.opt = {
-            section: '',
-            user: {},
-            captchaIcons: 4,
-            itemId: 0
-        }
+        this.opt = { section: '', user: {}, captchaIcons: 4, itemId: 0 };
         // Values of options that are passed in override the defaults
         this.setOptions(options);
         // Main area that holds the entire comments app
@@ -27,6 +25,10 @@ export class Comments {
         });
     }
 
+    /**
+     * Override the default options with user defined ones, if set
+     * @param options
+     */
     setOptions (options) {
         for(let [i, val] of Object.entries(this.opt)) {
             if(options.hasOwnProperty(i)) {
@@ -35,10 +37,18 @@ export class Comments {
         }
     }
 
+    /**
+     * Puts a list of saved comments in the comment area
+     * @param comments
+     */
     formatUserComments (comments) {
         this.commentArea.querySelector(`#${this.opt.section}-comments`).innerHTML = he.formatComments(comments);
     }
 
+    /**
+     * Event listener for saving a comment
+     * @param {object} chosenIcon
+     */
     setEvents(chosenIcon) {
         const submitBtn = document.querySelector(`#${this.opt.section}-comment-submit`);
         submitBtn.addEventListener('click', e => {

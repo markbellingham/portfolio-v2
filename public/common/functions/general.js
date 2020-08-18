@@ -163,3 +163,24 @@ export function setThumbnailFaveCommentCount(photo) {
     }
     $(`#pcounts-${photo.id}`).html(markup);
 }
+
+/**
+ * Sorts an array to work with CSS columns so that the items flow horizontally instead of vertically
+ * @param {array} arr
+ * @param {int} cols
+ * @returns {[]}
+ */
+export function reorder(arr, cols) {
+    const out = [];
+    let col = 0;
+
+    while(col < cols) {
+        for (let i = 0; i < arr.length; i += cols) {
+            const val = arr[i + col];
+            if (val !== undefined)
+                out.push(val);
+        }
+        col++;
+    }
+    return out;
+}
