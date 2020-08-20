@@ -38,30 +38,11 @@ $tags = $pictures->getTags();
                             </h3>
                             <p id="modal-photo-location"></p>
                         </div>
-                        <div class="comments-wrapper" data-section="photo" data-secret="<?= $secret; ?>">
+                        <div class="comments-wrapper" data-section="photo">
 
                         </div>
-                        <div class="text-left mt-2">
-                            <form id="add-tags-form">
-                                <?php
-                                if($cookieSettings->username == 'Mark') {
-                                    ?>
-                                    <label for="add-photo-tags" class="text-primary">Add Tags:</label>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <input type="text" id="add-photo-tags" class="form-control col-md-10" placeholder="Add tags separated by a comma"/>
-                                            <button type="submit" class="btn btn-primary" id="add-tag-btn">Add</button>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div id="available-photo-tags" class="col-md-12">
+                        <div class="tags-wrapper text-left mt-2" data-section="photo">
 
-                                        </div>
-                                    </div>
-                                    <?php
-                                }
-                                ?>
-                            </form>
                         </div>
                     </div>
                 </div>

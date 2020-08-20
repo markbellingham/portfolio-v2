@@ -2,11 +2,11 @@ import { photos } from './application-data.js';
 import * as c from '../../common/functions/cookies.js';
 import { Comments } from "../../common/comments/main.js";
 import { Favourites } from "../../common/faves/main.js";
+import { Tags } from '../../common/tags/main.js';
 import * as fn from '../../common/functions/general.js';
 
 let timeout = null;
 let tagObjects = [];
-let photoTags = [];
 let selectedPhotoId = null;
 
 const cookie = c.getCookie('settings');
@@ -52,16 +52,6 @@ async function getPhotoDetails() {
     return await result.json();
 }
 
-/**
- *
- * @param {int} userId
- * @returns {Promise<any>}
- */
-async function getUserDetails(userId) {
-    const result = await fetch(`/api/v1/user/${userId}`);
-    return result.json();
-}
-
 async function getPhotoTags() {
     const result = await fetch(`/api/v1/photo-tags`);
     return await result.json();
@@ -105,23 +95,19 @@ function formatPhotoGrid(data) {
  */
 $('#photos').on('click', 'img', function() {
     selectedPhotoId = Number(this.getAttribute('data-id'));
-    const commentsApp = new Comments({
-        section: 'photo',
-        user: userSettings,
-        itemId: selectedPhotoId,
-    });
-    const favesApp = new Favourites({
-        section: 'photo',
-        user: userSettings,
-        itemId: selectedPhotoId
-    });
+    const photo = photos.find(p => p.id === selectedPhotoId );
+
+    const appOptions = { section: 'photo', user: userSettings, itemId: selectedPhotoId };
+    const commentsApp = new Comments( appOptions );
+    const favesApp = new Favourites( appOptions );
+    const tagsApp = new Tags( appOptions );
+
     getPhotoDetails().then( response => {
         commentsApp.formatUserComments(response.comments);
         favesApp.showFavourite(response.fave_count);
         fn.setThumbnailFaveCommentCount(response);
-        photoTags = response.tags;
+        tagsApp.setOptions({ itemTags: response.tags, allTags: tagObjects });
     });
-    const photo = photos.find(p => p.id === selectedPhotoId );
     if(photo.width/photo.height < 0.90) {
         $('#modal-image-container').removeClass('col-md-9').addClass('col-md-7');
         $('#modal-text-container').removeClass('col-md-3').addClass('col-md-5');
@@ -143,81 +129,11 @@ $('#full-size-photo').on('click', function() {
     window.open(`/Resources/Pictures/${photo.directory}/${photo.filename}`);
 });
 
-$('#add-photo-tags').on('keyup', function() {
-    const filteredTags = [];
-    const inputTags = getInputTags();
-    for(let tag of inputTags) {
-        const alreadyHave = photoTags.find( t => t.tag === tag );
-        if(!alreadyHave) {
-            const result = fuzzysort.go(tag, tagObjects, {
-                limit: 10,
-                threshold: -10000,
-                key: "tag",
-            });
-            result.forEach( r => {
-                filteredTags.push(r);
-            });
-        }
-    }
-    showTags(filteredTags);
-});
-
-/**
- *
- * @param {array} tags
- */
-function showTags(tags) {
-    let buttons = '';
-    tags.forEach( tag => {
-        buttons += `<button class="btn btn-info mr-1 tag-btn" data-id="${tag.obj.id}">${tag.obj.tag}</button>`;
-    });
-    $('#available-photo-tags').html(buttons);
-}
-
-$('#add-tag-btn').on('click', function(e) {
-    e.preventDefault();
-    const inputTags = getInputTags()
-    const tagsToSave = [];
-    for(let tag of inputTags) {
-        let tagObject = tagObjects.find( t => t.tag === tag );
-        if(!tagObject) {
-            tagObject = { id: 'new', tag: tag };
-        }
-        let alreadySet = photoTags.find( t => t.tag === tag );
-        if(!alreadySet) {
-            tagsToSave.push(tagObject);
-        }
-    }
-    saveTags(tagsToSave);
-});
-
-function getInputTags() {
-    const inputTags = $('#add-photo-tags').val().split(',');
-    for(let tag of inputTags) {
-        tag.trim();
-    }
-    return inputTags;
-}
-
-function saveTags(tags) {
-    const secret = $('#server-secret').val();
-    fetch(`/api/v1/photo/${selectedPhotoId}`, {
-        method: 'POST',
-        body: JSON.stringify({ 'task': 'addTags', 'tags': tags, 'secret': secret }),
-        credentials: 'include'
-    })
-        .then( res => res.json() )
-        .then( response => {
-            tagObjects = response.tags;
-            photoTags = response.photo_tags;
-        });
-}
-
-$('#available-photo-tags').on('click', '.tag-btn', function() {
-    const inputTags = getInputTags();
-    inputTags.pop();
-    const selectedButton = this.innerText;
-    inputTags.push(selectedButton);
-    const inputText = inputTags.join(', ') + ', ';
-    $('#add-photo-tags').val(inputText);
-});
+// $('#available-photo-tags').on('click', '.tag-btn', function() {
+//     const inputTags = getInputTags();
+//     inputTags.pop();
+//     const selectedButton = this.innerText;
+//     inputTags.push(selectedButton);
+//     const inputText = inputTags.join(', ') + ', ';
+//     $('#add-photo-tags').val(inputText);
+// });

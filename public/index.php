@@ -8,6 +8,7 @@ $_SESSION['server-secret'] = $secret;
 
 ?>
 <body>
+<input type="hidden" id="server-secret" value="<?= $secret ?>"/>
 <div id="container">
 
     <div class="col-md-2"></div>

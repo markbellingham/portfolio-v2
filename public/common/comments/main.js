@@ -16,7 +16,7 @@ export class Comments {
         this.setOptions(options);
         // Main area that holds the entire comments app
         this.commentArea = document.querySelector(`.comments-wrapper[data-section="${this.opt.section}"]`);
-        const secret = this.commentArea.getAttribute('data-secret');
+        const secret = document.querySelector('#server-secret').value;
         this.commentArea.innerHTML = he.commentsHtml(this.opt.section, this.opt.user, secret);
         fn.buildCaptchaIcons(this.opt.captchaIcons, icons => {
             document.querySelector(`#${this.opt.section}-icons`).innerHTML = icons.chosenIconHtml + icons.iconsHtml;
