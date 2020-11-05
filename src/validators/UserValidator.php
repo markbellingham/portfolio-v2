@@ -31,6 +31,15 @@ class UserValidator implements Validator
         $cookie = is_object($cookie) ? $cookie : json_decode($cookie);
         $people = new People();
         $user = $people->findUserByValue('uuid', $cookie->uuid);
-        return $user && $user->name == $cookie->username ? $user : false;
+        return $user && $user->getName() == $cookie->username ? $user : null;
+    }
+
+    /**
+     * @param User $user
+     * @return bool
+     */
+    public function isAdmin(User $user)
+    {
+        return $user->getAdmin() == 1;
     }
 }

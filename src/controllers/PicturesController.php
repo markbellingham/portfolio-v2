@@ -207,9 +207,10 @@ class PicturesController
         $userValidator = new UserValidator();
         $user = $userValidator->validate($_COOKIE['settings'], 'cookie');
         if($user) {
-            return true;
-        } else {
-            return false;
+            if($userValidator->isAdmin($user)) {
+                return true;
+            }
         }
+        return false;
     }
 }

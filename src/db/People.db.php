@@ -19,8 +19,8 @@ class People
      */
     public function findAllUsers()
     {
-        $sql = "SELECT id, name, uuid FROM users";
-        return $this->db->run($sql)->fetchAll();
+        $sql = "SELECT id, name, uuid, admin FROM users";
+        return $this->db->query($sql)->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'User');
     }
 
     /**
@@ -30,12 +30,13 @@ class People
      */
     public function findUserByValue(string $column, string $value)
     {
-        if( !in_array( $column, ['id','name','uuid'] ) ) {
+        if( !in_array( $column, ['id','name','uuid'] )) {
             return false;
         }
-        $params = [$value];
-        $sql = "SELECT id, name, uuid FROM users WHERE $column = ?";
-        return $this->db->run($sql, $params)->fetch();
+        $stmt = $this->db->prepare("SELECT id, name, uuid, admin FROM users WHERE $column = ?");
+        $stmt->execute([$value]);
+        $stmt->setFetchMode(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'User');
+        return $stmt->fetch();
     }
 
     /**
@@ -44,7 +45,7 @@ class People
      */
     public function saveUser(User $user)
     {
-        $params = [$user->getUsername(), $user->getUuid()];
+        $params = [$user->getName(), $user->getUuid()];
         $sql = "INSERT INTO users (name, uuid) VALUES (?, ?)";
         $this->db->run($sql, $params);
         if(!$this->db->errors()) {

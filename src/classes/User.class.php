@@ -3,22 +3,23 @@
 class User implements JsonSerializable
 {
     private ?int $id = null;
-    private string $username;
+    private string $name;
     private string $uuid;
+    private int $admin;
     private StringValidator $stringValidator;
     private array $errors = [];
 
     /**
      * User constructor.
-     * @param string $username
+     * @param string $name
      * @param string $uuid
      * @param int|null $id
      * @throws Exception
      */
-    public function __construct(string $username, string $uuid, ?int $id = null)
+    public function __construct(string $name = '', string $uuid = '', ?int $id = null)
     {
         $this->stringValidator = new StringValidator();
-        $this->setUsername($username);
+        $this->setName($name);
         $this->setUuid($uuid);
         $this->setId($id);
         if(count($this->errors) > 0) {
@@ -34,7 +35,7 @@ class User implements JsonSerializable
     {
         return [
             'id' => $this->id,
-            'username' => $this->username,
+            'name' => $this->name,
             'uuid' => $this->uuid
         ];
     }
@@ -58,18 +59,18 @@ class User implements JsonSerializable
     /**
      * @return mixed
      */
-    public function getUsername()
+    public function getName()
     {
-        return $this->username;
+        return $this->name;
     }
 
     /**
      * @param mixed $username
      */
-    public function setUsername($username): void
+    public function setName($username): void
     {
         try {
-            $this->username = $this->stringValidator->validate($username);
+            $this->name = $this->stringValidator->validate($username);
         } catch (Exception $e) {
             $this->errors[] = $e->getMessage();
         }
@@ -94,4 +95,22 @@ class User implements JsonSerializable
             $this->errors[] = $e->getMessage();
         }
     }
+
+    /**
+     * @return int
+     */
+    public function getAdmin(): int
+    {
+        return $this->admin;
+    }
+
+    /**
+     * @param int $admin
+     */
+    public function setAdmin(int $admin = 0): void
+    {
+        $this->admin = $admin;
+    }
+
+
 }
