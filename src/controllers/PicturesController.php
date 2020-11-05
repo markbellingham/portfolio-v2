@@ -112,7 +112,7 @@ class PicturesController
         $user = $people->findUserByValue('uuid', $cookieSettings->uuid);
         if($this->fave_conditions()) {
             $fave = new Favourite(
-                $user->id,
+                $user->getId(),
                 $this->params['ref']
             );
             $pictures = new Pictures();
@@ -165,10 +165,10 @@ class PicturesController
         }
 
         $userValidator = new UserValidator();
-        $anon = '{"permission": false, "uuid": "95c7cdac-6a6f-44ca-a28f-fc62ef61405d", "username": "Anonymous"}';
+        $anon = '{"permission": false, "uuid": "", "username": "Anonymous"}';
         $user = $userValidator->validate($_COOKIE['settings'] ?? $anon, 'cookie');
         if($user) {
-            $this->params['userId'] = $user->id;
+            $this->params['userId'] = $user->getId();
         } else {
             return false;
         }
@@ -186,12 +186,13 @@ class PicturesController
         }
 
         $userValidator = new UserValidator();
-        $user = $userValidator->validate($_COOKIE['settings'], 'cookie');
-        if($user) {
-            $this->params['userId'] = $user->id;
-        } else {
+        $anon = '{"permission": false, "uuid": "95c7cdac-6a6f-44ca-a28f-fc62ef61405d", "username": "Anonymous"}';
+        $user = $userValidator->validate($_COOKIE['settings'] ?? $anon, 'cookie');
+        if(!$user) {
             return false;
         }
+
+        $this->params['userId'] = $user->getId();
         return true;
     }
 
@@ -205,12 +206,12 @@ class PicturesController
         }
 
         $userValidator = new UserValidator();
-        $user = $userValidator->validate($_COOKIE['settings'], 'cookie');
-        if($user) {
-            if($userValidator->isAdmin($user)) {
-                return true;
-            }
+        $anon = '{"permission": false, "uuid": "", "username": "Anonymous"}';
+        $user = $userValidator->validate($_COOKIE['settings'] ?? $anon, 'cookie');
+        if($user && $userValidator->isAdmin($user)) {
+            return true;
         }
+
         return false;
     }
 }

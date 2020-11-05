@@ -11,7 +11,7 @@ class UserValidator implements Validator
     /**
      * @param mixed $data
      * @param string $type
-     * @return array|bool|object
+     * @return array|bool|User
      */
     public function validate($data, $type = 'cookie')
     {
@@ -24,7 +24,7 @@ class UserValidator implements Validator
 
     /**
      * @param object|string $cookie
-     * @return bool|object
+     * @return bool|User
      */
     private function checkCookie($cookie)
     {

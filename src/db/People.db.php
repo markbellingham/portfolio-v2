@@ -23,10 +23,10 @@ class People
         return $this->db->query($sql)->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'User');
     }
 
-    /**
+    /**'uuid' => $this->uuid
      * @param string $column
      * @param string $value
-     * @return bool|object
+     * @return bool|User
      */
     public function findUserByValue(string $column, string $value)
     {
