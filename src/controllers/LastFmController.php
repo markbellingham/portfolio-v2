@@ -2,11 +2,11 @@
 
 class LastFmController
 {
-    private $rootUrl = '';
-    private $username = '';
-    private $apiKey = '';
-    private $sharedSecret = '';
-    private $response = array(
+    private string $rootUrl = '';
+    private string $username = '';
+    private string $apiKey = '';
+    private string $sharedSecret = '';
+    private array $response = array(
         'albums' => '',
         'artists' => '',
         'tracks' => ''
@@ -74,6 +74,10 @@ class LastFmController
         }
     }
 
+    /**
+     * @param $url
+     * @return bool|string
+     */
     private function getApiData($url)
     {
         $curl = curl_init();

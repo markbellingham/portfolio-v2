@@ -2,9 +2,9 @@
 
 class MusicController {
 
-    private $requestMethod;
-    private $params;
-    private $response = [];
+    private string $requestMethod;
+    private array $params;
+    private array $response = [];
 
     /**
      * MusicController constructor.

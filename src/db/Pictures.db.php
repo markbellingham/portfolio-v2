@@ -152,7 +152,7 @@ class Pictures
         $params = [$comment->getUserId(), $comment->getItemId(), $comment->getComment()];
         $sql = "INSERT INTO photo_comments (user_id, photo_id, comment) VALUES (?,?,?)";
         $this->db->run($sql, $params);
-        return $this->db->error ? false : true;
+        return $this->db->errors() ? false : true;
     }
 
     /**
@@ -164,7 +164,7 @@ class Pictures
         $params = [$fave->getUserId(), $fave->getItemId()];
         $sql = "INSERT INTO photo_faves (user_id, photo_id) VALUES (?,?)";
         $this->db->run($sql, $params);
-        return $this->db->error ? false : true;
+        return $this->db->errors() ? false : true;
     }
 
     /**
@@ -176,7 +176,7 @@ class Pictures
         $params = [$tag->getTag()];
         $sql = "INSERT INTO tags (tag) values (?)";
         $this->db->run($sql, $params);
-        if($this->db->error) {
+        if($this->db->errors()) {
             return false;
         }
         $tag->setTagId($this->getLastInsertId());
@@ -193,7 +193,7 @@ class Pictures
         $params = [$photoId, $tag->getTagId()];
         $sql = "INSERT INTO photo_tags (photo_id, tag_id) VALUES (?, ?)";
         $this->db->run($sql, $params);
-        return $this->db->error ? false : true;
+        return $this->db->errors() ? false : true;
     }
 
 

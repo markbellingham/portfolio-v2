@@ -4,8 +4,7 @@ use MyPDO\MyPDO;
 
 class Albums
 {
-    protected $db;
-    protected $data;
+    private $db;
 
     public function __construct()
     {
@@ -155,7 +154,7 @@ class Albums
         $params = [$rank, $data->playcount, '%'.$data->name.'%', $artist->artist_id];
         $sql = "UPDATE albums SET top50 = ?, playcount = ? WHERE title LIKE ? AND artist_id = ?";
         $this->db->run($sql, $params);
-        return $this->db->error ? false : true;
+        return $this->db->errors() ? false : true;
     }
 
     /**
@@ -168,7 +167,7 @@ class Albums
         $params = [$rank, $data->playcount, '%'.$data->name.'%'];
         $sql = "UPDATE artists SET top50 = ?, playcount = ? WHERE artist LIKE ?";
         $this->db->run($sql, $params);
-        return $this->db->error ? false : true;
+        return $this->db->errors() ? false : true;
     }
 
     /**
@@ -185,7 +184,7 @@ class Albums
             $sql .= " AND artist_id = ?";
         }
         $this->db->run($sql, $params);
-        return $this->db->error ? false : true;
+        return $this->db->errors() ? false : true;
     }
 
 
@@ -201,6 +200,6 @@ class Albums
         if(!in_array($table, ['albums','artists','tracks'])) { return false; }
         $sql = "UPDATE $table SET top50 = NULL";
         $this->db->run($sql);
-        return $this->db->error ? false : true;
+        return $this->db->errors() ? false : true;
     }
 }

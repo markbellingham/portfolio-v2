@@ -3,9 +3,9 @@ $configs = require_once '../../config/config.php';
 
 class ContactController {
 
-    private $requestMethod;
-    private $params;
-    private $response = [];
+    private string $requestMethod;
+    private array $params;
+    private array $response = [];
 
     /**
      * ContactController constructor.

@@ -4,10 +4,10 @@ use \PDO;
 
 class MyPDO extends PDO
 {
-    protected static $instance;
-    protected $pdo;
-    public $error = false;
-    protected $errorInfo;
+    protected static array $instance;
+    protected PDO $pdo;
+    protected bool $error = false;
+    protected array $errorInfo;
 
     public function __construct($db_name)
     {
