@@ -23,22 +23,22 @@ $_SESSION['server-secret'] = $secret;
             <!-- Nav tabs -->
             <ul class="nav flex-column" style="height: 80vh;">
                 <li class="active nav-item active">
-                    <a href="#home" class="nav-link active" data-toggle="tab">Home</a>
+                    <a href="#home" class="nav-link active" data-toggle="tab"><i class="fas fa-home"></i> Home</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#music" class="nav-link" data-toggle="tab">Music</a>
+                    <a href="#music" class="nav-link" data-toggle="tab"><i class="fas fa-music"></i> Music</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#gallery" class="nav-link" data-toggle="tab">Gallery</a>
+                    <a href="#gallery" class="nav-link" data-toggle="tab"><i class="far fa-image"></i> Gallery</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#blog" class="nav-link" data-toggle="tab">Blog</a>
+                    <a href="#blog" class="nav-link" data-toggle="tab"><i class="fas fa-edit"></i> Blog</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#games" class="nav-link" data-toggle="tab">Games</a>
+                    <a href="#games" class="nav-link" data-toggle="tab"><i class="fas fa-trophy"></i> Games</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#contact" class="nav-link" data-toggle="tab">Contact</a>
+                    <a href="#contact" class="nav-link" data-toggle="tab"><i class="far fa-comment"></i> Contact</a>
                 </li>
             </ul>
         </div>
@@ -47,32 +47,22 @@ $_SESSION['server-secret'] = $secret;
             <!-- Tab panes -->
             <div class="tab-content">
                 <div class="tab-pane active" id="home">
-                    <?php
-                    include_once 'home/page.php'
-                    ?>
+                    <?php include_once 'home/page.php' ?>
                 </div>
                 <div class="tab-pane" id="music" style="width: 100%;">
-                    <?php
-                    include_once 'music/library.php';
-                    ?>
+                    <?php include_once 'music/library.php'; ?>
                 </div>
                 <div class="tab-pane" id="gallery">
-                    <?php
-                    include_once 'photo/gallery.php';
-                    ?>
+                    <?php include_once 'photo/gallery.php'; ?>
                 </div>
                 <div class="tab-pane" id="blog">
                     Blog Tab.
                 </div>
                 <div class="tab-pane" id="games">
-                    <?php
-                    include_once 'games/index.php';
-                    ?>
+                    <?php include_once 'games/index.php'; ?>
                 </div>
                 <div class="tab-pane" id="contact">
-                    <?php
-                    include_once 'contact/me.php';
-                    ?>
+                    <?php include_once 'contact/me.php'; ?>
                 </div>
             </div>
         </div>
