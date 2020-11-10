@@ -6,7 +6,7 @@ class LastFmController
     private string $username = '';
     private string $apiKey = '';
     private string $sharedSecret = '';
-    private array $response = array(
+    private array $usageData = array(
         'albums' => '',
         'artists' => '',
         'tracks' => ''
@@ -29,17 +29,34 @@ class LastFmController
      */
     public function refreshData( string $format = 'json', string $action = 'save')
     {
+        $this->getRemoteDataFromLastFM($format);;
+        $this->saveUsageDataLocally();
+
+        if($action == 'save') {
+            $this->saveCopyOfResponse();
+        }
+        return $this->usageData;
+    }
+
+    /**
+     * @param string $format
+     */
+    function getRemoteDataFromLastFM(string $format)
+    {
         $albumsUrl = $this->rootUrl.'gettopalbums&user='.$this->username.'&api_key='.$this->apiKey.'&format='.$format;
         $artistsUrl = $this->rootUrl.'gettopartists&user='.$this->username.'&api_key='.$this->apiKey.'&format='.$format;
         $tracksUrl = $this->rootUrl.'gettoptracks&user='.$this->username.'&api_key='.$this->apiKey.'&format='.$format;
 
-        $this->response['albums'] = $this->getApiData($albumsUrl);
-        $this->response['artists'] = $this->getApiData($artistsUrl);
-        $this->response['tracks'] = $this->getApiData($tracksUrl);
+        $this->usageData['albums'] = $this->getApiData($albumsUrl);
+        $this->usageData['artists'] = $this->getApiData($artistsUrl);
+        $this->usageData['tracks'] = $this->getApiData($tracksUrl);
+    }
 
+    function saveUsageDataLocally()
+    {
         $albums = new Albums();
-        foreach($this->response as $key => $value) {
-            $jsonDecoded = json_decode($value);
+        foreach($this->usageData as $key => $value) {
+            $jsonDecoded = json_decode($value, false, 512, JSON_UNESCAPED_UNICODE);
             $albums->clearTop50($key);
             switch($key) {
                 case 'albums':
@@ -61,16 +78,15 @@ class LastFmController
                     }
             }
         }
+    }
 
-        if($action == 'return') {
-            return $this->response;
-        } else if($action == 'save') {
-            $date = date('Y-m-d');
-            foreach($this->response as $key => $value) {
-                $filename = $_SERVER['DOCUMENT_ROOT'] . '/music/json/top-' . $key . '.json';
-                $jsonDecoded = json_decode($value);
-                file_put_contents($filename, json_encode(["date" => $date, "data" => $jsonDecoded]));
-            }
+    function saveCopyOfResponse()
+    {
+        $date = date('Y-m-d');
+        foreach($this->usageData as $key => $value) {
+            $filename = $_SERVER['DOCUMENT_ROOT'] . '/music/json/top-' . $key . '.json';
+            $jsonDecoded = json_decode($value);
+            file_put_contents($filename, json_encode(["date" => $date, "data" => $jsonDecoded]));
         }
     }
 

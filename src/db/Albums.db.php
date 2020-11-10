@@ -150,11 +150,15 @@ class Albums
      */
     public function saveTop50Album(int $rank, object $data)
     {
+        $success = false;
         $artist = $this->getArtistByName($data->artist->name);
-        $params = [$rank, $data->playcount, '%'.$data->name.'%', $artist->artist_id];
-        $sql = "UPDATE albums SET top50 = ?, playcount = ? WHERE title LIKE ? AND artist_id = ?";
-        $this->db->run($sql, $params);
-        return $this->db->errors() ? false : true;
+        if($artist) {
+            $params = [$rank, $data->playcount, '%'.$data->name.'%', $artist->artist_id];
+            $sql = "UPDATE albums SET top50 = ?, playcount = ? WHERE title LIKE ? AND artist_id = ?";
+            $this->db->run($sql, $params);
+            $success = $this->db->errors() ? false : true;
+        }
+        return $success;
     }
 
     /**
@@ -178,9 +182,10 @@ class Albums
     public function saveTop50Track(int $rank, object $data)
     {
         $artist = $this->getArtistByName($data->artist->name);
-        $params = [$rank, $data->playcount, '%'.$data->name.'%', $artist->artist_id];
+        $params = [$rank, $data->playcount, '%'.$data->name.'%'];
         $sql = "UPDATE tracks SET top50 = ?, playcount = ? WHERE track_name LIKE ?";
         if($artist) {
+            $params[] = $artist->artist_id;
             $sql .= " AND artist_id = ?";
         }
         $this->db->run($sql, $params);
