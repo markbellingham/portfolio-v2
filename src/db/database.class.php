@@ -8,6 +8,7 @@ class MyPDO extends PDO
     protected PDO $pdo;
     protected bool $error = false;
     protected array $errorInfo;
+    protected int $affectedRows = 0;
 
     public function __construct($db_name)
     {
@@ -46,11 +47,13 @@ class MyPDO extends PDO
             return $this->query($sql);
         }
         $stmt = $this->prepare($sql);
-        if(!$stmt) {
-            $this->errorInfo = $stmt->errorInfo();
+        if($stmt) {
+            $stmt->execute($args);
+            $this->affectedRows = $stmt->rowCount();
+        } else {
             $this->error = true;
+            $this->errorInfo = $stmt->errorInfo();
         }
-        $stmt->execute($args);
         return $stmt;
     }
 
