@@ -12,30 +12,33 @@ CREATE TABLE IF NOT EXISTS albums (
     artist_id INT(5),
     top50 INT,
     playcount INT
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS artists (
     artist_id INT(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     artist VARCHAR(255) NOT NULL,
     top50 INT,
     playcount INT
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS genres (
     genre_id INT(5) NOT NULL PRIMARY KEY AUTO_INCREMENT,
     genre VARCHAR(255) NOT NULL,
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS tracks (
-    trackId INT(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    trackId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     track_no CHAR(5),
     track_name VARCHAR(255),
-    duration INT(5),
+    duration VARCHAR(10),
     filename VARCHAR(255),
-    album_id INT(7),
+    album_id INT,
+    artist_id INT,
     top50 INT,
-    playcount INT
-);
+    playcount INT,
+    KEY fk_album_id1 (album_id),
+    CONSTRAINT fk_album_id1 FOREIGN KEY (album_id) REFERENCES albums (album_id) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE DATABASE contact;
 
@@ -46,7 +49,7 @@ CREATE TABLE IF NOT EXISTS icons (
     icon VARCHAR(255) NOT NULL,
     name VARCHAR(255) NOT NULL,
     colour VARCHAR(255)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO icons (icon, name)
 VALUES
