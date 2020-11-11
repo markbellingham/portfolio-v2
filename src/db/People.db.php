@@ -49,18 +49,8 @@ class People
         $sql = "INSERT INTO users (name, uuid) VALUES (?, ?)";
         $this->db->run($sql, $params);
         if(!$this->db->errors()) {
-            $user->setId($this->getLastInsertId());
+            $user->setId($this->db->lastInsertId());
         }
         return $user;
-    }
-
-    /**
-     * @return int
-     */
-    private function getLastInsertId()
-    {
-        $sql = "SELECT LAST_INSERT_ID() AS last_id";
-        $result = $this->db->run($sql)->fetch();
-        return (int) $result->last_id;
     }
 }
