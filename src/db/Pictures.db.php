@@ -4,7 +4,7 @@ use MyPDO\MyPDO;
 
 class Pictures
 {
-    private $db;
+    private MyPDO $db;
 
     public function __construct()
     {
@@ -23,7 +23,7 @@ class Pictures
      * @param string $directory
      * @return array
      */
-    public function findAll(string $searchTerm = "", string $directory = 'Favourites')
+    public function findAll(string $searchTerm = "", string $directory = 'Favourites'): array
     {
         $fuzzySearch = $searchTerm == "" ? "" : '+'.$searchTerm.'*';
         $params = [$fuzzySearch, $fuzzySearch, $directory];
@@ -60,7 +60,7 @@ class Pictures
      * @param int $photoId
      * @return object
      */
-    public function findOne(int $photoId)
+    public function findOne(int $photoId): object
     {
         $params = [$photoId];
         $sql = "SELECT p.id, p.title, p.description, p.town, c.name, p.filename, p.directory,
@@ -86,7 +86,7 @@ class Pictures
      * @param int $photoId
      * @return array
      */
-    public function getPhotoComments(int $photoId)
+    public function getPhotoComments(int $photoId): array
     {
         $params = [$photoId];
         $sql = "SELECT pc.id, pc.user_id, u.name, pc.photo_id, pc.comment, DATE_FORMAT(pc.created, '%d-%m-%Y @ %H:%i') AS created
@@ -101,7 +101,7 @@ class Pictures
      * @param int $photoId
      * @return int
      */
-    public function getFaveCount(int $photoId)
+    public function getFaveCount(int $photoId): int
     {
         $params = [$photoId];
         $sql = "SELECT COUNT(photo_id) AS fave_count FROM photo_faves WHERE photo_id = ?";
@@ -113,7 +113,7 @@ class Pictures
      * @param int|null $photoId
      * @return array
      */
-    public function getTags(int $photoId = null)
+    public function getTags(int $photoId = null): array
     {
         $sql = "SELECT tags.id, tags.tag FROM tags";
         if($photoId) {
@@ -124,16 +124,6 @@ class Pictures
         } else {
             return $this->db->run($sql)->fetchAll();
         }
-    }
-
-    /**
-     * @return int
-     */
-    private function getLastInsertId()
-    {
-        $sql = "SELECT LAST_INSERT_ID() AS last_id";
-        $result = $this->db->run($sql)->fetch();
-        return (int) $result->last_id;
     }
 
 
@@ -147,7 +137,7 @@ class Pictures
      * @param Comment $comment
      * @return bool
      */
-    public function savePhotoComment(Comment $comment)
+    public function savePhotoComment(Comment $comment): bool
     {
         $params = [$comment->getUserId(), $comment->getItemId(), $comment->getComment()];
         $sql = "INSERT INTO photo_comments (user_id, photo_id, comment) VALUES (?,?,?)";
@@ -159,7 +149,7 @@ class Pictures
      * @param Favourite $fave
      * @return bool
      */
-    public function saveFave(Favourite $fave)
+    public function saveFave(Favourite $fave): bool
     {
         $params = [$fave->getUserId(), $fave->getItemId()];
         $sql = "INSERT INTO photo_faves (user_id, photo_id) VALUES (?,?)";
@@ -179,7 +169,7 @@ class Pictures
         if($this->db->errors()) {
             return false;
         }
-        $tag->setTagId($this->getLastInsertId());
+        $tag->setTagId($this->db->lastInsertId());
         return $tag;
     }
 
@@ -188,7 +178,7 @@ class Pictures
      * @param Tag $tag
      * @return bool
      */
-    public function savePhotoTag($photoId, Tag $tag)
+    public function savePhotoTag($photoId, Tag $tag): bool
     {
         $params = [$photoId, $tag->getTagId()];
         $sql = "INSERT INTO photo_tags (photo_id, tag_id) VALUES (?, ?)";

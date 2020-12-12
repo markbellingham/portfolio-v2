@@ -23,7 +23,7 @@ class PeopleController
     /**
      * @return array
      */
-    public function fulfilRequest()
+    public function fulfilRequest(): array
     {
         $action = strtolower($this->requestMethod);
         call_user_func(array($this, $action));

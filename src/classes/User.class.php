@@ -31,7 +31,7 @@ class User implements JsonSerializable
      * To enable json_encode() to output private/protected properties
      * @return array|mixed
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => $this->id,
@@ -41,9 +41,9 @@ class User implements JsonSerializable
     }
 
     /**
-     * @return mixed
+     * @return ?int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -57,9 +57,9 @@ class User implements JsonSerializable
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -77,9 +77,9 @@ class User implements JsonSerializable
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getUuid()
+    public function getUuid(): string
     {
         return $this->uuid;
     }

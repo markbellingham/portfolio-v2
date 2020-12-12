@@ -23,7 +23,7 @@ class PicturesController
         $this->params = $request;
     }
 
-    public function fulfilRequest()
+    public function fulfilRequest(): array
     {
         $action = strtolower($this->requestMethod);
         call_user_func(array($this, $action));
@@ -67,12 +67,12 @@ class PicturesController
 
     private function put()
     {
-        return '';
+
     }
 
     private function delete()
     {
-        return '';
+
     }
 
     /**
@@ -154,7 +154,12 @@ class PicturesController
         }
     }
 
-    private function comment_conditions()
+    /**
+     * Check that the form returned all valid elements
+     * Check that the user is allowed to make comments
+     * @return bool
+     */
+    private function comment_conditions(): bool
     {
         $paramValues = $this->params['values'];
 
@@ -176,7 +181,12 @@ class PicturesController
         return true;
     }
 
-    private function fave_conditions()
+    /**
+     * Check that the form returned all valid elements
+     * Check that the user is valid
+     * @return bool
+     */
+    private function fave_conditions(): bool
     {
         $fn = new Functions();
         $paramValues = $this->params['values'];
@@ -196,7 +206,12 @@ class PicturesController
         return true;
     }
 
-    private function tag_conditions()
+    /**
+     * Check that the form returns all valid elements
+     * Check that the user has permission to set tags
+     * @return bool
+     */
+    private function tag_conditions(): bool
     {
         $fn = new Functions();
         $paramValues = $this->params['values'];

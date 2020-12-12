@@ -2,8 +2,8 @@
 
 class Tag implements JsonSerializable
 {
-    private $tagId;
-    private $tag;
+    private ?int $tagId;
+    private string $tag;
 
     public function __construct(string $tag, int $tagId = null)
     {
@@ -11,7 +11,7 @@ class Tag implements JsonSerializable
         $this->tag = $tag;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'tagId' => $this->tagId,

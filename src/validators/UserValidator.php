@@ -38,7 +38,7 @@ class UserValidator implements Validator
      * @param User $user
      * @return bool
      */
-    public function isAdmin(User $user)
+    public function isAdmin(User $user): bool
     {
         return $user->getAdmin() == 1;
     }

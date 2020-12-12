@@ -14,7 +14,7 @@ class Functions {
      * @param string $file - The file to be loaded. Must be an absolute path (i.e. starting with a slash)
      * @return string
      */
-    public function auto_version(string $file)
+    public function auto_version(string $file): string
     {
         if(strpos($file, '/') !== 0 || !file_exists($_SERVER['DOCUMENT_ROOT'] . $file)) {
             return $file;
@@ -42,7 +42,8 @@ class Functions {
         }
     }
 
-    public function randomToken($length = 32){
+    public function randomToken($length = 32): string
+    {
         if(!isset($length) || intval($length) <= 8 ){
             $length = 32;
         }
@@ -51,7 +52,7 @@ class Functions {
         }
     }
 
-    public function requestedByTheSameDomain($secret)
+    public function requestedByTheSameDomain($secret): bool
     {
         return $secret === $_SESSION['server-secret'];
     }

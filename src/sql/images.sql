@@ -558,7 +558,9 @@ INSERT INTO people.users (name, uuid) VALUES ('Anonymous', '95c7cdac-6a6f-44ca-a
 
 CREATE TABLE IF NOT EXISTS photo_faves (
     user_id INT NOT NULL,
-    photo_id INT NOT NULL
+    photo_id INT NOT NULL,
+    CONSTRAINT fk_photo_id (photo_id) FOREIGN KEY REFERENCES photos(id),
+    CONSTRAINT fk_user_id (user_id) FOREIGN KEY REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS photo_comments (
@@ -566,11 +568,15 @@ CREATE TABLE IF NOT EXISTS photo_comments (
     user_id INT NOT NULL,
     photo_id INT NOT NULL,
     COMMENT TEXT NOT NULL,
-    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CHECKED TINYINT(1) NOT NULL DEFAULT 0,
+    CONSTRAINT fk_photo_id (photo_id) FOREIGN KEY REFERENCES photos(id),
+    CONSTRAINT fk_user_id (user_id) FOREIGN KEY REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS photo_tags (
     photo_id INT NOT NULL,
     tag_id INT NOT NULL,
-    PRIMARY KEY (photo_id, tag_id)
+    PRIMARY KEY (photo_id, tag_id),
+    CONSTRAINT fk_photo_id (photo_id) FOREIGN KEY REFERENCES photos(id)
 );

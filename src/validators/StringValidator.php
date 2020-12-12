@@ -4,14 +4,14 @@ class StringValidator implements Validator
 {
 
     private $response;
-    private $errors = [];
+    private array $errors = [];
 
     const ERROR_MESSAGE = 'String validation errors';
 
     public function __construct() {}
 
     /**
-     * @param string $data
+     * @param $data
      * @param string $type
      * @return array|string
      * @throws Exception
@@ -23,7 +23,6 @@ class StringValidator implements Validator
             case 'string':
                 $this->response = $this->cleanTagsFromString($data);
                 $this->checkProhibitedLinks($this->response);
-                $this->checkProhibitedWords($this->response);
                 break;
             case 'email':
                 break;
@@ -38,7 +37,7 @@ class StringValidator implements Validator
      * @param string $data
      * @return string
      */
-    private function cleanTagsFromString(string $data)
+    private function cleanTagsFromString(string $data): string
     {
         $data = trim($data);
         $data = strip_tags($data);
@@ -61,7 +60,7 @@ class StringValidator implements Validator
         }
     }
 
-    private function checkProhibitedWords(string $data)
+    private function checkProhibitedWords(string $data): string
     {
         // TODO: fix this
         return $data;

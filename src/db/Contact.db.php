@@ -4,15 +4,14 @@ use MyPDO\MyPDO;
 
 class Contact
 {
-    private $db;
-    private $data;
+    private MyPDO $db;
 
     public function __construct()
     {
         $this->db = MyPDO::instance('Contact');
     }
 
-    public function getIcons($qty)
+    public function getIcons($qty): array
     {
         $params = [$qty];
         $sql = "SELECT icon_id, icon, name, colour

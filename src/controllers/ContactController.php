@@ -18,7 +18,10 @@ class ContactController {
         $this->params = $request;
     }
 
-    public function fulfilRequest()
+    /**
+     * @return array
+     */
+    public function fulfilRequest(): array
     {
         $action = strtolower($this->requestMethod);
         call_user_func(array($this, $action));
@@ -37,17 +40,17 @@ class ContactController {
 
     private function post()
     {
-        return '';
+
     }
 
     private function put()
     {
-        return '';
+
     }
 
     private function delete()
     {
-        return '';
+
     }
 }
 

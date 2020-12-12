@@ -19,7 +19,7 @@ class FormSecurityValidator implements Validator
      * @param string $type
      * @return array|bool[]
      */
-    public function validate($data, string $type)
+    public function validate($data, string $type): array
     {
         try {
             $this->checkHoneyTrap($data);

@@ -1,6 +1,7 @@
 <?php
 namespace MyPDO;
 use \PDO;
+use PDOStatement;
 
 class MyPDO extends PDO
 {
@@ -24,8 +25,12 @@ class MyPDO extends PDO
         $this->pdo = new PDO($dsn, $dbConfig['db_user'], $dbConfig['db_pass'], $default_options);
     }
 
-    // A classical static method to make it universally available
-    public static function instance($db_name)
+    /**
+     * A classical static method to make it universally available
+     * @param $db_name
+     * @return MyPDO
+     */
+    public static function instance($db_name): MyPDO
     {
         if(!isset(self::$instance[$db_name]) || self::$instance[$db_name] === null) {
             self::$instance[$db_name] = new MyPDO($db_name);
@@ -33,13 +38,23 @@ class MyPDO extends PDO
         return self::$instance[$db_name];
     }
 
-    // A proxy to native PDO methods
+    /**
+     * A proxy to native PDO methods
+     * @param $method
+     * @param $args
+     * @return false|mixed
+     */
     public function __call($method, $args)
     {
         return call_user_func_array(array($this->pdo, $method), $args);
     }
 
-    // A helper function to run prepared statements smoothly
+    /**
+     * A helper function to run prepared statements smoothly
+     * @param $sql
+     * @param null $args
+     * @return false|PDOStatement
+     */
     public function run($sql, $args = NULL)
     {
         $this->error = false;
@@ -57,7 +72,10 @@ class MyPDO extends PDO
         return $stmt;
     }
 
-    public function errors()
+    /**
+     * @return bool
+     */
+    public function errors(): bool
     {
         return $this->error;
     }

@@ -4,7 +4,7 @@ use MyPDO\MyPDO;
 
 class People
 {
-    private $db;
+    private MyPDO $db;
 
     /**
      * People constructor.
@@ -17,7 +17,7 @@ class People
     /**
      * @return User[]
      */
-    public function findAllUsers()
+    public function findAllUsers(): array
     {
         $sql = "SELECT id, name, uuid, admin FROM users";
         return $this->db->query($sql)->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, 'User');
@@ -43,7 +43,7 @@ class People
      * @param $user
      * @return User
      */
-    public function saveUser(User $user)
+    public function saveUser(User $user): User
     {
         $params = [$user->getName(), $user->getUuid()];
         $sql = "INSERT INTO users (name, uuid) VALUES (?, ?)";

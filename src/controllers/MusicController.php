@@ -17,7 +17,7 @@ class MusicController {
         $this->params = $request;
     }
 
-    public function fulfilRequest()
+    public function fulfilRequest(): array
     {
         $action = strtolower($this->requestMethod);
         call_user_func(array($this, $action));
@@ -48,16 +48,16 @@ class MusicController {
 
     private function post()
     {
-        return '';
+
     }
 
     private function put()
     {
-        return '';
+
     }
 
     private function delete()
     {
-        return '';
+
     }
 }

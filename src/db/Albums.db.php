@@ -4,7 +4,7 @@ use MyPDO\MyPDO;
 
 class Albums
 {
-    private $db;
+    private MyPDO $db;
 
     public function __construct()
     {
@@ -21,7 +21,7 @@ class Albums
      * @param string $filter
      * @return array
      */
-    public function findAll(string $filter)
+    public function findAll(string $filter): array
     {
         $sql = "SELECT al.album_id, al.image, al.album_artist, ar.artist, al.title, al.year, g.genre, al.top50 AS album_top50,
                     al.playcount AS album_playcount, ar.top50 AS artist_top50, ar.playcount AS artist_playcount
@@ -50,7 +50,7 @@ class Albums
      * @param $albumId
      * @return object
      */
-    public function findOne($albumId)
+    public function findOne($albumId): object
     {
         $params = [$albumId];
         $sql = "SELECT al.album_id, al.image, ar.artist, al.title, al.year, g.genre, al.top50 AS album_top50, 
@@ -68,7 +68,7 @@ class Albums
      * @param $albumId
      * @return array
      */
-    public function getTracks($albumId)
+    public function getTracks($albumId): array
     {
         $params = [$albumId];
         $sql = "SELECT t.trackId, t.track_no, t.track_name, t.duration, t.filename, al.title, al.image, ar.artist,
@@ -87,7 +87,7 @@ class Albums
      * @param $trackId
      * @return object
      */
-    public function getOneTrack($trackId)
+    public function getOneTrack($trackId): object
     {
         $params = [$trackId];
         $sql = "SELECT t.trackId, t.track_no, t.track_name, t.duration, t.filename, al.title, al.image, ar.artist,
@@ -112,7 +112,7 @@ class Albums
         return $this->db->run($sql, $params)->fetch();
     }
 
-    public function getTop50tracks()
+    public function getTop50tracks(): array
     {
         $sql = "SELECT 
                     t.top50             AS track_top50, 
@@ -148,7 +148,7 @@ class Albums
      * @param object $data
      * @return bool
      */
-    public function saveTop50Album(int $rank, object $data)
+    public function saveTop50Album(int $rank, object $data): bool
     {
         $success = false;
         $artist = $this->getArtistByName($data->artist->name);
@@ -166,7 +166,7 @@ class Albums
      * @param object $data
      * @return bool
      */
-    public function saveTop50Artist(int $rank, object $data)
+    public function saveTop50Artist(int $rank, object $data): bool
     {
         $params = [$rank, $data->playcount, '%'.$data->name.'%'];
         $sql = "UPDATE artists SET top50 = ?, playcount = ? WHERE artist LIKE ?";
@@ -179,7 +179,7 @@ class Albums
      * @param object $data
      * @return bool
      */
-    public function saveTop50Track(int $rank, object $data)
+    public function saveTop50Track(int $rank, object $data): bool
     {
         $artist = $this->getArtistByName($data->artist->name);
         $params = [$rank, $data->playcount, '%'.$data->name.'%'];
@@ -201,7 +201,8 @@ class Albums
      * @param string $table
      * @return bool
      */
-    public function clearTop50(string $table) {
+    public function clearTop50(string $table): bool
+    {
         if(!in_array($table, ['albums','artists','tracks'])) { return false; }
         $sql = "UPDATE $table SET top50 = NULL";
         $this->db->run($sql);

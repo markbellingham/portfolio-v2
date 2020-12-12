@@ -6,6 +6,7 @@ class Comment extends Exception implements JsonSerializable
     private int $itemId;
     private string $comment;
     private string $created;
+    private bool $checked = false;
     private array $errors = [];
 
     /**
@@ -31,7 +32,7 @@ class Comment extends Exception implements JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'userId' => $this->userId,
@@ -44,7 +45,7 @@ class Comment extends Exception implements JsonSerializable
     /**
      * @return int
      */
-    public function getUserId()
+    public function getUserId(): int
     {
         return $this->userId;
     }
@@ -60,7 +61,7 @@ class Comment extends Exception implements JsonSerializable
     /**
      * @return int
      */
-    public function getItemId()
+    public function getItemId(): int
     {
         return $this->itemId;
     }
@@ -76,7 +77,7 @@ class Comment extends Exception implements JsonSerializable
     /**
      * @return string
      */
-    public function getComment()
+    public function getComment(): string
     {
         return $this->comment;
     }
@@ -97,7 +98,7 @@ class Comment extends Exception implements JsonSerializable
     /**
      * @return string
      */
-    public function getCreated()
+    public function getCreated(): string
     {
         return $this->created;
     }
@@ -105,8 +106,26 @@ class Comment extends Exception implements JsonSerializable
     /**
      * @param string|null $created
      */
-    public function setCreated($created)
+    public function setCreated(?string $created)
     {
         $this->created = $created ?? date('Y-m-d H:i:s');
     }
+
+    /**
+     * @return bool
+     */
+    public function isChecked(): bool
+    {
+        return $this->checked;
+    }
+
+    /**
+     * @param bool $checked
+     */
+    public function setChecked(bool $checked): void
+    {
+        $this->checked = $checked;
+    }
+
+
 }

@@ -27,7 +27,7 @@ class LastFmController
      * @param string $action
      * @return string[]
      */
-    public function refreshData( string $format = 'json', string $action = 'save')
+    public function refreshData( string $format = 'json', string $action = 'save'): array
     {
         $this->getRemoteDataFromLastFM($format);;
         $this->saveUsageDataLocally();

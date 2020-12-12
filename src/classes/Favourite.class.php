@@ -11,7 +11,7 @@ class Favourite implements JsonSerializable
         $this->setItemId($itemId);
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'userId' => $this->userId,
