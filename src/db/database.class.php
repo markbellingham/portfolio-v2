@@ -79,4 +79,12 @@ class MyPDO extends PDO
     {
         return $this->error;
     }
+
+    /**
+     * @return int
+     */
+    public function affectedRows(): int
+    {
+        return $this->affectedRows;
+    }
 }
