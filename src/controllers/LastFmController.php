@@ -6,6 +6,11 @@ class LastFmController
     private string $username = '';
     private string $apiKey = '';
     private string $sharedSecret = '';
+    private array $notSaved = [
+        'albums' => [],
+        'artists' => [],
+        'tracks' => []
+    ];
     private array $usageData = array(
         'albums' => '',
         'artists' => '',
@@ -29,8 +34,9 @@ class LastFmController
      */
     public function refreshData( string $format = 'json', string $action = 'save'): array
     {
-        $this->getRemoteDataFromLastFM($format);;
+        $this->getRemoteDataFromLastFM($format);
         $this->saveUsageDataLocally();
+        $this->outputFailedSaves();
 
         if($action == 'save') {
             $this->saveCopyOfResponse();
@@ -41,7 +47,7 @@ class LastFmController
     /**
      * @param string $format
      */
-    function getRemoteDataFromLastFM(string $format)
+    private function getRemoteDataFromLastFM(string $format)
     {
         $albumsUrl = $this->rootUrl.'gettopalbums&user='.$this->username.'&api_key='.$this->apiKey.'&format='.$format;
         $artistsUrl = $this->rootUrl.'gettopartists&user='.$this->username.'&api_key='.$this->apiKey.'&format='.$format;
@@ -52,7 +58,7 @@ class LastFmController
         $this->usageData['tracks'] = $this->getApiData($tracksUrl);
     }
 
-    function saveUsageDataLocally()
+    private function saveUsageDataLocally()
     {
         $albums = new Albums();
         foreach($this->usageData as $key => $value) {
@@ -62,25 +68,44 @@ class LastFmController
                 case 'albums':
                     $albumData = $jsonDecoded->topalbums->album;
                     foreach($albumData as $rank => $data) {
-                        $albums->saveTop50Album($rank + 1, $data);
+                        $found = $albums->saveTop50Album($rank + 1, $data);
+                        if($found < 1) {
+                            $this->notSaved['albums'][] = ['album' => $data->name, 'artist' => $data->artist->name];
+                        }
                     }
                     break;
                 case 'artists':
                     $artistData =  $jsonDecoded->topartists->artist;
                     foreach($artistData as $rank => $data) {
-                        $albums->saveTop50Artist($rank + 1, $data);
+                        $found = $albums->saveTop50Artist($rank + 1, $data);
+                        if($found < 1) {
+                            $this->notSaved['artists'][] = ['artist' => $data->name];
+                        }
                     }
                     break;
                 case 'tracks':
                     $trackData = $jsonDecoded->toptracks->track;
                     foreach($trackData as $rank => $data) {
-                        $albums->saveTop50Track($rank + 1, $data);
+                        $found = $albums->saveTop50Track($rank + 1, $data);
+                        if($found < 1) {
+                            $this->notSaved['tracks'][] = ['track' => $data->name, 'artist' => $data->artist->name];
+                        }
                     }
             }
         }
     }
 
-    function saveCopyOfResponse()
+    private function outputFailedSaves()
+    {
+        $errors = count($this->notSaved['albums']) > 0 || count($this->notSaved['artists']) > 0 || count($this->notSaved['tracks']) > 0;
+        if( $errors ) {
+            $filename = $_SERVER['DOCUMENT_ROOT'] . '../src/temp/' . date('Ymd') . '-most-played-not-saved.txt';
+            file_put_contents($filename, print_r($this->notSaved, true));
+            chmod($filename, 0775);
+        }
+    }
+
+    private function saveCopyOfResponse()
     {
         $date = date('Y-m-d');
         foreach($this->usageData as $key => $value) {

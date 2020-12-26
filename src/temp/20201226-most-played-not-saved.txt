@@ -1,0 +1,127 @@
+Array
+(
+    [albums] => Array
+        (
+            [0] => Array
+                (
+                    [album] => Plastic Mods '92-'97 (The Best Of The Early Years)
+                    [artist] => The Immediate
+                )
+
+            [1] => Array
+                (
+                    [album] => Trovadikxion
+                    [artist] => Daniel F
+                )
+
+            [2] => Array
+                (
+                    [album] => Rotten Apples - Greatest Hits
+                    [artist] => The Smashing Pumpkins
+                )
+
+            [3] => Array
+                (
+                    [album] => Different Class
+                    [artist] => Pulp
+                )
+
+            [4] => Array
+                (
+                    [album] => Shed Seven - The Collection
+                    [artist] => Shed Seven
+                )
+
+            [5] => Array
+                (
+                    [album] => A Weapon Called the Word
+                    [artist] => Levellers
+                )
+
+            [6] => Array
+                (
+                    [album] => The Understanding
+                    [artist] => Röyksopp
+                )
+
+        )
+
+    [artists] => Array
+        (
+            [0] => Array
+                (
+                    [artist] => Red Hot Chili Peppers
+                )
+
+            [1] => Array
+                (
+                    [artist] => Stevie Wonder
+                )
+
+        )
+
+    [tracks] => Array
+        (
+            [0] => Array
+                (
+                    [track] => Red House
+                    [artist] => Jimi Hendrix
+                )
+
+            [1] => Array
+                (
+                    [track] => Something Changed
+                    [artist] => Pulp
+                )
+
+            [2] => Array
+                (
+                    [track] => Ce Matin-là
+                    [artist] => Air
+                )
+
+            [3] => Array
+                (
+                    [track] => Had a Dad
+                    [artist] => Jane's Addiction
+                )
+
+            [4] => Array
+                (
+                    [track] => Can't be Serious
+                    [artist] => Ginny
+                )
+
+            [5] => Array
+                (
+                    [track] => A Satisfied Mind
+                    [artist] => Johnny Cash
+                )
+
+            [6] => Array
+                (
+                    [track] => Sell Out
+                    [artist] => Levellers
+                )
+
+            [7] => Array
+                (
+                    [track] => The Ballad of Robbie Jones
+                    [artist] => Levellers
+                )
+
+            [8] => Array
+                (
+                    [track] => Monday Morning
+                    [artist] => Pulp
+                )
+
+            [9] => Array
+                (
+                    [track] => The Adventures of Robinson Crusoe
+                    [artist] => Robert Mellin Orchestra
+                )
+
+        )
+
+)
