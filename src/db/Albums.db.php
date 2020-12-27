@@ -107,8 +107,11 @@ class Albums
      */
     public function getArtistByName(string $artistName)
     {
-        $params = ['%'.$artistName.'%'];
-        $sql = "SELECT artist_id, artist FROM artists WHERE artist LIKE ?";
+        $params = ['%'.$artistName.'%', $artistName];
+        $sql = "SELECT artist_id, artist 
+                FROM artists 
+                WHERE artist LIKE ?
+                ORDER BY INSTR(artist, ?), artist";
         return $this->db->run($sql, $params)->fetch();
     }
 
@@ -130,7 +133,7 @@ class Albums
                     MAX(ar.playcount)   AS artist_playcount
                 FROM tracks t
                 LEFT JOIN albums al ON t.album_id = al.album_id
-                LEFT JOIN artists ar ON al.artist_id = ar.artist_id
+                LEFT JOIN artists ar ON t.artist_id = ar.artist_id
                 LEFT JOIN genres g ON al.genre_id = g.genre_id
                 WHERE t.top50 > 0
                 GROUP BY t.top50
@@ -146,25 +149,27 @@ class Albums
     /**
      * @param int $rank
      * @param object $data
-     * @return bool
+     * @return int
      */
-    public function saveTop50Album(int $rank, object $data): bool
+    public function saveTop50Album(int $rank, object $data): int
     {
         $artist = $this->getArtistByName($data->artist->name);
+        $params = [$rank, $data->playcount, '%'.$data->name.'%'];
+        $sql = "UPDATE albums SET top50 = ?, playcount = ? WHERE title LIKE ?";
         if($artist) {
-            $params = [$rank, $data->playcount, '%'.$data->name.'%', $artist->artist_id];
-            $sql = "UPDATE albums SET top50 = ?, playcount = ? WHERE title LIKE ? AND artist_id = ?";
-            $this->db->run($sql, $params);
+            $params[] = $artist->artist_id;
+            $sql .= " AND artist_id = ?";
         }
+        $this->db->run($sql, $params);
         return $this->db->affectedRows();
     }
 
     /**
      * @param int $rank
      * @param object $data
-     * @return bool
+     * @return int
      */
-    public function saveTop50Artist(int $rank, object $data): bool
+    public function saveTop50Artist(int $rank, object $data): int
     {
         $params = [$rank, $data->playcount, '%'.$data->name.'%'];
         $sql = "UPDATE artists SET top50 = ?, playcount = ? WHERE artist LIKE ?";
@@ -175,9 +180,9 @@ class Albums
     /**
      * @param int $rank
      * @param object $data
-     * @return bool
+     * @return int
      */
-    public function saveTop50Track(int $rank, object $data): bool
+    public function saveTop50Track(int $rank, object $data): int
     {
         $artist = $this->getArtistByName($data->artist->name);
         $params = [$rank, $data->playcount, '%'.$data->name.'%'];
